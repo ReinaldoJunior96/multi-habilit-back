@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\Http\Requests\MedicoRequest;
 use App\Models\Medico;
 use App\Services\MedicoService;
 use Illuminate\Http\Request;
@@ -26,45 +27,27 @@ class MedicoController extends Controller
         return response()->json($medico);
     }
 
-    public function store(Request $request)
+    public function store(MedicoRequest $request)
     {
-        $validated = $request->validate([
-            'regime_trabalhista' => 'required|integer',
-            'carga_horaria' => 'required|integer',
-            'cnpj' => 'required|string|size:14',
-            'id_usuario' => 'required|exists:usuarios,id',
-        ]);
+        // Pega os dados validados diretamente do MedicoRequest
+        $validatedData = $request->validated();
+        if(Medico::findOrFail($request->get('id_usuario'))){
+            return response()->json(['error'=> 'Usuário já existe!'], 201);
+        }
+        $medico = $this->medicoService->createMedico($validatedData);
 
-        $medico = $this->medicoService->createMedico($validated);
-
+        // Retorna a resposta com o status 201 (Created)
         return response()->json($medico, 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(MedicoRequest $request, $id)
     {
-
         $medico = Medico::findOrFail($id);
 
-        if (!$medico) {
-            return response()->json(['error' => 'Médico não encontrado'], 404);
-        }
 
-        $validated = $request->validate([
-            'regime_trabalhista' => 'required|integer',
-            'carga_horaria' => 'required|integer',
-            'cnpj' => 'required|string|size:14',
-            'id_usuario' => 'required|exists:usuarios,id',
-        ]);
+        $medico->update($request->validated());
 
-       if($this->medicoService->updateMedico($medico, $validated) && $validated){
-            return response()->json($medico);
-       }
-
-        return response()->json(['error' => 'Erro ao alterar o medico']);
-
-
-
-
+        return response()->json($medico, 200);
 
     }
 
