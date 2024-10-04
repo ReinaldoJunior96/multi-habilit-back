@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Usuario;
 use App\Http\Resources\UsuarioResource;
 use App\Http\Resources\UsuarioCollection;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioService
 {
@@ -20,7 +21,11 @@ class UsuarioService
 
     public function createUsuario($data)
     {
+        $data['password'] = Hash::make($data['password']);
+
+        // Cria o usuário com a senha criptografada
         $usuario = Usuario::create($data);
+
         return new UsuarioResource($usuario);
     }
 
