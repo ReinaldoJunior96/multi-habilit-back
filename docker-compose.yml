@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+    # Serviço do PHP
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: multi-habilit-backend
+        volumes:
+            - ./:/var/www
+        networks:
+            - laravel_network
+        depends_on:
+            - db
+
+    # Serviço do Nginx
+    webserver:
+        image: nginx:alpine
+        container_name: nginx_server
+        volumes:
+            - ./:/var/www
+            - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - "8081:80"
+        networks:
+            - laravel_network
+        depends_on:
+            - app
+
+    # Serviço do MySQL
+    db:
+        image: mysql:8.0
+        container_name: mysql_db
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: multi-habilit
+            MYSQL_PASSWORD: root
+        volumes:
+            - dbdata:/var/lib/mysql
+        ports:
+            - "3307:3306"
+        networks:
+            - laravel_network
+
+networks:
+    laravel_network:
+
+volumes:
+    dbdata:
