@@ -1,0 +1,55 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Back end - Multi-habilit",
+        "description": "Documentação da API do projeto",
+        "contact": {
+            "email": "reinaldojunior272@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Realiza login",
+                "description": "Realiza o login de um usuário cadastrado",
+                "operationId": "99460a8a3205cfe89f3dc53a9db1523d",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "name",
+                        "required": false
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "name",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwODEvYXBpL2xvZ2luIiwiaWF0IjoxNzI4MjYyMjU3LCJleHAiOjE3MjgyNjU4NTcsIm5iZiI6MTcyODI2MjI1NywianRpIjoiTk0yWk9Cc2pYY2pyNk9OVSIsInN1YiI6IjQiLCJwcnYiOiI1ODcwODYzZDRhNjJkNzkxNDQzZmFmOTM2ZmMzNjgwMzFkMTEwYzRmIn0.5F8mDnew_KWgBIxvBy46VezLPgm36vcaMZ44oUTuacI'}",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Test",
+            "description": "Test"
+        }
+    ]
+}

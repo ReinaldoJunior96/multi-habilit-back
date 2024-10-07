@@ -15,7 +15,7 @@ use App\Http\Controllers\UsuarioController;
 
 Route::post('usuarios', [UsuarioController::class, 'store']);
 Route::post('login', [AuthController::class, 'login']);
-
+Route::post('/test', [UsuarioController::class, 'test']);
 
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
@@ -61,5 +61,7 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::put('agendamentos/{id}', [AgendamentoController::class, 'update']);
     Route::delete('agendamentos/{id}', [AgendamentoController::class, 'destroy']);
 });
+
+
 
 
