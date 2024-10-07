@@ -5,17 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Endereco extends Model
+class Atendente extends Model
 {
     use HasFactory;
 
-    // Define quais campos podem ser preenchidos em massa
+    // Define os campos que podem ser preenchidos em massa
     protected $fillable = [
-        'cep',
-        'logradouro',
-        'complemento',
-        'bairro',
-        'uf',
         'id_usuario',
     ];
 
@@ -24,6 +19,4 @@ class Endereco extends Model
     {
         return $this->belongsTo(Usuario::class, 'id_usuario');
     }
-
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\AtendenteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\MedicoController;
@@ -43,3 +45,21 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::put('enderecos/{id}', [EnderecoController::class, 'update']);
     Route::delete('enderecos/{id}', [EnderecoController::class, 'destroy']);
 });
+
+Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+    Route::get('atendentes', [AtendenteController::class, 'index']);
+    Route::get('atendentes/{id}', [AtendenteController::class, 'show']);
+    Route::post('atendentes', [AtendenteController::class, 'store']);
+    Route::put('atendentes/{id}', [AtendenteController::class, 'update']);
+    Route::delete('atendentes/{id}', [AtendenteController::class, 'destroy']);
+});
+
+Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+    Route::get('agendamentos', [AgendamentoController::class, 'index']);
+    Route::get('agendamentos/{id}', [AgendamentoController::class, 'show']);
+    Route::post('agendamentos', [AgendamentoController::class, 'store']);
+    Route::put('agendamentos/{id}', [AgendamentoController::class, 'update']);
+    Route::delete('agendamentos/{id}', [AgendamentoController::class, 'destroy']);
+});
+
+
