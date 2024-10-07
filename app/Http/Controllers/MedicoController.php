@@ -10,6 +10,7 @@ class MedicoController extends Controller
 
     public function __construct(MedicoService $medicoService)
     {
+
         $this->medicoService = $medicoService;
     }
 
@@ -27,14 +28,17 @@ class MedicoController extends Controller
         return response()->json($medico);
     }
 
-    public function store(MedicoRequest $request)
+    public function store(Request $request)
     {
         // Pega os dados validados diretamente do MedicoRequest
-        $validatedData = $request->validated();
-        if(Medico::findOrFail($request->get('id_usuario'))){
-            return response()->json(['error'=> 'Usuário já existe!'], 201);
+
+       // $validatedData = $request->validated();
+
+        if(Medico::where('id_usuario', $request->get('id_usuario'))->get()){
+            return response()->json(['error'=> 'usuario invalido!'], 201);
         }
-        $medico = $this->medicoService->createMedico($validatedData);
+
+        $medico = $this->medicoService->createMedico($request->all());
 
         // Retorna a resposta com o status 201 (Created)
         return response()->json($medico, 201);
