@@ -16,7 +16,7 @@ class EnderecoService
     {
 
 
-        // Criação manual dos dados
+        // Cria o novo endereço
         $endereco = new Endereco();
         $endereco->cep = $data['cep'];
         $endereco->logradouro = $data['logradouro'];
@@ -24,10 +24,10 @@ class EnderecoService
         $endereco->bairro = $data['bairro'];
         $endereco->uf = $data['uf'];
         $endereco->id_usuario = $data['id_usuario'];
-
         $endereco->save();
 
-        return $endereco;
+        // Retorna o endereço criado
+        return response()->json($endereco, 201);
     }
 
     /**
@@ -56,6 +56,7 @@ class EnderecoService
     {
 
         Endereco::findOrFail($id)->delete();
+        return response()->json(['message' => 'Endereço deletado com sucesso.'], 200);
     }
 
     /**

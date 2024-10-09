@@ -27,7 +27,7 @@ class Agendamento extends Model
     // Relacionamento com Paciente (usuário)
     public function paciente()
     {
-        return $this->belongsTo(Usuario::class, 'paciente', 'id');
+        return $this->belongsTo(Paciente::class, 'paciente', 'id');
     }
 
     // Relacionamento com Médico

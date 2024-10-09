@@ -46,7 +46,6 @@ class AtendenteController extends Controller
     // Deletar um atendente
     public function destroy($id)
     {
-        $this->atendenteService->deleteAtendente($id);
-        return response()->json(null, 204);
+        return $this->atendenteService->deleteAtendente($id);
     }
 }

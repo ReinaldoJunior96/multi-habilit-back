@@ -41,7 +41,6 @@ class AgendamentoController extends Controller
 
     public function destroy($id)
     {
-        $this->agendamentoService->deleteAgendamento($id);
-        return response()->json(null, 204);
+        return  $this->agendamentoService->deleteAgendamento($id);
     }
 }

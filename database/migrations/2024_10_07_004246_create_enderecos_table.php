@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('complemento', 255)->nullable();
             $table->string('bairro', 100);
             $table->string('uf', 2);
-            $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade');
+            $table->foreignId('id_usuario')->constrained('usuarios')->unique()->onDelete('cascade');
             $table->timestamps();
         });
     }

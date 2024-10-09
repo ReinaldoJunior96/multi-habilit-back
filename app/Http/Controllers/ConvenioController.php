@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Convenio;
@@ -56,12 +57,6 @@ class ConvenioController extends Controller
     // Deletar um convênio
     public function destroy($id)
     {
-        $deleted = $this->convenioService->deleteConvenio($id);
-
-        if (!$deleted) {
-            return response()->json(['error' => 'Convênio não encontrado'], 404);
-        }
-
-        return response()->json(['message' => 'Convênio deletado com sucesso'], 200);
+        return $this->convenioService->deleteConvenio($id);
     }
 }

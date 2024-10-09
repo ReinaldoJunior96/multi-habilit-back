@@ -7,9 +7,7 @@ use App\Models\Agendamento;
 class AgendamentoService
 {
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function createAgendamento(array $data)
     {
@@ -25,12 +23,20 @@ class AgendamentoService
 
     public function deleteAgendamento(int $id)
     {
-        Agendamento::findOrFail($id)->delete();
+
+        $exist = Agendamento::where('id', $id)->exists();
+        //dd($exist);
+        if ($exist) {
+            Agendamento::where('id', $id)->delete();
+            return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
+        }
+
+        return response()->json(['message' => 'Agendamento não existe.'], 400);
     }
 
     public function getAllAgendamentos()
     {
-        return Agendamento::with('medico.usuario','paciente','atendente.usuario')->get();
+        return Agendamento::with('medico.usuario', 'paciente.usuario', 'atendente.usuario')->get();
     }
 
     public function getAgendamentoById(int $id)

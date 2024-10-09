@@ -48,7 +48,6 @@ class EnderecoController extends Controller
     // Deletar um endereço
     public function destroy($id)
     {
-        $this->enderecoService->deleteEndereco($id);
-        return response()->json(null, 204);
+        return $this->enderecoService->deleteEndereco($id);
     }
 }

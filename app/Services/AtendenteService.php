@@ -47,7 +47,14 @@ class AtendenteService
      */
     public function deleteAtendente(int $id)
     {
-        Atendente::findOrFail($id)->delete();
+        $exist = Atendente::where('id', $id)->exists();
+
+        if ($exist) {
+            Atendente::findOrFail($id)->delete();
+            return response()->json(['message' => 'Atendente deletado com sucesso.'], 200);
+        }
+
+        return response()->json(['message' => 'Atendente não existe.'], 400);
     }
 
     /**
@@ -57,7 +64,7 @@ class AtendenteService
      */
     public function getAllAtendentes()
     {
-        return Atendente::all();
+        return Atendente::with('usuario')->get();
     }
 
     /**

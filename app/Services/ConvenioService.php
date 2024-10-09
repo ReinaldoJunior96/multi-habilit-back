@@ -30,7 +30,7 @@ class ConvenioService
         $convenio = Convenio::find($id);
 
         if (!$convenio) {
-            return false;
+            return response()->json(['message' => 'Convenio não existe.'], 200);
         }
 
         $convenio->update($data);
@@ -40,12 +40,13 @@ class ConvenioService
     // Deletar um convênio
     public function deleteConvenio($id)
     {
-        $convenio = Convenio::find($id);
+        $convenio = Convenio::where('id', $id)->exists();
 
-        if (!$convenio) {
-            return false;
+        if ($convenio) {
+            Convenio::where('id',  $id)->delete();
+            return response()->json(['message' => 'Convenio deletado com sucesso'], 200);
         }
 
-        return $convenio->delete();
+        return response()->json(['message' => 'Convenio não existe.'], 200);
     }
 }

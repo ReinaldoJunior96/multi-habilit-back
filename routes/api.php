@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConvenioController;
 use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\MedicoController;
+use App\Http\Controllers\PacienteController;
 use App\Http\Middleware\EnsureApiIsAuthenticated as EnsureApiIsAuthenticatedAlias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -67,5 +68,10 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 });
 
 
-
-
+Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+    Route::get('pacientes', [PacienteController::class, 'index']);
+    Route::get('pacientes/{id}', [PacienteController::class, 'show']);
+    Route::post('pacientes', [PacienteController::class, 'store']);
+    Route::put('pacientes/{id}', [PacienteController::class, 'update']);
+    Route::delete('pacientes/{id}', [PacienteController::class, 'destroy']);
+});
