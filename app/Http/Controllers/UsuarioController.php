@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UsuarioRequest;
 use App\Services\UsuarioService;
 use Illuminate\Http\Request;
 
@@ -24,12 +25,14 @@ class UsuarioController extends Controller
         return $this->usuarioService->getUsuarioById($id);
     }
 
-    public function store(Request $request)
+    public function store(UsuarioRequest $request)
     {
-        return $this->usuarioService->createUsuario($request->all());
+        $validatedData = $request->validated();
+
+        return $this->usuarioService->createUsuario($validatedData);
     }
 
-    public function update(Request $request, $id)
+    public function update(UsuarioRequest $request, $id)
     {
         return $this->usuarioService->updateUsuario($request->all(), $id);
     }

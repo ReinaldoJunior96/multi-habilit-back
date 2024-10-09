@@ -6,6 +6,11 @@ use App\Models\Agendamento;
 
 class AgendamentoService
 {
+
+    public function __construct()
+    {
+    }
+
     public function createAgendamento(array $data)
     {
         return Agendamento::create($data);
@@ -25,7 +30,7 @@ class AgendamentoService
 
     public function getAllAgendamentos()
     {
-        return Agendamento::all();
+        return Agendamento::with('medico.usuario','paciente','atendente.usuario')->get();
     }
 
     public function getAgendamentoById(int $id)

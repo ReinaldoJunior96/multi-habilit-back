@@ -46,7 +46,7 @@ class AuthController extends Controller
      *      path="/api/login",
      *      summary="Realiza login",
      *      description="Realiza o login de um usuário cadastrado",
-     *      tags={"Test"},
+     *      tags={"Login"},
      *      @OA\Parameter(
      *         name="email",
      *         in="query",

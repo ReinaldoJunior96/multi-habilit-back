@@ -16,7 +16,7 @@
         "/api/login": {
             "post": {
                 "tags": [
-                    "Test"
+                    "Login"
                 ],
                 "summary": "Realiza login",
                 "description": "Realiza o login de um usuário cadastrado",
@@ -44,12 +44,258 @@
                     }
                 }
             }
+        },
+        "/api/usuarios": {
+            "put": {
+                "tags": [
+                    "Usuário"
+                ],
+                "summary": "Edita um usuário",
+                "operationId": "4b932540f0a1c2cc2a0671099c05d378",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nome_completo": {
+                                        "type": "string",
+                                        "example": "John Doe Editado"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "reinaldojr@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "data_nascimento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2000-01-01"
+                                    },
+                                    "sexo": {
+                                        "type": "string",
+                                        "example": "Masculino"
+                                    },
+                                    "rg": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "nome_social": {
+                                        "type": "string",
+                                        "example": "Johnny",
+                                        "nullable": true
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "123456789",
+                                        "nullable": true
+                                    },
+                                    "celular": {
+                                        "type": "string",
+                                        "example": "987654321",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário editado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome_completo": {
+                                            "type": "string",
+                                            "example": "John Doe Editado"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "reinaldojr@example.com"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01 12:34:56"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01 12:34:56"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados de validação incorretos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Os dados fornecidos são inválidos."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Usuário"
+                ],
+                "summary": "Cadastra um novo usuário",
+                "operationId": "05f736010dbca8a2719dae1c157df992",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nome_completo": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "reinaldojr@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "data_nascimento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2000-01-01"
+                                    },
+                                    "sexo": {
+                                        "type": "string",
+                                        "example": "Masculino"
+                                    },
+                                    "rg": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "nome_social": {
+                                        "type": "string",
+                                        "example": "Johnny",
+                                        "nullable": true
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "123456789",
+                                        "nullable": true
+                                    },
+                                    "celular": {
+                                        "type": "string",
+                                        "example": "987654321",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome_completo": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "reinaldojr@example.com"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01 12:34:56"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01 12:34:56"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados de validação incorretos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Os dados fornecidos são inválidos."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
         {
-            "name": "Test",
-            "description": "Test"
+            "name": "Login",
+            "description": "Login"
+        },
+        {
+            "name": "Usuário",
+            "description": "Usuário"
         }
     ]
 }

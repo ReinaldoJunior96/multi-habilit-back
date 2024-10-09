@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\AtendenteController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ConvenioController;
 use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Middleware\EnsureApiIsAuthenticated as EnsureApiIsAuthenticatedAlias;
@@ -10,25 +11,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 
-
-
-
-Route::post('usuarios', [UsuarioController::class, 'store']);
 Route::post('login', [AuthController::class, 'login']);
-Route::post('/test', [UsuarioController::class, 'test']);
-
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
+});
 
+Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+    Route::post('usuarios', [UsuarioController::class, 'store']);
     Route::get('usuarios', [UsuarioController::class, 'index']);
     Route::get('usuarios/{id}', [UsuarioController::class, 'show']);
-
     Route::put('usuarios/{id}', [UsuarioController::class, 'update']);
     Route::delete('usuarios/{id}', [UsuarioController::class, 'destroy']);
 });
-
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::get('medicos', [MedicoController::class, 'index']);
@@ -60,6 +55,15 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::post('agendamentos', [AgendamentoController::class, 'store']);
     Route::put('agendamentos/{id}', [AgendamentoController::class, 'update']);
     Route::delete('agendamentos/{id}', [AgendamentoController::class, 'destroy']);
+});
+
+
+Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+    Route::get('convenios', [ConvenioController::class, 'index']);
+    Route::get('convenios/{id}', [ConvenioController::class, 'show']);
+    Route::post('convenios', [ConvenioController::class, 'store']);
+    Route::put('convenios/{id}', [ConvenioController::class, 'update']);
+    Route::delete('convenios/{id}', [ConvenioController::class, 'destroy']);
 });
 
 

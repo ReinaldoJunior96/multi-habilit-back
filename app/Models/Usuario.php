@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Usuario extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'usuarios';
 
@@ -48,6 +49,16 @@ class Usuario extends Authenticatable implements JWTSubject
 
     public function medico()
     {
-        return $this->hasOne(Medico::class, 'id_usuario');
+        return $this->hasOne(Medico::class, 'id_usuario', 'id');
+    }
+
+    public function atendente()
+    {
+        return $this->hasOne(Atendente::class, 'id_usuario', 'id');
+    }
+
+    public function paciente()
+    {
+        return $this->hasOne(Paciente::class, 'id_usuario', 'id');
     }
 }
