@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ConvenioRequest extends FormRequest
 {
@@ -34,5 +36,14 @@ class ConvenioRequest extends FormRequest
             'id_paciente.exists' => 'O paciente selecionado não existe.',
         ];
     }
-}
 
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        // Personaliza a resposta JSON em caso de erro de validação
+        throw new HttpResponseException(response()->json([
+            'message' => 'Os dados fornecidos são inválidos.',
+            'errors' => $validator->errors()
+        ], 422));
+    }
+}

@@ -1,65 +1,165 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Http\Requests\MedicoRequest;
-use App\Models\Medico;
 use App\Services\MedicoService;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
+use Exception;
+
 class MedicoController extends Controller
 {
     protected $medicoService;
 
     public function __construct(MedicoService $medicoService)
     {
-
         $this->medicoService = $medicoService;
+    }
+
+    private function getLoggedUserId()
+    {
+        return auth('api')->check() ? auth('api')->user()->id : 'usuário não autenticado';
     }
 
     public function index()
     {
-        return response()->json($this->medicoService->listMedicos(), 200);
+        try {
+            return response()->json($this->medicoService->listMedicos(), 200);
+        } catch (Exception $e) {
+            Log::error('Erro ao listar médicos', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
+            return response()->json(['message' => 'Erro ao listar médicos.', 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function show($id)
     {
-        $medico = $this->medicoService->findMedicoById($id);
-        if (!$medico) {
-            return response()->json(['error' => 'Médico não encontrado'], 404);
+        try {
+            $medico = $this->medicoService->findMedicoById($id);
+            return response()->json($medico, 200);
+        } catch (ModelNotFoundException $e) {
+            Log::error('Médico não encontrado', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
+            return response()->json(['message' => 'Médico não encontrado.'], 404);
+        } catch (Exception $e) {
+            Log::error('Erro ao buscar médico', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
+            return response()->json(['message' => 'Erro ao buscar médico.', 'error' => $e->getMessage()], 500);
         }
-        return response()->json($medico, 200);
     }
 
     public function store(MedicoRequest $request)
     {
-        if(!Medico::where('id_usuario', $request->get('id_usuario'))->get()->isEmpty()){
-            return response()->json(['message'=> 'Médico já atrelado a outro usuário!'], 201);
+        try {
+            $medico = $this->medicoService->createMedico($request->validated());
+
+            return response()->json($medico, 201);
+        } catch (ValidationException $e) {
+            Log::error('Erro de validação ao criar médico', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'errors' => $e->errors(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
+            return response()->json([
+                'message' => 'Erro de validação.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (Exception $e) {
+            Log::error('Erro ao criar médico', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
+            return response()->json(['message' => 'Erro ao criar médico.', 'error' => $e->getMessage()], 500);
         }
-
-        $medico = $this->medicoService->createMedico($request->validated());
-
-        return response()->json($medico, 201);
     }
 
     public function update(MedicoRequest $request, $id)
     {
-        $medico = Medico::findOrFail($id);
+        try {
+            $medico = $this->medicoService->updateMedico($request->validated(), $id);
 
+            return response()->json($medico, 200);
+        } catch (ModelNotFoundException $e) {
+            Log::error('Médico não encontrado para atualização', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
 
-        $medico->update($request->validated());
+            return response()->json(['message' => 'Médico não encontrado.'], 404);
+        } catch (ValidationException $e) {
+            Log::error('Erro de validação ao atualizar médico', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'errors' => $e->errors(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
 
-        return response()->json($medico, 200);
+            return response()->json([
+                'message' => 'Erro de validação.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (Exception $e) {
+            Log::error('Erro ao atualizar médico', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
 
+            return response()->json(['message' => 'Erro ao atualizar médico.', 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function destroy($id)
     {
-        $medico = Medico::find($id);
-        if (!$medico) {
+        try {
+            $this->medicoService->deleteMedico($id);
+
+            return response()->json(['message' => 'Médico excluído com sucesso.'], 200);
+        } catch (ModelNotFoundException $e) {
+            Log::error('Médico não encontrado para exclusão', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
             return response()->json(['message' => 'Médico não encontrado.'], 404);
+        } catch (Exception $e) {
+            Log::error('Erro ao excluir médico', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
+            return response()->json(['message' => 'Erro ao excluir médico.', 'error' => $e->getMessage()], 500);
         }
-
-        $this->medicoService->deleteMedico($medico);
-
-        return response()->json(['message' => 'Médico excluído com sucesso.']);
     }
 }
-

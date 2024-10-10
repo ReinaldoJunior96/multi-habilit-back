@@ -2,112 +2,102 @@
 
 namespace Tests\Feature;
 
-use App\Models\Medico;
+use App\Models\Atendente;
 use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class MedicoApiTest extends TestCase
+class AtendenteTest extends TestCase
 {
     use RefreshDatabase;
 
     private function authenticate()
     {
         $usuario = Usuario::factory()->create([
-            'email' => 'medico@example.com',
+            'email' => 'user@example.com',
             'password' => bcrypt('password123'),
         ]);
 
         $response = $this->postJson('/api/login', [
-            'email' => 'medico@example.com',
+            'email' => 'user@example.com',
             'password' => 'password123',
         ]);
 
         return $response->json('token');
     }
 
-    public function test_can_create_medico()
+    public function test_can_create_atendente()
     {
         $usuario = Usuario::factory()->create();
 
         $token = $this->authenticate();
 
         $data = [
-            'regime_trabalhista' => 0,
-            'carga_horaria' => 40,
-            'cnpj' => '12345678000123',
             'id_usuario' => $usuario->id,
         ];
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->postJson('/api/medicos', $data);
+            ->postJson('/api/atendentes', $data);
 
         $response->assertStatus(201);
-
-        $this->assertDatabaseHas('medicos', ['cnpj' => '12345678000123']);
+        $this->assertDatabaseHas('atendentes', ['id_usuario' => $usuario->id]);
     }
 
-    public function test_can_list_medicos()
+    public function test_can_list_atendentes()
     {
-        Medico::factory()->count(3)->create();
+        Atendente::factory()->count(3)->create();
 
         $token = $this->authenticate();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson('/api/medicos');
+            ->getJson('/api/atendentes');
 
         $response->assertStatus(200);
-
         $this->assertCount(3, $response->json());
     }
 
-    public function test_can_show_medico()
+    public function test_can_show_atendente()
     {
-        $medico = Medico::factory()->create();
+        $atendente = Atendente::factory()->create();
 
         $token = $this->authenticate();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson("/api/medicos/{$medico->id}");
+            ->getJson("/api/atendentes/{$atendente->id}");
 
         $response->assertStatus(200)
             ->assertJson([
-                'id' => $medico->id,
-                'cnpj' => $medico->cnpj,
+                'id' => $atendente->id,
             ]);
     }
 
-    public function test_can_update_medico()
+    public function test_can_update_atendente()
     {
-        $medico = Medico::factory()->create();
+        $atendente = Atendente::factory()->create();
 
         $token = $this->authenticate();
 
         $data = [
-            'regime_trabalhista' => 1,
-            'carga_horaria' => 20,
-            'cnpj' => '98765432000112',
+            'id_usuario' => $atendente->id_usuario,
         ];
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->putJson("/api/medicos/{$medico->id}", $data);
+            ->putJson("/api/atendentes/{$atendente->id}", $data);
 
         $response->assertStatus(200);
-
-        $this->assertDatabaseHas('medicos', ['cnpj' => '98765432000112']);
+        $this->assertDatabaseHas('atendentes', ['id_usuario' => $atendente->id_usuario]);
     }
 
-    public function test_can_delete_medico()
+    public function test_can_delete_atendente()
     {
-        $medico = Medico::factory()->create();
+        $atendente = Atendente::factory()->create();
 
         $token = $this->authenticate();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->deleteJson("/api/medicos/{$medico->id}");
+            ->deleteJson("/api/atendentes/{$atendente->id}");
 
         $response->assertStatus(200);
-
-        $this->assertDatabaseMissing('medicos', ['id' => $medico->id]);
+        $this->assertDatabaseMissing('atendentes', ['id' => $atendente->id]);
     }
 }

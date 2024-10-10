@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             AtendentesTableSeeder::class,
             AgendamentosTableSeeder::class,
             PacientesTableSeeder::class,
-            ConveniosTableSeeder::class
+            ConveniosTableSeeder::class,
+            EnderecoSeeder::class
         ]);
     }
 }
