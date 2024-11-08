@@ -1,6 +1,6 @@
 services:
   # Serviço do PHP para a segunda API
-  second-app:
+  multi-habilit-back:
     build:
       context: .
       dockerfile: Dockerfile
