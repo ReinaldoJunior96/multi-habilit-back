@@ -25,8 +25,8 @@ WORKDIR /var/www
 # Copiar o código da aplicação Laravel
 COPY . .
 
-# Instalar dependências do Laravel
-RUN composer install
+# Executar o composer install durante o build
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Definir permissões
 RUN chown -R www-data:www-data /var/www \
