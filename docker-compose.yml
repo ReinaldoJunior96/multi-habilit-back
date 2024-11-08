@@ -1,48 +1,40 @@
 services:
-    # Serviço do PHP
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: multi-habilit-backend
-        volumes:
-            - ./:/var/www
-        networks:
-            - laravel_network
-        depends_on:
-            - db
+  # Serviço do PHP para a segunda API
+  second-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: multi-habilit-back
+    volumes:
+      - ./:/var/www
+    networks:
+      - multi_habilit_back_network
+    depends_on:
+      - multi-habilit-back-db
+    command: >
+      sh -c "chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
+         chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
+         php artisan serve --host=0.0.0.0 --port=8081"
+    ports:
+      - "8081:8081"  # Porta diferente para a segunda API
 
-    # Serviço do Nginx
-    webserver:
-        image: nginx:alpine
-        container_name: nginx_server
-        volumes:
-            - ./:/var/www
-            - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-        ports:
-            - "8081:80"
-        networks:
-            - laravel_network
-        depends_on:
-            - app
-
-    # Serviço do MySQL
-    db:
-        image: mysql:8.0
-        container_name: mysql_db
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: multi-habilit
-            MYSQL_PASSWORD: root
-        volumes:
-            - dbdata:/var/lib/mysql
-        ports:
-            - "3307:3306"
-        networks:
-            - laravel_network
+  # Serviço do MySQL para a segunda API
+  multi-habilit-back-db:
+    image: mysql:8.0
+    container_name: mysql_db_multi_habilit_back
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: multi-habilit-back
+      MYSQL_PASSWORD: root
+    volumes:
+      - multi_habilit_back_dbdata:/var/lib/mysql
+    ports:
+      - "3310:3306"  # Porta diferente para o banco de dados
+    networks:
+      - multi_habilit_back_network
 
 networks:
-    laravel_network:
+  multi_habilit_back_network:  # Rede exclusiva para a segunda API
 
 volumes:
-    dbdata:
+  multi_habilit_back_dbdata:

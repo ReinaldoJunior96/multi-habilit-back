@@ -69,6 +69,7 @@ class EnderecoController extends Controller
     {
         try {
             $endereco = $this->enderecoService->createEndereco($request->validated());
+
             Log::info('Endereço criado com sucesso', [
                 'endereco_id' => $endereco->id,
                 'usuario_logado' => $this->getLoggedUserId()

@@ -30,7 +30,7 @@ class EnderecoService
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($endereco, 201);
+            return $endereco;
         } catch (\Exception $e) {
             Log::error("Erro ao criar endereço", [
                 'exception_message' => $e->getMessage(),

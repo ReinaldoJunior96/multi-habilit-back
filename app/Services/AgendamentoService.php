@@ -29,7 +29,7 @@ class AgendamentoService
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($agendamento, 201);
+            return $agendamento;
         } catch (\Exception $e) {
             Log::error('Erro ao criar agendamento', [
                 'exception_message' => $e->getMessage(),

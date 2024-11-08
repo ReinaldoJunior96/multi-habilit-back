@@ -31,7 +31,7 @@ class AtendenteService
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($atendente, 201);
+            return $atendente;
         } catch (\Exception $e) {
             Log::error("Erro ao criar atendente", [
                 'exception_message' => $e->getMessage(),

@@ -84,7 +84,7 @@ class ConvenioService
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($convenio, 201);
+            return $convenio;
         } catch (\Exception $e) {
             Log::error("Erro ao criar convênio", [
                 'exception_message' => $e->getMessage(),
