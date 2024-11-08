@@ -7,14 +7,13 @@ services:
     container_name: multi-habilit-back
     volumes:
       - ./:/var/www
+      - /var/www/vendor  # Isso evita que o volume sobrescreva a pasta vendor
     networks:
       - multi_habilit_back_network
     depends_on:
       - multi-habilit-back-db
     command: >
-      sh -c "chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
-         chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
-         php artisan serve --host=0.0.0.0 --port=8081"
+      sh -c "php artisan serve --host=0.0.0.0 --port=8081"
     ports:
       - "8081:8081"  # Porta diferente para a segunda API
 
