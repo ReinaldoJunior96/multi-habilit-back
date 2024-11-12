@@ -25,7 +25,7 @@ class UsuarioService
     public function getAllUsuarios()
     {
         try {
-            $usuarios = $this->usuario->all();
+            $usuarios = $this->usuario->with(['medico', 'paciente', 'atendente'])->get();
             Log::info("Usuário [{$this->getLoggedUserId()}] buscou todos os usuários com sucesso.");
             return response()->json($usuarios, 200);
         } catch (\Exception $e) {
