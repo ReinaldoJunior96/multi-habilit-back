@@ -23,8 +23,10 @@ class AgendamentosTableSeeder extends Seeder
             // Define o primeiro dia do mês atual
             $dataInicioMes = Carbon::create(2024, $mes, 1);
 
-            // Cria 30 agendamentos para o mês atual
-            foreach (range(1, 30) as $index) {
+            // Gera uma quantidade aleatória de agendamentos para o mês (entre 30 e 50)
+            $quantidadeAgendamentos = rand(30, 70);
+
+            foreach (range(1, $quantidadeAgendamentos) as $index) {
                 $paciente = $usuarios->random(); // Seleciona um paciente aleatório
                 $medico = $medicos->random(); // Seleciona um médico aleatório
                 $atendente = $atendentes->random(); // Seleciona um atendente aleatório
