@@ -7,6 +7,7 @@ use App\Models\Agendamento;
 use App\Models\Atendente;
 use App\Models\Usuario;
 use App\Models\Medico;
+use Carbon\Carbon;
 
 class AgendamentosTableSeeder extends Seeder
 {
@@ -17,19 +18,28 @@ class AgendamentosTableSeeder extends Seeder
         $medicos = Medico::factory()->count(5)->create(); // Cria 5 médicos
         $atendentes = Atendente::factory()->count(3)->create(); // Cria 3 atendentes
 
-        // Gera múltiplos agendamentos com combinações variadas
-        foreach (range(1, 20) as $index) { // Cria 20 agendamentos
-            $paciente = $usuarios->random(); // Seleciona um paciente aleatório
-            $medico = $medicos->random(); // Seleciona um médico aleatório
-            $atendente = $atendentes->random(); // Seleciona um atendente aleatório
+        // Itera por cada mês de 2024
+        foreach (range(1, 12) as $mes) {
+            // Define o primeiro dia do mês atual
+            $dataInicioMes = Carbon::create(2024, $mes, 1);
 
-            Agendamento::create([
-                'atendente' => $atendente->id,
-                'paciente' => $paciente->id,
-                'medico' => $medico->id,
-                'data_agendada' => now()->addDays(rand(1, 30))->setTime(rand(8, 17), rand(0, 59)), // Gera uma data e hora entre 8h e 17h nos próximos 30 dias
-                'status' => rand(0, 1), // Status aleatório (0 ou 1)
-            ]);
+            // Cria 30 agendamentos para o mês atual
+            foreach (range(1, 30) as $index) {
+                $paciente = $usuarios->random(); // Seleciona um paciente aleatório
+                $medico = $medicos->random(); // Seleciona um médico aleatório
+                $atendente = $atendentes->random(); // Seleciona um atendente aleatório
+
+                // Define uma data aleatória dentro do mês
+                $dataAgendada = $dataInicioMes->copy()->addDays(rand(0, $dataInicioMes->daysInMonth - 1))->setTime(rand(8, 17), rand(0, 59));
+
+                Agendamento::create([
+                    'atendente' => $atendente->id,
+                    'paciente' => $paciente->id,
+                    'medico' => $medico->id,
+                    'data_agendada' => $dataAgendada,
+                    'status' => rand(0, 1), // Status aleatório (0 ou 1)
+                ]);
+            }
         }
     }
 }
