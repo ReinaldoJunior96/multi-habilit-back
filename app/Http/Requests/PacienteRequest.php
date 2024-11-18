@@ -19,7 +19,7 @@ class PacienteRequest extends FormRequest
             'estado_civil' => 'required|string|max:20',
             'nome_mae' => 'required|string|max:200',
             'nome_pai' => 'nullable|string|max:200',
-            'prefrencial' => 'required|boolean',
+            'preferencial' => 'required|boolean',
             'cns' => 'nullable|string',
             'nome_conjuge' => 'nullable|string|max:255',
             'cor_raca' => 'nullable|string|max:50',
