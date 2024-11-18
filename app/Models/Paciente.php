@@ -13,7 +13,7 @@ class Paciente extends Model
         'estado_civil',
         'nome_mae',
         'nome_pai',
-        'prefrencial',
+        'preferencial',
         'cns',
         'nome_conjuge',
         'cor_raca',
@@ -29,8 +29,8 @@ class Paciente extends Model
         return $this->belongsTo(Usuario::class, 'id_usuario');
     }
 
-//    public function responsavel()
-//    {
-//        return $this->belongsTo(Usuario::class, 'id_responsavel');
-//    }
+    //    public function responsavel()
+    //    {
+    //        return $this->belongsTo(Usuario::class, 'id_responsavel');
+    //    }
 }

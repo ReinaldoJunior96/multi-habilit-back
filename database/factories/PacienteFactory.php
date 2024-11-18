@@ -16,7 +16,7 @@ class PacienteFactory extends Factory
             'estado_civil' => $this->faker->randomElement(['Solteiro', 'Casado', 'Divorciado']),
             'nome_mae' => $this->faker->name('female'),
             'nome_pai' => $this->faker->optional()->name('male'),
-            'prefrencial' => $this->faker->boolean(),
+            'preferencial' => $this->faker->boolean(),
             'cns' => $this->faker->optional()->numerify('###########'),
             'nome_conjuge' => $this->faker->optional()->name(),
             'cor_raca' => $this->faker->randomElement(['Branco', 'Negro', 'Pardo', 'Amarelo', 'Indígena']),

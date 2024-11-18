@@ -28,6 +28,7 @@ class UsuarioFactory extends Factory
             'nome_social' => $this->faker->optional()->name,
             'telefone' => $this->faker->phoneNumber,
             'celular' => $this->faker->phoneNumber,
+            'unidade' => $this->faker->state,
         ];
     }
 }

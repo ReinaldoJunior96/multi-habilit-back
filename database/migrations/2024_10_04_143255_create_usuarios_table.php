@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('nome_social', 255)->nullable();
             $table->string('telefone', 20)->nullable();
             $table->string('celular', 20)->nullable();
+            $table->string('unidade')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

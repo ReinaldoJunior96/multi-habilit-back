@@ -65,4 +65,16 @@ class AuthController extends Controller
             return response()->json(['error' => 'Erro ao obter informações do usuário'], 500);
         }
     }
+
+
+    public function refresh()
+    {
+        try {
+            $newToken = JWTAuth::refresh(JWTAuth::getToken());
+            return response()->json(['token' => $newToken], 200);
+        } catch (JWTException $e) {
+            Log::error('Erro ao atualizar o token JWT: ' . $e->getMessage());
+            return response()->json(['error' => 'Não foi possível atualizar o token'], 500);
+        }
+    }
 }

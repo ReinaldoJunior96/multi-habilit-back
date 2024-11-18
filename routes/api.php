@@ -16,6 +16,8 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']); // Nova rota para refresh token
+    Route::get('me', [AuthController::class, 'me']);
 });
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
