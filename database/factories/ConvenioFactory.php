@@ -10,16 +10,12 @@ class ConvenioFactory extends Factory
 {
     protected $model = Convenio::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
-            'empresa' => $this->faker->company(),
-            'tipo' => $this->faker->randomElement(['Plano Completo', 'Plano Parcial', 'Plano Emergencial']),
-            'vencimento' => $this->faker->dateTimeBetween('+1 year', '+2 years'),
-            'percentual_coparticipacao' => $this->faker->numberBetween(0, 100),
-            'particular' => $this->faker->boolean(),
-            'id_paciente' => Paciente::factory(),  // Cria ou associa um paciente automaticamente
+            'empresa' => $this->faker->company,
+            'cnpj' => $this->faker->numerify('##############'), // 14 números
+            'valor_convenio' => $this->faker->randomFloat(2, 100, 10000), // Valor entre 100 e 10.000
         ];
     }
 }
-

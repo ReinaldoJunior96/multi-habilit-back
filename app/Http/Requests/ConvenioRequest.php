@@ -9,18 +9,15 @@ class ConvenioRequest extends FormRequest
 {
     public function authorize()
     {
-        return true;
+        return true; // Permite que qualquer usuário autorizado faça a solicitação.
     }
 
     public function rules()
     {
         return [
             'empresa' => 'required|string|max:255',
-            'tipo' => 'required|string|max:50',
-            'vencimento' => 'nullable|date',
-            'percentual_coparticipacao' => 'integer|min:0|max:100',
-            'particular' => 'boolean',
-            'id_paciente' => 'required|exists:pacientes,id',
+            'cnpj' => 'required|string|size:14|unique:convenios,cnpj',
+            'valor_convenio' => 'required|numeric|min:0',
         ];
     }
 
@@ -28,15 +25,19 @@ class ConvenioRequest extends FormRequest
     {
         return [
             'empresa.required' => 'A empresa é obrigatória.',
-            'tipo.required' => 'O tipo de convênio é obrigatório.',
-            'vencimento.date' => 'A data de vencimento deve ser uma data válida.',
-            'percentual_coparticipacao.integer' => 'O percentual de coparticipação deve ser um número inteiro.',
-            'particular.boolean' => 'O campo particular deve ser verdadeiro ou falso.',
-            'id_paciente.required' => 'O ID do paciente é obrigatório.',
-            'id_paciente.exists' => 'O paciente selecionado não existe.',
+            'empresa.string' => 'O nome da empresa deve ser um texto.',
+            'empresa.max' => 'O nome da empresa não pode exceder 255 caracteres.',
+
+            'cnpj.required' => 'O CNPJ é obrigatório.',
+            'cnpj.string' => 'O CNPJ deve ser um texto.',
+            'cnpj.size' => 'O CNPJ deve ter exatamente 14 caracteres.',
+            'cnpj.unique' => 'Este CNPJ já está cadastrado.',
+
+            'valor_convenio.required' => 'O valor do convênio é obrigatório.',
+            'valor_convenio.numeric' => 'O valor do convênio deve ser um número.',
+            'valor_convenio.min' => 'O valor do convênio não pode ser negativo.',
         ];
     }
-
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {

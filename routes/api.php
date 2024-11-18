@@ -11,6 +11,7 @@ use App\Http\Middleware\EnsureApiIsAuthenticated as EnsureApiIsAuthenticatedAlia
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\ConvenioPacienteController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -77,3 +78,9 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::put('pacientes/{id}', [PacienteController::class, 'update']);
     Route::delete('pacientes/{id}', [PacienteController::class, 'destroy']);
 });
+
+
+// Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+//     Route::post('/convenios/pacientes', [ConvenioPacienteController::class, 'store']);
+//     Route::delete('/convenios/pacientes', [ConvenioPacienteController::class, 'remover']);
+// });

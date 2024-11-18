@@ -15,18 +15,15 @@ class ConveniosTableSeeder extends Seeder
      */
     public function run()
     {
-        // Cria alguns pacientes para associar aos convênios
-        $pacientes = Paciente::factory()->count(5)->create();
+        // Cria 20 pacientes
+        $pacientes = Paciente::factory()->count(20)->create();
 
-        foreach ($pacientes as $paciente) {
-            Convenio::create([
-                'empresa' => 'Convenio ' . $paciente->id,
-                'tipo' => 'Plano Completo',
-                'vencimento' => now()->addYear(),
-                'percentual_coparticipacao' => 20,
-                'particular' => false,
-                'id_paciente' => $paciente->id,
-            ]);
-        }
+        // Cria 10 convênios e associa pacientes a eles
+        Convenio::factory()->count(10)->create()->each(function ($convenio) use ($pacientes) {
+            // Associa entre 3 e 7 pacientes ao convênio
+            $convenio->pacientes()->attach(
+                $pacientes->random(rand(3, 7))->pluck('id')->toArray()
+            );
+        });
     }
 }

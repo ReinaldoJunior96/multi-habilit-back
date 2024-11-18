@@ -16,11 +16,12 @@ class AgendamentoRequest extends FormRequest
     public function rules()
     {
         return [
-            'atendente' => 'required|exists:atendentes,id',
-            'paciente' => 'required|exists:usuarios,id',
-            'medico' => 'required|exists:medicos,id',
-            'data_agendada' => 'required|date',
-            'status' => 'required|integer',
+            'atendente' => 'required|exists:atendentes,id', // Valida que o atendente existe na tabela 'atendentes'
+            'paciente' => 'required|exists:usuarios,id', // Valida que o paciente existe na tabela 'usuarios'
+            'medico' => 'required|exists:medicos,id', // Valida que o médico existe na tabela 'medicos'
+            'data_agendada' => 'required|date|after:now', // A data deve ser uma data válida e futura
+            'status' => 'required|integer|in:0,1,2', // Status deve ser um inteiro e um dos valores permitidos
+            'convenio' => 'nullable|exists:convenios,id', // Valida que o convênio é opcional e existe na tabela 'convenios'
         ];
     }
 
@@ -35,8 +36,11 @@ class AgendamentoRequest extends FormRequest
             'medico.exists' => 'O médico informado não existe.',
             'data_agendada.required' => 'A data agendada é obrigatória.',
             'data_agendada.date' => 'A data agendada deve ser uma data válida.',
+            'data_agendada.after' => 'A data agendada deve ser no futuro.',
             'status.required' => 'O status é obrigatório.',
             'status.integer' => 'O status deve ser um número inteiro.',
+            'status.in' => 'O status deve ser 0 (pendente), 1 (confirmado) ou 2 (cancelado).',
+            'convenio.exists' => 'O convênio informado não existe.',
         ];
     }
 

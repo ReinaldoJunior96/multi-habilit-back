@@ -16,6 +16,7 @@ class Agendamento extends Model
         'medico',
         'data_agendada',
         'status',
+        'convenio',
     ];
 
     // Relacionamento com Atendente
@@ -34,5 +35,9 @@ class Agendamento extends Model
     public function medico()
     {
         return $this->belongsTo(Medico::class, 'medico', 'id');
+    }
+    public function convenio()
+    {
+        return $this->belongsTo(Convenio::class, 'convenio', 'id');
     }
 }

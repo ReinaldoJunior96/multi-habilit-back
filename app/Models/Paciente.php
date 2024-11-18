@@ -9,6 +9,7 @@ class Paciente extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['pivot'];
     protected $fillable = [
         'estado_civil',
         'nome_mae',
@@ -24,13 +25,14 @@ class Paciente extends Model
         'id_usuario',
     ];
 
+
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuario');
     }
 
-    //    public function responsavel()
-    //    {
-    //        return $this->belongsTo(Usuario::class, 'id_responsavel');
-    //    }
+    public function convenios()
+    {
+        return $this->belongsToMany(Convenio::class, 'convenio_paciente');
+    }
 }

@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('convenios', function (Blueprint $table) {
-            $table->id(); // ID primário auto-incrementado
-            $table->string('empresa', 255);
-            $table->string('cnpj', 14);
-            $table->decimal('valor_convenio', 10, 2)->default(0);
+        Schema::create('convenio_paciente', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('convenio_id')->constrained('convenios')->onDelete('cascade');
+            $table->foreignId('paciente_id')->constrained('pacientes')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('convenios');
+        Schema::dropIfExists('convenio_paciente');
     }
 };

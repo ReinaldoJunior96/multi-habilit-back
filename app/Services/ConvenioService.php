@@ -24,7 +24,7 @@ class ConvenioService
     public function getAllConvenios()
     {
         try {
-            $convenios = $this->convenio->with('paciente')->get();
+            $convenios = $this->convenio->with('pacientes')->get();
 
             Log::info('Convênios listados com sucesso.', [
                 'usuario_logado' => $this->getLoggedUserId()
@@ -46,7 +46,7 @@ class ConvenioService
     public function getConvenioById($id)
     {
         try {
-            $convenio = $this->convenio->with('paciente')->findOrFail($id);
+            $convenio = $this->convenio->with('pacientes.usuario')->findOrFail($id);
 
             Log::info("Convênio ID {$id} encontrado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()

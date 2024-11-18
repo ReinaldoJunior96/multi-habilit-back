@@ -11,15 +11,12 @@ class Convenio extends Model
 
     protected $fillable = [
         'empresa',
-        'tipo',
-        'vencimento',
-        'percentual_coparticipacao',
-        'particular',
-        'id_paciente',
+        'cnpj',
+        'valor_convenio',
     ];
 
-    public function paciente()
+    public function pacientes()
     {
-        return $this->belongsTo(Paciente::class, 'id_paciente', 'id');
+        return $this->belongsToMany(Paciente::class, 'convenio_paciente');
     }
 }
