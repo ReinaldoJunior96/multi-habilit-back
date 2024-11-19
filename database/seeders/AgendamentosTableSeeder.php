@@ -30,28 +30,27 @@ class AgendamentosTableSeeder extends Seeder
             $horariosPermitidos[] = sprintf('%02d:30', $hora); // Meia hora (ex: 08:30)
         }
 
-        // Gera uma quantidade de agendamentos para essa data (exemplo: 20 agendamentos)
-        foreach (range(1, 20) as $index) {
-            $paciente = $usuarios->random(); // Seleciona um paciente aleatório
-            $medico = $medicos->random(); // Seleciona um médico aleatório
-            $atendente = $atendentes->random(); // Seleciona um atendente aleatório
-            $convenio = $convenios->random(); // Seleciona um convênio aleatório
+        // Para cada horário permitido, cria agendamentos para diferentes médicos
+        foreach ($horariosPermitidos as $horario) {
+            foreach ($medicos as $medico) { // Itera sobre cada médico
+                // Seleciona um paciente e um atendente aleatoriamente
+                $paciente = $usuarios->random();
+                $atendente = $atendentes->random();
+                $convenio = $convenios->random(); // Seleciona um convênio aleatório
 
-            // Seleciona um horário aleatório
-            $horarioAleatorio = array_splice($horariosPermitidos, array_rand($horariosPermitidos), 1)[0]; // Remove o horário escolhido da lista para evitar duplicatas
+                // Combina a data fixa com o horário
+                $dataCompleta = Carbon::parse($dataAgendamento->format('Y-m-d') . ' ' . $horario);
 
-            // Combina a data fixa com o horário escolhido
-            $dataCompleta = Carbon::parse($dataAgendamento->format('Y-m-d') . ' ' . $horarioAleatorio);
-
-            // Cria o agendamento
-            Agendamento::create([
-                'atendente' => $atendente->id,
-                'paciente' => $paciente->id,
-                'medico' => $medico->id,
-                'data_agendada' => $dataCompleta,
-                'status' => rand(0, 1), // Status aleatório (0 ou 1)
-                'convenio' => $convenio->id, // Associa o convênio ao agendamento
-            ]);
+                // Cria o agendamento para o médico no horário específico
+                Agendamento::create([
+                    'atendente' => $atendente->id,
+                    'paciente' => $paciente->id,
+                    'medico' => $medico->id,
+                    'data_agendada' => $dataCompleta,
+                    'status' => rand(0, 1), // Status aleatório (0 ou 1)
+                    'convenio' => $convenio->id, // Associa o convênio ao agendamento
+                ]);
+            }
         }
     }
 }
