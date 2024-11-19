@@ -7,6 +7,7 @@ use App\Models\Agendamento;
 use App\Models\Atendente;
 use App\Models\Usuario;
 use App\Models\Medico;
+use App\Models\Convenio;
 use Carbon\Carbon;
 
 class AgendamentosTableSeeder extends Seeder
