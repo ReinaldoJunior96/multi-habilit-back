@@ -18,6 +18,9 @@ class AgendamentosTableSeeder extends Seeder
         $medicos = Medico::factory()->count(5)->create(); // Cria 5 médicos
         $atendentes = Atendente::factory()->count(3)->create(); // Cria 3 atendentes
 
+        // Certifique-se de que existem convênios previamente criados
+        $convenios = Convenio::all();
+
         // Itera por cada mês de 2024
         foreach (range(1, 12) as $mes) {
             // Define o primeiro dia do mês atual
@@ -31,15 +34,25 @@ class AgendamentosTableSeeder extends Seeder
                 $medico = $medicos->random(); // Seleciona um médico aleatório
                 $atendente = $atendentes->random(); // Seleciona um atendente aleatório
 
+                // Seleciona um convênio aleatório associado ao paciente
+                $convenio = $paciente->convenios()->inRandomOrder()->first();
+
+                if (!$convenio) {
+                    // Se o paciente não tem convênios, pula a criação do agendamento
+                    continue;
+                }
+
                 // Define uma data aleatória dentro do mês
                 $dataAgendada = $dataInicioMes->copy()->addDays(rand(0, $dataInicioMes->daysInMonth - 1))->setTime(rand(8, 17), rand(0, 59));
 
+                // Cria o agendamento com o convênio associado
                 Agendamento::create([
                     'atendente' => $atendente->id,
                     'paciente' => $paciente->id,
                     'medico' => $medico->id,
                     'data_agendada' => $dataAgendada,
                     'status' => rand(0, 1), // Status aleatório (0 ou 1)
+                    'convenio_id' => $convenio->id, // Associa o convênio ao agendamento
                 ]);
             }
         }
