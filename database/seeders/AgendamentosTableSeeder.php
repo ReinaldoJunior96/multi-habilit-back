@@ -18,30 +18,21 @@ class AgendamentosTableSeeder extends Seeder
         $usuarios = Usuario::factory()->count(10)->create(); // Cria 10 pacientes (usuários)
         $medicos = Medico::factory()->count(5)->create(); // Cria 5 médicos
         $atendentes = Atendente::factory()->count(3)->create(); // Cria 3 atendentes
-
-        // Certifique-se de que existem convênios previamente criados
-        $convenios = Convenio::all();
+        $convenios = Convenio::all(); // Obtém todos os convênios disponíveis
 
         // Itera por cada mês de 2024
         foreach (range(1, 12) as $mes) {
             // Define o primeiro dia do mês atual
             $dataInicioMes = Carbon::create(2024, $mes, 1);
 
-            // Gera uma quantidade aleatória de agendamentos para o mês (entre 30 e 50)
+            // Gera uma quantidade aleatória de agendamentos para o mês (entre 30 e 70)
             $quantidadeAgendamentos = rand(30, 70);
 
             foreach (range(1, $quantidadeAgendamentos) as $index) {
                 $paciente = $usuarios->random(); // Seleciona um paciente aleatório
                 $medico = $medicos->random(); // Seleciona um médico aleatório
                 $atendente = $atendentes->random(); // Seleciona um atendente aleatório
-
-                // Seleciona um convênio aleatório associado ao paciente
-                $convenio = $paciente->convenios()->inRandomOrder()->first();
-
-                if (!$convenio) {
-                    // Se o paciente não tem convênios, pula a criação do agendamento
-                    continue;
-                }
+                $convenio = $convenios->random(); // Seleciona um convênio aleatório
 
                 // Define uma data aleatória dentro do mês
                 $dataAgendada = $dataInicioMes->copy()->addDays(rand(0, $dataInicioMes->daysInMonth - 1))->setTime(rand(8, 17), rand(0, 59));
@@ -53,7 +44,7 @@ class AgendamentosTableSeeder extends Seeder
                     'medico' => $medico->id,
                     'data_agendada' => $dataAgendada,
                     'status' => rand(0, 1), // Status aleatório (0 ou 1)
-                    'convenio_id' => $convenio->id, // Associa o convênio ao agendamento
+                    'convenio' => $convenio->id, // Associa o convênio ao agendamento
                 ]);
             }
         }
