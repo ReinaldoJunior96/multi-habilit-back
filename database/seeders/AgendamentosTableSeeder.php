@@ -20,6 +20,13 @@ class AgendamentosTableSeeder extends Seeder
         $atendentes = Atendente::factory()->count(3)->create(); // Cria 3 atendentes
         $convenios = Convenio::all(); // Obtém todos os convênios disponíveis
 
+        // Define os horários permitidos entre 08:00 e 18:00
+        $horariosPermitidos = [];
+        for ($hora = 8; $hora <= 17; $hora++) {
+            $horariosPermitidos[] = sprintf('%02d:00', $hora); // Hora cheia (ex: 08:00)
+            $horariosPermitidos[] = sprintf('%02d:30', $hora); // Meia hora (ex: 08:30)
+        }
+
         // Itera por cada mês de 2024
         foreach (range(1, 12) as $mes) {
             // Define o primeiro dia do mês atual
@@ -35,7 +42,11 @@ class AgendamentosTableSeeder extends Seeder
                 $convenio = $convenios->random(); // Seleciona um convênio aleatório
 
                 // Define uma data aleatória dentro do mês
-                $dataAgendada = $dataInicioMes->copy()->addDays(rand(0, $dataInicioMes->daysInMonth - 1))->setTime(rand(8, 17), rand(0, 59));
+                $diaAgendado = $dataInicioMes->copy()->addDays(rand(0, $dataInicioMes->daysInMonth - 1));
+                $horarioAleatorio = $horariosPermitidos[array_rand($horariosPermitidos)]; // Seleciona um horário aleatório
+
+                // Combina a data e o horário
+                $dataAgendada = Carbon::parse($diaAgendado->format('Y-m-d') . ' ' . $horarioAleatorio);
 
                 // Cria o agendamento com o convênio associado
                 Agendamento::create([
