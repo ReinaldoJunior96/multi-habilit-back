@@ -62,4 +62,9 @@ class Usuario extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Paciente::class, 'id_usuario', 'id');
     }
+
+    public function convenios()
+    {
+        return $this->belongsToMany(Convenio::class, 'convenio_paciente', 'paciente_id', 'convenio_id');
+    }
 }
