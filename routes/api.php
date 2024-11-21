@@ -31,7 +31,7 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 });
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::middleware('role:admin-master,admin')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         Route::get('medicos', [MedicoController::class, 'index']);
         Route::get('medicos/{id}', [MedicoController::class, 'show']);
         Route::post('medicos', [MedicoController::class, 'store']);
