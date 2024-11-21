@@ -26,7 +26,11 @@ class UsuariosTableSeeder extends Seeder
                 'cpf' => '12345678901',
                 'nome_social' => 'Johnny',
                 'telefone' => '123456789',
-                'celular' => '987654321'
+                'celular' => '987654321',
+                'unidade' => null,
+                'role' => 'admin-master', // Role definida como admin-master
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'nome_completo' => 'Jane Smith',
@@ -38,8 +42,12 @@ class UsuariosTableSeeder extends Seeder
                 'cpf' => '10987654321',
                 'nome_social' => null,
                 'telefone' => '123456780',
-                'celular' => '987654320'
-            ]
+                'celular' => '987654320',
+                'unidade' => null,
+                'role' => 'admin', // Role definida como admin para este exemplo
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

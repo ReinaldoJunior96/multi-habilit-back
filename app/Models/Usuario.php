@@ -26,6 +26,7 @@ class Usuario extends Authenticatable implements JWTSubject
         'telefone',
         'celular',
         'unidade',
+        'role',
     ];
 
     protected $hidden = [
@@ -66,5 +67,10 @@ class Usuario extends Authenticatable implements JWTSubject
     public function convenios()
     {
         return $this->belongsToMany(Convenio::class, 'convenio_paciente', 'paciente_id', 'convenio_id');
+    }
+
+    public function isRole($role)
+    {
+        return $this->role === $role;
     }
 }

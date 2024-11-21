@@ -29,6 +29,7 @@ class UsuarioFactory extends Factory
             'telefone' => $this->faker->phoneNumber,
             'celular' => $this->faker->phoneNumber,
             'unidade' => $this->faker->state,
+            'role' => $this->faker->randomElement(['admin-master', 'admin', 'atendente', 'medico', 'paciente']), // Role aleatória
         ];
     }
 }
