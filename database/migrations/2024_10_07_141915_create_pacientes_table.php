@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();
-            $table->string('estado_civil', 20);
-            $table->string('nome_mae', 200);
+            $table->string('estado_civil', 20)->nullable();
+            $table->string('nome_mae', 200)->nullable();
             $table->string('nome_pai', 200)->nullable();
             $table->boolean('preferencial')->default(false);
             $table->string('cns')->nullable(); // Cartão Nacional de Saúde

@@ -60,7 +60,6 @@ class UsuarioService
     {
         try {
             $usuario = $this->usuario->withTrashed()->where('email', $data['email'])->orWhere('cpf', $data['cpf'])->first();
-
             if ($usuario) {
                 if ($usuario->trashed()) {
                     $usuario->restore();

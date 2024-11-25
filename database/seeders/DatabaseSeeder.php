@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             AtendentesTableSeeder::class,
             PacientesTableSeeder::class, // Pacientes precisam existir antes dos convênios
             ConveniosTableSeeder::class, // Convenios precisam ser criados antes dos agendamentos
-            AgendamentosTableSeeder::class, // Depende de convenios
+            //AgendamentosTableSeeder::class, // Depende de convenios
             EnderecoSeeder::class,
         ]);
     }

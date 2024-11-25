@@ -42,7 +42,6 @@ class PacienteService
     {
         try {
             $paciente = $this->paciente->with('usuario')->findOrFail($id);
-
             Log::info("Paciente ID {$id} foi encontrado com sucesso.", ['usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($paciente, 200);
         } catch (ModelNotFoundException $e) {
@@ -73,7 +72,7 @@ class PacienteService
 
             if ($exist) {
                 Log::warning("Tentativa de criação de paciente com id_usuario já existente: {$data['id_usuario']}", ['usuario_logado' => $this->getLoggedUserId()]);
-                return response()->json(['message' => 'Paciente já atrelado a um usuário.'], 409);
+                return response()->json(['message' => 'Usuário já é paciente.'], 409);
             }
 
             $paciente = $this->paciente->create($data);

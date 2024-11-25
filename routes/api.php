@@ -11,8 +11,6 @@ use App\Http\Middleware\EnsureApiIsAuthenticated as EnsureApiIsAuthenticatedAlia
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\ConvenioPacienteController;
-use App\Http\Middleware\RoleMiddleware;
 
 Route::post('login', [AuthController::class, 'login']);
 
