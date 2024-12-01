@@ -21,7 +21,8 @@ class AgendamentoRequest extends FormRequest
             'medico' => 'required|exists:medicos,id', // Valida que o médico existe na tabela 'medicos'
             'data_agendada' => 'required|date|after:now', // A data deve ser uma data válida e futura
             'status' => 'required|integer|in:0,1,2', // Status deve ser um inteiro e um dos valores permitidos
-            'convenio' => 'nullable|exists:convenios,id', // Valida que o convênio é opcional e existe na tabela 'convenios'
+            'convenio' => 'nullable|exists:convenios,id',
+            'numero_guia' => 'required|string',
         ];
     }
 
@@ -41,6 +42,7 @@ class AgendamentoRequest extends FormRequest
             'status.integer' => 'O status deve ser um número inteiro.',
             'status.in' => 'O status deve ser 0 (pendente), 1 (confirmado) ou 2 (cancelado).',
             'convenio.exists' => 'O convênio informado não existe.',
+            'numero_guia.string' => 'O número da guia deve ser um numero válido.',
         ];
     }
 

@@ -24,6 +24,8 @@ class AgendamentoService
     {
         try {
             // Cria o agendamento
+
+
             $agendamento = $this->agendamento->create($data);
 
             // Captura os IDs do paciente e do convênio

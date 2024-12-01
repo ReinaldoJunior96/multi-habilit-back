@@ -17,6 +17,7 @@ class Agendamento extends Model
         'data_agendada',
         'status',
         'convenio',
+        'numero_guia',
     ];
 
     // Relacionamento com Atendente
