@@ -147,6 +147,7 @@ class UsuarioService
             'nome_social' => $data['nome_social'] ?? null,
             'telefone' => $data['telefone'] ?? null,
             'celular' => $data['celular'] ?? null,
+            'role' => $data['role'] ?? 'paciente',
         ];
     }
 }

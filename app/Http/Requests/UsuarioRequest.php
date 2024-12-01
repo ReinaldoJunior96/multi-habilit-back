@@ -47,6 +47,7 @@ class UsuarioRequest extends FormRequest
             'nome_social' => 'nullable|string|max:255',
             'telefone' => 'nullable|string|max:20',
             'celular' => 'nullable|string|max:20',
+            'role' => 'nullable|in:admin-master,admin,atendente,medico,paciente',
         ];
     }
 
@@ -69,6 +70,7 @@ class UsuarioRequest extends FormRequest
             'cpf.unique' => 'Este CPF já está cadastrado.',
             'telefone.max' => 'O telefone deve ter no máximo 20 caracteres.',
             'celular.max' => 'O celular deve ter no máximo 20 caracteres.',
+            'role' => 'nullable|in:admin-master,admin,atendente,medico,paciente',
         ];
     }
 
