@@ -25,7 +25,7 @@ class UsuarioRequest extends FormRequest
                 'email',
                 'max:255',
                 // Verifica se o email é único, considerando soft deletes
-                Rule::unique('usuarios', 'email')->ignore($usuarioId)->whereNull('deleted_at'),
+                Rule::unique('usuarios', 'email')->ignore($usuarioId),
             ],
             'password' => $usuarioId ? 'nullable|string|min:8' : 'required|string|min:8', // Apenas requer password se for um novo usuário
             'data_nascimento' => 'required|date',
@@ -35,7 +35,7 @@ class UsuarioRequest extends FormRequest
                 'string',
                 'max:20',
                 // Verifica se o RG é único, considerando soft deletes
-                Rule::unique('usuarios', 'rg')->ignore($usuarioId)->whereNull('deleted_at'),
+                Rule::unique('usuarios', 'rg')->ignore($usuarioId),
             ],
             'cpf' => [
                 'required',
@@ -70,7 +70,6 @@ class UsuarioRequest extends FormRequest
             'cpf.unique' => 'Este CPF já está cadastrado.',
             'telefone.max' => 'O telefone deve ter no máximo 20 caracteres.',
             'celular.max' => 'O celular deve ter no máximo 20 caracteres.',
-            'role' => 'nullable|in:admin-master,admin,atendente,medico,paciente',
         ];
     }
 
