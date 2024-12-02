@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class UsuarioRequest extends FormRequest
 {
@@ -16,7 +17,8 @@ class UsuarioRequest extends FormRequest
 
     public function rules()
     {
-        $usuarioId = $this->route('id'); // Pega o ID do usuário a ser editado (se houver)
+        $usuarioId = $this->route('id'); // Obtém o ID da rota
+        Log::info('Validando com ID do usuário:', ['id' => $usuarioId]);
 
         return [
             'nome_completo' => 'required|string|max:255',
@@ -24,25 +26,22 @@ class UsuarioRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                // Verifica se o email é único, considerando soft deletes
                 Rule::unique('usuarios', 'email')->ignore($usuarioId),
             ],
-            'password' => $usuarioId ? 'nullable|string|min:8' : 'required|string|min:8', // Apenas requer password se for um novo usuário
+            'password' => $usuarioId ? 'nullable|string|min:8' : 'required|string|min:8',
             'data_nascimento' => 'required|date',
             'sexo' => 'required|string|max:10',
             'rg' => [
                 'required',
                 'string',
                 'max:20',
-                // Verifica se o RG é único, considerando soft deletes
                 Rule::unique('usuarios', 'rg')->ignore($usuarioId),
             ],
             'cpf' => [
                 'required',
                 'string',
                 'size:11',
-                // Verifica se o CPF é único, considerando soft deletes
-                Rule::unique('usuarios', 'cpf')->ignore($usuarioId)->whereNull('deleted_at'),
+                Rule::unique('usuarios', 'cpf')->ignore($usuarioId),
             ],
             'nome_social' => 'nullable|string|max:255',
             'telefone' => 'nullable|string|max:20',
