@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('medicos', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('regime_trabalhista');
-            $table->integer('carga_horaria');
-            $table->string('cnpj', 14);  // CNPJ único para garantir que cada médico tenha um CNPJ exclusivo
+            $table->integer('carga_horaria')->nullable();
+            $table->string('cnpj', 14)->nullable();  // CNPJ único para garantir que cada médico tenha um CNPJ exclusivo
             $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade')->unique(); // Garante que id_usuario seja único
             $table->timestamps();
         });
