@@ -1,5 +1,5 @@
 services:
-  # Serviço do PHP para a segunda API
+  # Serviço do PHP para a API
   multi-habilit-back-app:
     build:
       context: .
@@ -7,17 +7,33 @@ services:
     container_name: multi-habilit-back
     volumes:
       - ./:/var/www
-      - /var/www/vendor  # Isso evita que o volume sobrescreva a pasta vendor
+      - /var/www/vendor
     networks:
       - multi_habilit_back_network
     depends_on:
       - multi-habilit-back-db
     command: >
       sh -c "php artisan serve --host=0.0.0.0 --port=8081"
-    ports:
-      - "8081:8081"  # Porta diferente para a segunda API
+    expose:
+      - "8081"
 
-  # Serviço do MySQL para a segunda API
+  # Serviço do Nginx para HTTPS
+  nginx:
+    image: nginx:latest
+    container_name: multi-habilit-back-nginx
+    ports:
+      - "443:443"  # HTTPS
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl/certificate.crt:/etc/ssl/certs/certificate.crt
+      - ./ssl/certificate.key:/etc/ssl/private/certificate.key
+      - ./:/var/www
+    depends_on:
+      - multi-habilit-back-app
+    networks:
+      - multi_habilit_back_network
+
+  # Serviço do MySQL para a API
   multi-habilit-back-db:
     image: mysql:8.0
     container_name: mysql_db_multi_habilit_back
@@ -28,12 +44,12 @@ services:
     volumes:
       - multi_habilit_back_dbdata:/var/lib/mysql
     ports:
-      - "3310:3306"  # Porta diferente para o banco de dados
+      - "3310:3306"
     networks:
       - multi_habilit_back_network
 
 networks:
-  multi_habilit_back_network:  # Rede exclusiva para a segunda API
+  multi_habilit_back_network:
 
 volumes:
   multi_habilit_back_dbdata:
