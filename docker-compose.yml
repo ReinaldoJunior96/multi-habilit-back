@@ -17,6 +17,18 @@ services:
     expose:
       - "8081" # Expor apenas para a rede interna
 
+  services:
+  # Nginx para servir o frontend e fazer proxy para o backend
+  nginx_server:
+    image: nginx:alpine
+    container_name: nginx_server
+    ports:
+      - "8081:80" # Porta externa para acessar o Nginx
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - backend_network # Conectar Nginx à mesma rede do backend
+      
   # Banco de Dados do Backend
   multi-habilit-back-db:
     image: mysql:8.0
@@ -32,23 +44,8 @@ services:
     expose:
       - "3306" # Expor apenas para a rede interna
 
-  
-  # Frontend React
-  multhabilit-app:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: multhabilit-app
-    ports:
-      - "80:80" # Expor o frontend para acesso externo
-    networks:
-      - frontend_network
-    # Aplicação React não precisa se comunicar com o backend
-
 networks:
   backend_network:
-    driver: bridge
-  frontend_network:
     driver: bridge
 
 volumes:
