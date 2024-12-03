@@ -1,5 +1,5 @@
 services:
-  # Serviço do PHP para a API
+  # Backend da API
   multi-habilit-back-app:
     build:
       context: .
@@ -7,18 +7,16 @@ services:
     container_name: multi-habilit-back
     volumes:
       - ./:/var/www
-      - /var/www/vendor  # Isso evita que o volume sobrescreva a pasta vendor
-    networks:
-      - multi_habilit_network
+      - /var/www/vendor
     depends_on:
       - multi-habilit-back-db
       - db
     command: >
       sh -c "php artisan serve --host=0.0.0.0 --port=8081"
     ports:
-      - "8081:8081"  # Porta para a API
+      - "8081:8081"
 
-  # Serviço do MySQL para a API
+  # Banco de Dados do Backend
   multi-habilit-back-db:
     image: mysql:8.0
     container_name: mysql_db_multi_habilit_back
@@ -29,40 +27,20 @@ services:
     volumes:
       - multi_habilit_back_dbdata:/var/lib/mysql
     ports:
-      - "3310:3306"  # Porta para o banco de dados da API
-    networks:
-      - multi_habilit_network
+      - "3310:3306"
 
-  # Novo serviço MySQL para outra aplicação
-  db:
-    image: mysql:8.0
-    container_name: mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: multi-habilit
-      MYSQL_PASSWORD: root
-    volumes:
-      - dbdata:/var/lib/mysql
-    ports:
-      - "3309:3306"  # Porta para o banco de dados do formulário
-    networks:
-      - multi_habilit_network
-
-  # Serviço do frontend (opcional)
-  # frontend-app:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: frontend-multi-habilit
+  # Banco de Dados para Outro Uso
+  # db:
+  #   image: mysql:8.0
+  #   container_name: mysql_db
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: multi-habilit
+  #     MYSQL_PASSWORD: root
+  #   volumes:
+  #     - dbdata:/var/lib/mysql
   #   ports:
-  #     - "3000:3000"  # Porta para o frontend
-  #   networks:
-  #     - multi_habilit_network
-  #   depends_on:
-  #     - multi-habilit-back-app
-
-networks:
-  multi_habilit_network:  # Rede única compartilhada pelos serviços
+  #     - "3309:3306"
 
 volumes:
   multi_habilit_back_dbdata:
