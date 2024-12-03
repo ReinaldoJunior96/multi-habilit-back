@@ -1,35 +1,18 @@
 services:
-  # Backend da API
   multi-habilit-back-app:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     container_name: multi-habilit-back
     volumes:
       - ./backend:/var/www
-      - /var/www/vendor
-    networks:
-      - backend_network
+    ports:
+      - "8081:8081" # Porta externa mapeada para o servidor PHP interno
     depends_on:
       - multi-habilit-back-db
-    command: >
-      sh -c "php artisan serve --host=0.0.0.0 --port=8081"
-    expose:
-      - "8081" # Expor apenas para a rede interna
-
-  services:
-  # Nginx para servir o frontend e fazer proxy para o backend
-  nginx_server:
-    image: nginx:alpine
-    container_name: nginx_server
-    ports:
-      - "8081:80" # Porta externa para acessar o Nginx
-    volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
-      - backend_network # Conectar Nginx à mesma rede do backend
-      
-  # Banco de Dados do Backend
+      - backend_network
+
   multi-habilit-back-db:
     image: mysql:8.0
     container_name: mysql_db_multi_habilit_back
@@ -39,10 +22,10 @@ services:
       MYSQL_PASSWORD: root
     volumes:
       - multi_habilit_back_dbdata:/var/lib/mysql
+    ports:
+      - "3307:3306"
     networks:
       - backend_network
-    expose:
-      - "3306" # Expor apenas para a rede interna
 
 networks:
   backend_network:

@@ -1,7 +1,6 @@
-# Usar a imagem oficial do PHP com FPM e PHP 8.2
 FROM php:8.2-fpm
 
-# Instalar dependências do sistema
+# Instalar extensões PHP necessárias
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -12,27 +11,25 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
-# Instalar extensões PHP necessárias
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install gd pdo pdo_mysql zip
 
-# Instalar o Composer
+# Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Definir o diretório de trabalho
+# Configuração do diretório de trabalho
 WORKDIR /var/www
 
 # Copiar o código da aplicação Laravel
 COPY . .
 
-# Executar o composer install durante o build
+# Instalar dependências do Laravel
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Definir permissões
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+# Ajustar permissões
+RUN chown -R www-data:www-data /var/www && \
+    chmod -R 755 /var/www/storage
 
-# Expor a porta do PHP-FPM
-EXPOSE 9000
+EXPOSE 8081
 
-CMD ["php-fpm"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8081"]
