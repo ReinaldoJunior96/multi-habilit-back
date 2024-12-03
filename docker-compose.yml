@@ -39,7 +39,7 @@ services:
     container_name: mysql_db
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: multi-habilit-db
+      MYSQL_DATABASE: multi-habilit
       MYSQL_PASSWORD: root
     volumes:
       - dbdata:/var/lib/mysql
@@ -49,17 +49,17 @@ services:
       - multi_habilit_network
 
   # Serviço do frontend (opcional)
-  frontend-app:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend-multi-habilit
-    ports:
-      - "3000:3000"  # Porta para o frontend
-    networks:
-      - multi_habilit_network
-    depends_on:
-      - multi-habilit-back-app
+  # frontend-app:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: frontend-multi-habilit
+  #   ports:
+  #     - "3000:3000"  # Porta para o frontend
+  #   networks:
+  #     - multi_habilit_network
+  #   depends_on:
+  #     - multi-habilit-back-app
 
 networks:
   multi_habilit_network:  # Rede única compartilhada pelos serviços
