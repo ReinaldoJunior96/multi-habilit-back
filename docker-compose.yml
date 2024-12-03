@@ -10,7 +10,6 @@ services:
       - /var/www/vendor
     depends_on:
       - multi-habilit-back-db
-      - db
     command: >
       sh -c "php artisan serve --host=0.0.0.0 --port=8081"
     ports:
@@ -29,19 +28,6 @@ services:
     ports:
       - "3310:3306"
 
-  # Banco de Dados para Outro Uso
-  # db:
-  #   image: mysql:8.0
-  #   container_name: mysql_db
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: root
-  #     MYSQL_DATABASE: multi-habilit
-  #     MYSQL_PASSWORD: root
-  #   volumes:
-  #     - dbdata:/var/lib/mysql
-  #   ports:
-  #     - "3309:3306"
-
 volumes:
   multi_habilit_back_dbdata:
-  dbdata:
+  # dbdata:
