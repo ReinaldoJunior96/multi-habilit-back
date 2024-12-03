@@ -1,24 +1,23 @@
 services:
-  # Serviço do PHP para a API
+  # Backend da API
   multi-habilit-back-app:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: multi-habilit-back
     volumes:
-      - ./:/var/www
-      - /var/www/vendor  # Isso evita que o volume sobrescreva a pasta vendor
+      - ./backend:/var/www
+      - /var/www/vendor
     networks:
-      - multi_habilit_network
+      - backend_network
     depends_on:
       - multi-habilit-back-db
-      - db
     command: >
       sh -c "php artisan serve --host=0.0.0.0 --port=8081"
-    ports:
-      - "8081:8081"  # Porta para a API
+    expose:
+      - "8081" # Expor apenas para a rede interna
 
-  # Serviço do MySQL para a API
+  # Banco de Dados do Backend
   multi-habilit-back-db:
     image: mysql:8.0
     container_name: mysql_db_multi_habilit_back
@@ -28,42 +27,29 @@ services:
       MYSQL_PASSWORD: root
     volumes:
       - multi_habilit_back_dbdata:/var/lib/mysql
-    ports:
-      - "3310:3306"  # Porta para o banco de dados da API
     networks:
-      - multi_habilit_network
+      - backend_network
+    expose:
+      - "3306" # Expor apenas para a rede interna
 
-  # Novo serviço MySQL para outra aplicação
-  db:
-    image: mysql:8.0
-    container_name: mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: multi-habilit
-      MYSQL_PASSWORD: root
-    volumes:
-      - dbdata:/var/lib/mysql
+  
+  # Frontend React
+  multhabilit-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: multhabilit-app
     ports:
-      - "3309:3306"  # Porta para o banco de dados do formulário
+      - "80:80" # Expor o frontend para acesso externo
     networks:
-      - multi_habilit_network
-
-  # Serviço do frontend (opcional)
-  # frontend-app:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: frontend-multi-habilit
-  #   ports:
-  #     - "3000:3000"  # Porta para o frontend
-  #   networks:
-  #     - multi_habilit_network
-  #   depends_on:
-  #     - multi-habilit-back-app
+      - frontend_network
+    # Aplicação React não precisa se comunicar com o backend
 
 networks:
-  multi_habilit_network:  # Rede única compartilhada pelos serviços
+  backend_network:
+    driver: bridge
+  frontend_network:
+    driver: bridge
 
 volumes:
   multi_habilit_back_dbdata:
-  dbdata:
