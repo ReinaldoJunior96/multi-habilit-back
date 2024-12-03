@@ -30,7 +30,6 @@ class MedicoRequest extends FormRequest
         return [
             'regime_trabalhista' => 'required|integer',
             'carga_horaria' => 'required|integer|min:1|max:60',
-            'cnpj' => 'size:14',
             'id_usuario' => 'required'
         ];
     }
@@ -49,7 +48,6 @@ class MedicoRequest extends FormRequest
             'carga_horaria.integer' => 'A carga horária deve ser um número inteiro.',
             'carga_horaria.min' => 'A carga horária mínima permitida é 1 hora.',
             'carga_horaria.max' => 'A carga horária máxima permitida é 60 horas.',
-            'cnpj.size' => 'O CNPJ deve ter exatamente 14 caracteres.',
             'cnpj.unique' => 'Este CNPJ já está cadastrado.',
             'id_usuario.required' => 'O ID do usuário é obrigatório.',
             'id_usuario.exists' => 'O ID do usuário informado não existe.',
