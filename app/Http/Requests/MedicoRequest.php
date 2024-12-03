@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -48,8 +49,6 @@ class MedicoRequest extends FormRequest
             'carga_horaria.integer' => 'A carga horária deve ser um número inteiro.',
             'carga_horaria.min' => 'A carga horária mínima permitida é 1 hora.',
             'carga_horaria.max' => 'A carga horária máxima permitida é 60 horas.',
-            'cnpj.required' => 'O CNPJ é obrigatório.',
-            'cnpj.string' => 'O CNPJ deve ser uma string.',
             'cnpj.size' => 'O CNPJ deve ter exatamente 14 caracteres.',
             'cnpj.unique' => 'Este CNPJ já está cadastrado.',
             'id_usuario.required' => 'O ID do usuário é obrigatório.',
