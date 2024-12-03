@@ -30,7 +30,7 @@ class MedicoRequest extends FormRequest
         return [
             'regime_trabalhista' => 'required|integer',
             'carga_horaria' => 'required|integer|min:1|max:60',
-            'cnpj' => 'required|string|size:14',
+            'cnpj' => 'size:14',
             'id_usuario' => 'required'
         ];
     }
