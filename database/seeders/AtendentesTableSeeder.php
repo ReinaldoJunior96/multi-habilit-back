@@ -16,11 +16,11 @@ class AtendentesTableSeeder extends Seeder
     public function run()
     {
         // Encontra ou cria um usuário fixo, ou você pode definir um ID específico
-        $usuario = Usuario::factory()->create();// Ou use Usuario::find(1) para um usuário existente
+        //$usuario = Usuario::factory()->create(); // Ou use Usuario::find(1) para um usuário existente
 
         // Cria um atendente associado ao usuário
-        Atendente::create([
-            'id_usuario' => $usuario->id, // Associação ao usuário
-        ]);
+        // Atendente::create([
+        //     'id_usuario' => $usuario->id, // Associação ao usuário
+        // ]);
     }
 }
