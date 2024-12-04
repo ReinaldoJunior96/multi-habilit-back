@@ -71,6 +71,7 @@ class AgendamentoController extends Controller
 
     public function store(AgendamentoRequest $request)
     {
+        dd($request->all());
         try {
             $agendamento = $this->agendamentoService->createAgendamento($request->validated());
             Log::info('Agendamento criado com sucesso', [
