@@ -16,7 +16,7 @@ class UsuariosTableSeeder extends Seeder
     public function run()
     {
         // Insere usuários e obtém o ID do usuário Admin
-        $adminId = DB::table('usuarios')->insertGetId([
+        DB::table('usuarios')->insert([
             'nome_completo' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password123'),

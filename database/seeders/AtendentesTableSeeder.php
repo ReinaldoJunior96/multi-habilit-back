@@ -20,7 +20,7 @@ class AtendentesTableSeeder extends Seeder
         // Cria o registro na tabela atendentes
         if ($adminId) {
             DB::table('atendentes')->insert([
-                'usuario_id' => $adminId,
+                'id_usuario' => $adminId, // Campo correto da chave estrangeira
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
