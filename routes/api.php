@@ -29,13 +29,14 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 });
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::middleware('role:admin-master,admin')->group(function () {
-        Route::get('medicos', [MedicoController::class, 'index']);
-        Route::get('medicos/{id}', [MedicoController::class, 'show']);
-        Route::post('medicos', [MedicoController::class, 'store']);
-        Route::put('medicos/{id}', [MedicoController::class, 'update']);
-        Route::delete('medicos/{id}', [MedicoController::class, 'destroy']);
-    });
+    Route::get('medicos', [MedicoController::class, 'index']);
+    Route::get('medicos/{id}', [MedicoController::class, 'show']);
+    Route::post('medicos', [MedicoController::class, 'store']);
+    Route::put('medicos/{id}', [MedicoController::class, 'update']);
+    Route::delete('medicos/{id}', [MedicoController::class, 'destroy']);
+    // Route::middleware('role:admin-master,admin')->group(function () {
+
+    // });
 });
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {

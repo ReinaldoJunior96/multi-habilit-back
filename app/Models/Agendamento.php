@@ -21,10 +21,10 @@ class Agendamento extends Model
     ];
 
     // Relacionamento com Atendente
-    // public function atendente()
-    // {
-    //     return $this->belongsTo(Atendente::class, 'atendente', 'id');
-    // }
+    public function atendente()
+    {
+        return $this->belongsTo(Atendente::class, 'atendente', 'id');
+    }
 
     // Relacionamento com Paciente (usuário)
     public function paciente()

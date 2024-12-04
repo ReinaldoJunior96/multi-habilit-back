@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('atendentes', function (Blueprint $table) {
             $table->id(); // Primary key com auto-incremento
-            //$table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade');
+            $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade');
             $table->timestamps(); // Campos 'created_at' e 'updated_at'
         });
     }

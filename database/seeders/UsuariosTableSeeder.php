@@ -28,7 +28,7 @@ class UsuariosTableSeeder extends Seeder
                 'telefone' => '123456789',
                 'celular' => '987654321',
                 'unidade' => null,
-                'role' => 'admin-master', // Role definida como admin-master
+                'role' => 'atendente', // Role definida como admin-master
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -44,7 +44,7 @@ class UsuariosTableSeeder extends Seeder
                 'telefone' => '123456780',
                 'celular' => '987654320',
                 'unidade' => null,
-                'role' => 'admin', // Role definida como admin para este exemplo
+                'role' => 'atendente', // Role definida como admin para este exemplo
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
