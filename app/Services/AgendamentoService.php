@@ -23,31 +23,24 @@ class AgendamentoService
     public function createAgendamento(array $data)
     {
         try {
-            // Cria o agendamento
-
-
             $agendamento = $this->agendamento->create($data);
 
-            // Captura os IDs do paciente e do convênio
             $pacienteId = $data['paciente'];
-            $convenioId = $data['convenio'] ?? null; // Certifique-se de que 'convenio' está vindo na requisição
+            $convenioId = $data['convenio'] ?? null;
 
             if ($convenioId) {
-                // Verifica se o paciente já está associado ao convênio antes de criar
                 $convenio = \App\Models\Convenio::findOrFail($convenioId);
 
                 if (!$convenio->pacientes()->where('paciente_id', $pacienteId)->exists()) {
-                    // Associa o paciente ao convênio
                     $convenio->pacientes()->attach($pacienteId);
                 }
             }
-
 
             Log::info("Agendamento criado com sucesso. ID Agendamento: {$agendamento->id}", [
                 'usuario_logado' => $this->getLoggedUserId(),
             ]);
 
-            return $agendamento;
+            return $agendamento; // Retorna somente o modelo
         } catch (\Exception $e) {
             Log::error('Erro ao criar agendamento', [
                 'exception_message' => $e->getMessage(),
@@ -57,9 +50,10 @@ class AgendamentoService
                 'usuario_logado' => $this->getLoggedUserId(),
             ]);
 
-            return response()->json(['message' => 'Erro ao criar agendamento.'], 500);
+            throw $e; // Lança a exceção para o controller tratar
         }
     }
+
 
     public function updateAgendamento(array $data, int $id)
     {

@@ -71,13 +71,14 @@ class AgendamentoController extends Controller
 
     public function store(AgendamentoRequest $request)
     {
-        dd($request->all());
         try {
             $agendamento = $this->agendamentoService->createAgendamento($request->validated());
+
             Log::info('Agendamento criado com sucesso', [
                 'agendamento_id' => $agendamento->id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
+
             return response()->json($agendamento, 201);
         } catch (ValidationException $e) {
             Log::error('Erro de validação ao criar agendamento', [
