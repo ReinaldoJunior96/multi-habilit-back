@@ -19,7 +19,7 @@ class MedicoSeeder extends Seeder
         $medico = Usuario::factory()->create();
         $medicoFixoTest = Usuario::create([
             'nome_completo' => 'Médico Fixo',
-            'email' => 'medico@example.com',
+            'email' => 'medicoAtivo@example.com',
             'password' => bcrypt('password123'),  // Define a senha fixa
             'data_nascimento' => '1980-01-01',
             'sexo' => 'Masculino',

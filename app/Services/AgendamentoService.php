@@ -127,7 +127,7 @@ class AgendamentoService
     public function getAllAgendamentos()
     {
         try {
-            $agendamentos = $this->agendamento->with('medico.usuario', 'paciente.usuario', 'atendente.usuario', 'convenio.pacientes')->get();
+            $agendamentos = $this->agendamento->with('medico.usuario', 'paciente.usuario', 'convenio.pacientes')->get();
 
             Log::info("Todos os agendamentos foram buscados com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()
@@ -149,7 +149,7 @@ class AgendamentoService
     public function getAgendamentoById(int $id)
     {
         try {
-            $agendamento = $this->agendamento->with('medico.usuario', 'paciente.usuario', 'atendente.usuario', 'convenio')->findOrFail($id);
+            $agendamento = $this->agendamento->with('medico.usuario', 'paciente.usuario', 'convenio')->findOrFail($id);
 
             Log::info("Agendamento ID {$id} encontrado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()

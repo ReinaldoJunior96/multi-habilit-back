@@ -24,21 +24,23 @@ class ConvenioService
     public function getAllConvenios()
     {
         try {
+            // Carrega convênios com os pacientes associados
             $convenios = $this->convenio->with('pacientes')->get();
 
             Log::info('Convênios listados com sucesso.', [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($convenios, 200);
+            return $convenios;
         } catch (\Exception $e) {
-            Log::error("Erro ao listar convênios", [
+            Log::error('Erro ao listar convênios.', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Erro ao listar convênios.'], 500);
+
+            throw $e; // Repropaga a exceção para o controlador tratar
         }
     }
 
@@ -46,13 +48,14 @@ class ConvenioService
     public function getConvenioById($id)
     {
         try {
-            $convenio = $this->convenio->with('pacientes.usuario')->findOrFail($id);
+            // Carrega o convênio com os pacientes associados
+            $convenio = $this->convenio->with('pacientes')->findOrFail($id);
 
             Log::info("Convênio ID {$id} encontrado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($convenio, 200);
+            return $convenio;
         } catch (ModelNotFoundException $e) {
             Log::error("Convênio não encontrado.", [
                 'exception_message' => $e->getMessage(),
@@ -61,16 +64,18 @@ class ConvenioService
                 'id_convenio' => $id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Convênio não encontrado.'], 404);
+
+            throw $e; // Repropaga a exceção para o controlador tratar
         } catch (\Exception $e) {
-            Log::error("Erro ao buscar convênio.", [
+            Log::error('Erro ao buscar convênio.', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'id_convenio' => $id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Erro ao buscar convênio.'], 500);
+
+            throw $e; // Repropaga a exceção para o controlador tratar
         }
     }
 
@@ -78,7 +83,25 @@ class ConvenioService
     public function createConvenio(array $data)
     {
         try {
+            // Extrai os pacientes associados, se existirem
+            $pacientes = $data['pacientes'] ?? [];
+
+            // Remove o campo 'pacientes' do restante dos dados
+            unset($data['pacientes']);
+
+            // Converte arrays para JSON nos campos relevantes
+            $data['procedimentos'] = isset($data['procedimentos']) ? json_encode($data['procedimentos']) : null;
+            $data['medicamentos'] = isset($data['medicamentos']) ? json_encode($data['medicamentos']) : null;
+            $data['taxas'] = isset($data['taxas']) ? json_encode($data['taxas']) : null;
+            $data['materiais'] = isset($data['materiais']) ? json_encode($data['materiais']) : null;
+
+            // Cria o convênio
             $convenio = $this->convenio->create($data);
+
+            // Associa os pacientes ao convênio
+            if (!empty($pacientes)) {
+                $convenio->pacientes()->attach($pacientes);
+            }
 
             Log::info("Convênio criado com sucesso. ID Convênio: {$convenio->id}", [
                 'usuario_logado' => $this->getLoggedUserId()
@@ -86,40 +109,59 @@ class ConvenioService
 
             return $convenio;
         } catch (\Exception $e) {
-            Log::error("Erro ao criar convênio", [
+            Log::error('Erro ao criar convênio.', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'input_data' => $data,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Erro ao criar convênio.'], 500);
+
+            throw $e; // Repropaga a exceção para o controlador tratar
         }
     }
+
 
     // Atualizar um convênio existente
     public function updateConvenio($id, array $data)
     {
         try {
+            // Extrai os pacientes associados, se existirem
+            $pacientes = isset($data['pacientes']) ? $data['pacientes'] : [];
+
+            // Remove o campo 'pacientes' do restante dos dados
+            unset($data['pacientes']);
+
+            // Encontra o convênio
             $convenio = $this->convenio->findOrFail($id);
+
+            // Atualiza os dados do convênio
             $convenio->update($data);
+
+            // Atualiza os pacientes associados
+            if (!empty($pacientes)) {
+                $convenio->pacientes()->sync($pacientes);
+            } else {
+                $convenio->pacientes()->detach(); // Remove todos os pacientes associados
+            }
 
             Log::info("Convênio ID {$id} atualizado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($convenio, 200);
+            return $convenio;
         } catch (ModelNotFoundException $e) {
-            Log::error("Convênio não encontrado para atualização", [
+            Log::error('Convênio não encontrado para atualização.', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'id_convenio' => $id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Convênio não encontrado para atualização.'], 404);
+
+            throw $e; // Repropaga a exceção para o controlador tratar
         } catch (\Exception $e) {
-            Log::error("Erro ao atualizar convênio", [
+            Log::error('Erro ao atualizar convênio.', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
@@ -127,7 +169,8 @@ class ConvenioService
                 'input_data' => $data,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Erro ao atualizar convênio.'], 500);
+
+            throw $e; // Repropaga a exceção para o controlador tratar
         }
     }
 
@@ -135,32 +178,37 @@ class ConvenioService
     public function deleteConvenio($id)
     {
         try {
+            // Encontra o convênio
             $convenio = $this->convenio->findOrFail($id);
+
+            // Deleta o convênio
             $convenio->delete();
 
             Log::info("Convênio ID {$id} deletado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json(['message' => 'Convênio deletado com sucesso.'], 200);
+            return true;
         } catch (ModelNotFoundException $e) {
-            Log::error("Convênio não encontrado para exclusão", [
+            Log::error('Convênio não encontrado para exclusão.', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'id_convenio' => $id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Convênio não encontrado para exclusão.'], 404);
+
+            throw $e; // Repropaga a exceção para o controlador tratar
         } catch (\Exception $e) {
-            Log::error("Erro ao deletar convênio", [
+            Log::error('Erro ao deletar convênio.', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'id_convenio' => $id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Erro ao deletar convênio.'], 500);
+
+            throw $e; // Repropaga a exceção para o controlador tratar
         }
     }
 }

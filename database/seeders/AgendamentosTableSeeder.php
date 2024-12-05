@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Agendamento;
-use App\Models\Atendente;
+use App\Models\Paciente;
 use App\Models\Usuario;
 use App\Models\Medico;
 use App\Models\Convenio;
@@ -14,41 +14,35 @@ class AgendamentosTableSeeder extends Seeder
 {
     public function run()
     {
-        // Cria múltiplos usuários, médicos e atendentes
-        $usuarios = Usuario::factory()->count(10)->create(); // Cria 10 pacientes (usuários)
-        $medicos = Medico::factory()->count(5)->create(); // Cria 5 médicos
-        $atendentes = Atendente::factory()->count(3)->create(); // Cria 3 atendentes
-        $convenios = Convenio::all(); // Obtém todos os convênios disponíveis
+        $pacientes = Paciente::all(); // Obtém todos os pacientes
+        $medicos = Medico::factory()->count(10)->create(); // Cria 10 médicos
+        $atendentes = Usuario::factory()->count(5)->create(); // Cria 5 atendentes
+        $convenios = Convenio::factory()->count(5)->create(); // Cria 5 convênios
 
-        // Define a data fixa para os agendamentos
-        $dataAgendamento = Carbon::create(2024, 11, 19); // Terça-feira, 19 de novembro de 2024
+        $mesAtual = Carbon::now()->month;
+        $anoAtual = Carbon::now()->year;
 
-        // Define os horários permitidos entre 08:00 e 18:00
-        $horariosPermitidos = [];
-        for ($hora = 8; $hora <= 17; $hora++) {
-            $horariosPermitidos[] = sprintf('%02d:00', $hora); // Hora cheia (ex: 08:00)
-            $horariosPermitidos[] = sprintf('%02d:30', $hora); // Meia hora (ex: 08:30)
-        }
+        foreach (range(1, Carbon::now()->daysInMonth) as $dia) {
+            $numeroAgendamentos = rand(2, 5); // Entre 2 e 5 agendamentos por dia
 
-        // Para cada horário permitido, cria agendamentos para diferentes médicos
-        foreach ($horariosPermitidos as $horario) {
-            foreach ($medicos as $medico) { // Itera sobre cada médico
-                // Seleciona um paciente e um atendente aleatoriamente
-                $paciente = $usuarios->random();
-                $atendente = $atendentes->random();
-                $convenio = $convenios->random(); // Seleciona um convênio aleatório
+            for ($i = 0; $i < $numeroAgendamentos; $i++) {
+                $paciente = $pacientes->random(); // Seleciona um paciente existente
+                $medico = $medicos->random(); // Seleciona um médico existente
+                $atendente = $atendentes->random(); // Seleciona um atendente existente
+                $convenio = $convenios->random(); // Seleciona um convênio existente
 
-                // Combina a data fixa com o horário
-                $dataCompleta = Carbon::parse($dataAgendamento->format('Y-m-d') . ' ' . $horario);
+                $hora = rand(8, 17); // Horário de 08:00 a 17:00
+                $minuto = [0, 30][rand(0, 1)]; // Minutos 00 ou 30
+                $dataAgendada = Carbon::create($anoAtual, $mesAtual, $dia, $hora, $minuto);
 
-                // Cria o agendamento para o médico no horário específico
                 Agendamento::create([
                     'atendente' => $atendente->id,
                     'paciente' => $paciente->id,
                     'medico' => $medico->id,
-                    'data_agendada' => $dataCompleta,
-                    'status' => rand(0, 1), // Status aleatório (0 ou 1)
-                    'convenio' => $convenio->id, // Associa o convênio ao agendamento
+                    'data_agendada' => $dataAgendada,
+                    'status' => rand(0, 1), // Status aleatório
+                    'convenio' => $convenio->id,
+                    'numero_guia' => 'GUID-' . strtoupper(bin2hex(random_bytes(3))), // Número de guia aleatório
                 ]);
             }
         }

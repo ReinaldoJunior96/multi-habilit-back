@@ -79,6 +79,7 @@ class ConvenioController extends Controller
                 'convenio_id' => $convenio->id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
+
             return response()->json($convenio, 201);
         } catch (\Exception $e) {
             Log::error('Erro ao criar convênio', [
@@ -87,7 +88,7 @@ class ConvenioController extends Controller
                 'line' => $e->getLine(),
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Erro ao criar convênio.'], 500);
+            return response()->json(['message' => 'Erro ao criar convênio.', 'error' => $e->getMessage(),], 500);
         }
     }
 

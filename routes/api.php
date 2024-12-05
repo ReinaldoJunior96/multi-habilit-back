@@ -47,13 +47,6 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::delete('enderecos/{id}', [EnderecoController::class, 'destroy']);
 });
 
-Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::get('atendentes', [AtendenteController::class, 'index']);
-    Route::get('atendentes/{id}', [AtendenteController::class, 'show']);
-    Route::post('atendentes', [AtendenteController::class, 'store']);
-    Route::put('atendentes/{id}', [AtendenteController::class, 'update']);
-    Route::delete('atendentes/{id}', [AtendenteController::class, 'destroy']);
-});
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::get('agendamentos', [AgendamentoController::class, 'index']);

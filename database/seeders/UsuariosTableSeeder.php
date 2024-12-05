@@ -15,49 +15,47 @@ class UsuariosTableSeeder extends Seeder
      */
     public function run()
     {
-        // Insere o usuário Admin e obtém seu ID
-        $adminId = DB::table('usuarios')->insertGetId([
-            'nome_completo' => 'Admin',
-            'email' => 'admin@admin.com',
-            'password' => Hash::make('password123'),
-            'data_nascimento' => '1990-01-01',
-            'sexo' => 'Masculino',
-            'rg' => '123456789',
-            'cpf' => '12345678901',
-            'nome_social' => 'Johnny',
-            'telefone' => '123456789',
-            'celular' => '987654321',
-            'unidade' => null,
-            'role' => 'atendente',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // Lista de roles, nomes e emails personalizados
+        $roles = [
+            'admin-master' => [
+                'name' => 'Admin Master',
+                'email' => 'admin-master@admin.com',
+            ],
+            'admin' => [
+                'name' => 'Administrador',
+                'email' => 'admin@admin.com',
+            ],
+            'atendente' => [
+                'name' => 'Atendente',
+                'email' => 'atendente@atendente.com',
+            ],
+            'medico' => [
+                'name' => 'Médico',
+                'email' => 'medico@medico.com',
+            ],
+            'paciente' => [
+                'name' => 'Paciente',
+                'email' => 'paciente@paciente.com',
+            ],
+        ];
 
-        // Adiciona o Admin como atendente na tabela atendentes
-        DB::table('atendentes')->insert([
-            'id_usuario' => $adminId, // Use o nome correto do campo (id_usuario)
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        // Insere outros usuários
-        DB::table('usuarios')->insert([
-            [
-                'nome_completo' => 'Jane Smith',
-                'email' => 'jane@example.com',
-                'password' => Hash::make('password123'),
-                'data_nascimento' => '1992-05-12',
-                'sexo' => 'Feminino',
-                'rg' => '987654321',
-                'cpf' => '10987654321',
-                'nome_social' => null,
-                'telefone' => '123456780',
-                'celular' => '987654320',
+        foreach ($roles as $role => $details) {
+            DB::table('usuarios')->insert([
+                'nome_completo' => $details['name'],
+                'email' => $details['email'], // Email personalizado
+                'password' => Hash::make('password123'), // Senha padrão
+                'data_nascimento' => '1990-01-01',
+                'sexo' => 'Masculino',
+                'rg' => fake()->numerify('#########'),
+                'cpf' => fake()->numerify('###########'),
+                'nome_social' => $details['name'],
+                'telefone' => fake()->phoneNumber(),
+                'celular' => fake()->phoneNumber(),
                 'unidade' => null,
-                'role' => 'atendente',
+                'role' => $role,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-        ]);
+            ]);
+        }
     }
 }
