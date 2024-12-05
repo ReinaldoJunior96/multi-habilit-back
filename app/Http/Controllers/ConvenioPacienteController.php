@@ -19,15 +19,14 @@ class ConvenioPacienteController extends Controller
 
         $convenio = Convenio::findOrFail($validated['convenio_id']);
 
-        // Verifica se o paciente já está associado ao convênio
-        if ($convenio->pacientes()->where('paciente_id', $validated['paciente_id'])->exists()) {
+        // Tenta associar o paciente diretamente sem verificar existência
+        $result = $convenio->pacientes()->syncWithoutDetaching([$validated['paciente_id']]);
+
+        if (empty($result['attached'])) {
             return response()->json([
                 'message' => 'O paciente já está associado a este convênio.',
             ], 422);
         }
-
-        // Associa o paciente ao convênio
-        $convenio->pacientes()->attach($validated['paciente_id']);
 
         return response()->json([
             'message' => 'Paciente associado ao convênio com sucesso.',
@@ -56,4 +55,8 @@ class ConvenioPacienteController extends Controller
         // Remove o paciente do convênio
         $convenio->pacientes()->detach($validated['paciente_id']);
 
-       
+        return response()->json([
+            'message' => 'Paciente removido do convênio com sucesso.',
+        ], 200);
+    }
+}

@@ -17,14 +17,14 @@ class PacienteFactory extends Factory
             'nome_mae' => $this->faker->name('female'),
             'nome_pai' => $this->faker->name('male'),
             'preferencial' => $this->faker->boolean,
-            'cns' => $this->faker->numerify('###############'), // 15 números
+            'cns' => $this->faker->numerify('###############'), // CNS com 15 números
             'nome_conjuge' => $this->faker->name,
             'cor_raca' => $this->faker->randomElement(['branca', 'parda', 'negra', 'amarela', 'indígena']),
             'profissao' => $this->faker->jobTitle,
             'instrucao' => $this->faker->text,
             'nacionalidade' => $this->faker->country,
             'tipo_sanguineo' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
-            'id_usuario' => \App\Models\Usuario::factory(), // Gera um usuário associado
+            'id_usuario' => Usuario::factory(), // Cria e associa ao usuário
         ];
     }
 }

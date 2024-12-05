@@ -25,7 +25,8 @@ class UsuarioService
     public function getAllUsuarios()
     {
         try {
-            $usuarios = $this->usuario->with(['medico', 'paciente', 'atendente'])->get();
+            $usuarios = $this->usuario->with(['medico', 'paciente'])->get();
+
             Log::info("Usuário [{$this->getLoggedUserId()}] buscou todos os usuários com sucesso.");
             return response()->json($usuarios, 200);
         } catch (\Exception $e) {
@@ -34,14 +35,14 @@ class UsuarioService
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
-            return response()->json(['message' => 'Erro ao buscar todos os usuários.'], 500);
+            return response()->json(['message' => 'Erro ao buscar todos os usuários.', 'error' => $e->getMessage(),], 500);
         }
     }
 
     public function getUsuarioById($id)
     {
         try {
-            $usuario = $this->usuario->with(['medico', 'paciente', 'atendente'])->findOrFail($id);
+            $usuario = $this->usuario->with(['medico', 'paciente', 'usuario'])->findOrFail($id);
             Log::info("Usuário [{$this->getLoggedUserId()}] buscou o usuário [ID: {$id}] com sucesso.");
             return response()->json($usuario, 200);
         } catch (ModelNotFoundException $e) {

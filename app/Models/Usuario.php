@@ -54,10 +54,7 @@ class Usuario extends Authenticatable implements JWTSubject
         return $this->hasOne(Medico::class, 'id_usuario', 'id');
     }
 
-    public function atendente()
-    {
-        return $this->hasOne(Atendente::class, 'id_usuario', 'id');
-    }
+
 
     public function paciente()
     {
