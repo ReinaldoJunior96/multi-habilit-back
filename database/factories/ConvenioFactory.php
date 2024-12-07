@@ -25,10 +25,10 @@ class ConvenioFactory extends Factory
             'site' => $this->faker->url, // URL do site
             'email' => $this->faker->unique()->safeEmail, // Email único
             'observacao' => $this->faker->text(100), // Observação curta
-            'procedimentos' => json_encode([$this->faker->word, $this->faker->word]), // Procedimentos em JSON
-            'medicamentos' => json_encode([$this->faker->word, $this->faker->word]), // Medicamentos em JSON
-            'taxas' => json_encode([$this->faker->word, $this->faker->word]), // Taxas em JSON
-            'materiais' => json_encode([$this->faker->word, $this->faker->word]), // Materiais em JSON
+            'procedimentos' => $this->faker->word, // Procedimentos em JSON
+            'medicamentos' => $this->faker->word, // Medicamentos em JSON
+            'taxas' => $this->faker->word, // Taxas em JSON
+            'materiais' => $this->faker->word, // Materiais em JSON
             'valor_filme' => $this->faker->randomFloat(2, 0, 1000), // Valor filme entre 0 e 1000
             'dias_retorno_eletivo' => $this->faker->numberBetween(1, 30), // Dias retorno eletivo
             'dias_retorno_emergencia' => $this->faker->numberBetween(1, 30), // Dias retorno emergência

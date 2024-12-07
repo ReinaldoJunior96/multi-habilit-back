@@ -83,17 +83,6 @@ class ConvenioService
     public function createConvenio(array $data)
     {
         try {
-            // Extrai os pacientes associados, se existirem
-            $pacientes = $data['pacientes'] ?? [];
-
-            // Remove o campo 'pacientes' do restante dos dados
-            unset($data['pacientes']);
-
-            // Converte arrays para JSON nos campos relevantes
-            $data['procedimentos'] = isset($data['procedimentos']) ? json_encode($data['procedimentos']) : null;
-            $data['medicamentos'] = isset($data['medicamentos']) ? json_encode($data['medicamentos']) : null;
-            $data['taxas'] = isset($data['taxas']) ? json_encode($data['taxas']) : null;
-            $data['materiais'] = isset($data['materiais']) ? json_encode($data['materiais']) : null;
 
             // Cria o convênio
             $convenio = $this->convenio->create($data);

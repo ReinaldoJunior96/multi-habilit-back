@@ -27,10 +27,10 @@ class CreateConveniosTable extends Migration
             $table->string('site')->nullable(); // Site
             $table->string('email')->nullable(); // Email
             $table->text('observacao')->nullable(); // Observação
-            $table->json('procedimentos')->nullable(); // Procedimentos (array JSON)
-            $table->json('medicamentos')->nullable(); // Medicamentos (array JSON)
-            $table->json('taxas')->nullable(); // Taxas (array JSON)
-            $table->json('materiais')->nullable(); // Materiais (array JSON)
+            $table->string('procedimentos')->nullable(); // Procedimentos (array JSON)
+            $table->string('medicamentos')->nullable(); // Medicamentos (array JSON)
+            $table->string('taxas')->nullable(); // Taxas (array JSON)
+            $table->string('materiais')->nullable(); // Materiais (array JSON)
             $table->decimal('valor_filme', 10, 2)->default(0); // Valor Filme
             $table->integer('dias_retorno_eletivo')->nullable(); // Dias Retorno Eletivo
             $table->integer('dias_retorno_emergencia')->nullable(); // Dias Retorno Emergência
