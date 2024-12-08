@@ -42,6 +42,13 @@ class Convenio extends Model
         'bairro',
     ];
 
+
+    public function procedimentos()
+    {
+        return $this->belongsToMany(Procedimento::class, 'convenio_procedimentos')
+            ->withPivot('preco')
+            ->withTimestamps();
+    }
     // Relacionamento com Pacientes
     public function pacientes()
     {
