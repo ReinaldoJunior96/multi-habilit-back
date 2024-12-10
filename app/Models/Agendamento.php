@@ -37,4 +37,9 @@ class Agendamento extends Model
     {
         return $this->belongsTo(Convenio::class, 'convenio', 'id');
     }
+
+    public function atendente()
+    {
+        return $this->belongsTo(Usuario::class, 'atendente', 'id');
+    }
 }
