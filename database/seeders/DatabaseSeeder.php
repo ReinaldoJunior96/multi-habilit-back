@@ -16,9 +16,9 @@ class DatabaseSeeder extends Seeder
             //MedicoSeeder::class,                 // Médicos independentes
             //EnderecosTableSeeder::class,         // Endereços para usuários/médicos
             //PacientesTableSeeder::class,         // Pacientes antes dos convênios
-            ConveniosTableSeeder::class,
-            ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
-            AgendamentosTableSeeder::class,      // Agendamentos dependem de convênios
+            //ConveniosTableSeeder::class,
+            //ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
+            //AgendamentosTableSeeder::class,      // Agendamentos dependem de convênios
         ]);
     }
 }
