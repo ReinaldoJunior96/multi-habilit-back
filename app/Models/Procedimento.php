@@ -17,6 +17,7 @@ class Procedimento extends Model
         'porte_anestesia',
         'ch_anestesista',
         'custo_operacional',
+        'codigo_tuss',
         'num_auxiliares',
         'tempo',
         'valor_filme',

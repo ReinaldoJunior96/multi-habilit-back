@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('porte_anestesia')->nullable(); // Porte anestésico
             $table->integer('ch_anestesista')->nullable(); // CH do anestesista
             $table->decimal('custo_operacional', 10, 2)->nullable(); // Custo operacional
+            $table->string('codigo_tuss')->nullable();
             $table->integer('num_auxiliares')->nullable(); // Número de auxiliares
             $table->integer('tempo')->nullable(); // Tempo estimado (minutos)
             $table->decimal('valor_filme', 10, 2)->default(0); // Valor do filme

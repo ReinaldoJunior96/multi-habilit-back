@@ -18,8 +18,9 @@ class ProcedimentoFactory extends Factory
             'porte_anestesia' => $this->faker->numberBetween(1, 5),
             'ch_anestesista' => $this->faker->numberBetween(1, 10),
             'custo_operacional' => $this->faker->randomFloat(2, 0, 500),
+            'codigo_tuss' => $this->faker->unique()->numerify('TUSS-#####'),
             'num_auxiliares' => $this->faker->numberBetween(0, 5),
-            'tempo' => $this->faker->numberBetween(10, 240), // Tempo em minutos
+            'tempo' => $this->faker->numberBetween(10, 240),
             'valor_filme' => $this->faker->randomFloat(2, 0, 50),
         ];
     }

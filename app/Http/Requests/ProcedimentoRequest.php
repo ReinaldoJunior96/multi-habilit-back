@@ -35,6 +35,7 @@ class ProcedimentoRequest extends FormRequest
             'num_auxiliares' => 'nullable|integer|min:0',
             'tempo' => 'nullable|integer|min:0',
             'valor_filme' => 'nullable|numeric|min:0',
+            'codigo_tuss' => 'string|nullable',
         ];
     }
 
@@ -68,6 +69,7 @@ class ProcedimentoRequest extends FormRequest
             'tempo.min' => 'O campo tempo deve ser maior ou igual a 0.',
             'valor_filme.numeric' => 'O campo valor do filme deve ser numérico.',
             'valor_filme.min' => 'O campo valor do filme deve ser maior ou igual a 0.',
+            'codigo_tuss.string' => 'O campo código deve ser uma string.',
         ];
     }
 
