@@ -43,6 +43,7 @@ class UsuarioController extends Controller
     public function show($id)
     {
         try {
+
             return $this->usuarioService->getUsuarioById($id);
         } catch (ModelNotFoundException $e) {
             Log::error('Usuário não encontrado', [
@@ -51,7 +52,6 @@ class UsuarioController extends Controller
                 'line' => $e->getLine(),
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-
             return response()->json(['message' => 'Usuário não encontrado.'], 404);
         } catch (Exception $e) {
             Log::error('Erro ao buscar usuário', [
