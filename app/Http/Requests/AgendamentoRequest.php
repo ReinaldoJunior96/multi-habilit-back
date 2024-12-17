@@ -35,6 +35,7 @@ class AgendamentoRequest extends FormRequest
             'status' => 'required|integer|in:0,1,2',
             'convenio' => 'nullable|exists:convenios,id',
             'numero_guia' => 'required|string',
+            'recorrencia' => 'nullable|in:semanal,mensal',
         ];
     }
 
@@ -47,6 +48,7 @@ class AgendamentoRequest extends FormRequest
     public function messages()
     {
         return [
+            'recorrencia.in' => 'O campo recorrência deve ser "semanal" ou "mensal".',
             'atendente.required' => 'O campo atendente é obrigatório.',
             'paciente.required' => 'O campo paciente é obrigatório.',
             'paciente.exists' => 'O paciente informado não existe.',

@@ -72,34 +72,27 @@ class AgendamentoController extends Controller
     public function store(AgendamentoRequest $request)
     {
         try {
-            $agendamento = $this->agendamentoService->createAgendamento($request->validated());
+            $agendamentos = $this->agendamentoService->createAgendamento($request->validated());
 
-            Log::info('Agendamento criado com sucesso', [
-                'agendamento_id' => $agendamento->id,
+            Log::info('Agendamento(s) criado(s) com sucesso.', [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($agendamento, 201);
-        } catch (ValidationException $e) {
-            Log::error('Erro de validação ao criar agendamento', [
-                'exception_message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'errors' => $e->errors(),
-                'usuario_logado' => $this->getLoggedUserId()
-            ]);
             return response()->json([
-                'message' => 'Erro de validação.',
-                'errors' => $e->errors(),
-            ], 422);
-        } catch (Exception $e) {
+                'message' => 'Agendamento(s) criado(s) com sucesso.',
+                'data' => $agendamentos
+            ], 201);
+        } catch (\Exception $e) {
             Log::error('Erro ao criar agendamento', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            return response()->json(['message' => 'Erro ao criar agendamento.', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Erro ao criar agendamento.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 

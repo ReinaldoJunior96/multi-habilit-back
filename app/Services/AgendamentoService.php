@@ -23,24 +23,38 @@ class AgendamentoService
     public function createAgendamento(array $data)
     {
         try {
-            $agendamento = $this->agendamento->create($data);
+            $agendamentos = [];
 
-            $pacienteId = $data['paciente'];
-            $convenioId = $data['convenio'] ?? null;
+            $dataInicial = \Carbon\Carbon::parse($data['data_agendada']);
+            $quantidadeRecorrencias = ($data['recorrencia'] === 'semanal') ? 12 : 6; // 12 semanas ou 6 meses
 
-            if ($convenioId) {
-                $convenio = \App\Models\Convenio::findOrFail($convenioId);
+            if (!empty($data['recorrencia'])) {
+                for ($i = 0; $i < $quantidadeRecorrencias; $i++) {
+                    $agendamentoData = $data;
+                    $agendamentoData['data_agendada'] = $dataInicial->copy()->format('Y-m-d H:i:s');
 
-                if (!$convenio->pacientes()->where('paciente_id', $pacienteId)->exists()) {
-                    $convenio->pacientes()->attach($pacienteId);
+                    $agendamento = $this->agendamento->create($agendamentoData);
+
+                    // Verifica o convênio e associa o paciente, se necessário
+                    $this->handleConvenioPaciente($data['paciente'], $data['convenio']);
+
+                    $agendamentos[] = $agendamento;
+
+                    // Incrementa a data conforme a recorrência
+                    if ($data['recorrencia'] === 'semanal') {
+                        $dataInicial->addWeek();
+                    } elseif ($data['recorrencia'] === 'mensal') {
+                        $dataInicial->addMonth();
+                    }
                 }
+            } else {
+                // Cria apenas um agendamento único
+                $agendamentos[] = $this->agendamento->create($data);
+                $this->handleConvenioPaciente($data['paciente'], $data['convenio']);
             }
 
-            Log::info("Agendamento criado com sucesso. ID Agendamento: {$agendamento->id}", [
-                'usuario_logado' => $this->getLoggedUserId(),
-            ]);
-
-            return $agendamento; // Retorna somente o modelo
+            Log::info("Agendamento(s) criado(s) com sucesso.", ['usuario_logado' => $this->getLoggedUserId()]);
+            return $agendamentos;
         } catch (\Exception $e) {
             Log::error('Erro ao criar agendamento', [
                 'exception_message' => $e->getMessage(),
@@ -50,7 +64,17 @@ class AgendamentoService
                 'usuario_logado' => $this->getLoggedUserId(),
             ]);
 
-            throw $e; // Lança a exceção para o controller tratar
+            throw $e;
+        }
+    }
+
+    private function handleConvenioPaciente($pacienteId, $convenioId)
+    {
+        if ($convenioId) {
+            $convenio = \App\Models\Convenio::findOrFail($convenioId);
+            if (!$convenio->pacientes()->where('paciente_id', $pacienteId)->exists()) {
+                $convenio->pacientes()->attach($pacienteId);
+            }
         }
     }
 
