@@ -13,12 +13,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UsuariosTableSeeder::class,          // Cria os usuários
-            MedicoSeeder::class,                 // Médicos independentes
+            //MedicoSeeder::class,                 // Médicos independentes
             //EnderecosTableSeeder::class,         // Endereços para usuários/médicos
-            PacientesTableSeeder::class,         // Pacientes antes dos convênios
-            ConveniosTableSeeder::class,
-            ProcedimentoSeeder::class,
-            ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
+            //PacientesTableSeeder::class,         // Pacientes antes dos convênios
+            //ConveniosTableSeeder::class,
+            //ProcedimentoSeeder::class,
+            //ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
             //AgendamentosTableSeeder::class,      // Agendamentos dependem de convênios
         ]);
     }
