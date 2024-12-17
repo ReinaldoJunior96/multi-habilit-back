@@ -36,6 +36,7 @@ class ProcedimentoRequest extends FormRequest
             'tempo' => 'nullable|integer|min:0',
             'valor_filme' => 'nullable|numeric|min:0',
             'codigo_tuss' => 'string|nullable',
+            'convenio_id' => 'required',
         ];
     }
 
@@ -70,6 +71,7 @@ class ProcedimentoRequest extends FormRequest
             'valor_filme.numeric' => 'O campo valor do filme deve ser numérico.',
             'valor_filme.min' => 'O campo valor do filme deve ser maior ou igual a 0.',
             'codigo_tuss.string' => 'O campo código deve ser uma string.',
+            'convenio_id.required' => 'Convenio é obrigatório',
         ];
     }
 

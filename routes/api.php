@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ProcedimentoController;
 use App\Http\Controllers\ConvenioProcedimentoController;
+use App\Http\Controllers\HorarioController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -83,7 +84,13 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::post('convenio-procedimentos', [ConvenioProcedimentoController::class, 'store']);
 });
 
-
+Route::prefix('horarios')->group(function () {
+    Route::get('/', [HorarioController::class, 'index']);      // Listar todos os horários
+    Route::get('/{id}', [HorarioController::class, 'show']);   // Mostrar um horário específico
+    Route::post('/', [HorarioController::class, 'store']);     // Criar um novo horário
+    Route::put('/{id}', [HorarioController::class, 'update']); // Atualizar um horário
+    Route::delete('/{id}', [HorarioController::class, 'destroy']); // Deletar um horário
+});
 
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 //     Route::post('/convenios/pacientes', [ConvenioPacienteController::class, 'store']);

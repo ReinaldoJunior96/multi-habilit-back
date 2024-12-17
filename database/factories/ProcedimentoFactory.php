@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Procedimento;
+use App\Models\Convenio;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProcedimentoFactory extends Factory
@@ -22,6 +23,7 @@ class ProcedimentoFactory extends Factory
             'num_auxiliares' => $this->faker->numberBetween(0, 5),
             'tempo' => $this->faker->numberBetween(10, 240),
             'valor_filme' => $this->faker->randomFloat(2, 0, 50),
+            'convenio_id' => Convenio::factory(), // Cria automaticamente um convênio para cada procedimento
         ];
     }
 }

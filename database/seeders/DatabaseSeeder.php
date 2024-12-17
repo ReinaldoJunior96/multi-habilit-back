@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             //EnderecosTableSeeder::class,         // Endereços para usuários/médicos
             PacientesTableSeeder::class,         // Pacientes antes dos convênios
             ConveniosTableSeeder::class,
+            ProcedimentoSeeder::class,
             ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
             //AgendamentosTableSeeder::class,      // Agendamentos dependem de convênios
         ]);

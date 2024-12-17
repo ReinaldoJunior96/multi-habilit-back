@@ -21,12 +21,11 @@ class Procedimento extends Model
         'num_auxiliares',
         'tempo',
         'valor_filme',
+        'convenio_id'
     ];
 
-    public function convenios()
+    public function convenio()
     {
-        return $this->belongsToMany(Convenio::class, 'convenio_procedimentos')
-            ->withPivot('preco')
-            ->withTimestamps();
+        return $this->belongsTo(Convenio::class, 'convenio_id');
     }
 }

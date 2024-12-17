@@ -26,6 +26,7 @@ class ProcedimentoService
 
     public function createProcedimento(array $data)
     {
+
         return $this->procedimento->create($data);
     }
 
