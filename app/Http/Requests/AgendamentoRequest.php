@@ -18,7 +18,7 @@ class AgendamentoRequest extends FormRequest
         return [
             'atendente' => 'required',
             'paciente' => 'required|exists:usuarios,id',
-            'medico' => 'required|exists:medicos,id',
+            'medico_id' => 'required|exists:medicos,id',
             'data_agendada' => ['required', 'date', function ($attribute, $value, $fail) {
                 $agora = now();
 
@@ -52,7 +52,7 @@ class AgendamentoRequest extends FormRequest
             'atendente.required' => 'O campo atendente é obrigatório.',
             'paciente.required' => 'O campo paciente é obrigatório.',
             'paciente.exists' => 'O paciente informado não existe.',
-            'medico.required' => 'O campo médico é obrigatório.',
+            'medico_id.required' => 'O campo médico é obrigatório.',
             'medico.exists' => 'O médico informado não existe.',
             'data_agendada.required' => 'A data agendada é obrigatória.',
             'data_agendada.date' => 'A data agendada deve ser uma data válida.',
