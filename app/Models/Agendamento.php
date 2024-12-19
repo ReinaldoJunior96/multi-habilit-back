@@ -13,7 +13,7 @@ class Agendamento extends Model
     protected $fillable = [
         'atendente',
         'paciente',
-        'medico',
+        'medico_id',
         'data_agendada',
         'status',
         'convenio',
@@ -31,7 +31,7 @@ class Agendamento extends Model
     // Relacionamento com Médico
     public function medico()
     {
-        return $this->belongsTo(Medico::class, 'medico', 'id');
+        return $this->belongsTo(Medico::class, 'medico_id', 'id');
     }
     public function convenio()
     {

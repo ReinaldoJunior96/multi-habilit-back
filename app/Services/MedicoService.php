@@ -105,7 +105,7 @@ class MedicoService
     public function findMedicoById($id)
     {
         try {
-            $medico = $this->medico->with('usuario')->findOrFail($id);
+            $medico = $this->medico->with('usuario', 'agendamentos.paciente.usuario', 'agendamentos.atendente')->findOrFail($id);
 
             Log::info("Médico ID {$id} encontrado com sucesso. Usuário logado: " . $this->getLoggedUserId());
             return response()->json($medico, 200);
@@ -133,7 +133,7 @@ class MedicoService
     public function listMedicos()
     {
         try {
-            $medicos = $this->medico->with('usuario')->get();
+            $medicos = $this->medico->with('usuario', 'agendamentos')->get();
 
             Log::info("Lista de médicos buscada com sucesso. Usuário logado: " . $this->getLoggedUserId());
             return response()->json($medicos, 200);

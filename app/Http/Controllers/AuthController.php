@@ -53,11 +53,15 @@ class AuthController extends Controller
     public function me()
     {
         try {
+            // Obtém o usuário autenticado
             $user = auth()->guard('api')->user();
 
             if (!$user) {
                 return response()->json(['error' => 'Usuário não autenticado'], 401);
             }
+
+            // Carrega as relações desejadas
+            $user->load(['medico', 'paciente', 'convenios']);
 
             return response()->json($user, 200);
         } catch (\Exception $e) {
@@ -65,6 +69,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Erro ao obter informações do usuário'], 500);
         }
     }
+
 
 
     public function refresh()

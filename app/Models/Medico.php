@@ -23,4 +23,9 @@ class Medico extends Model
     {
         return $this->belongsTo(Usuario::class, 'id_usuario');
     }
+
+    public function agendamentos()
+    {
+        return $this->hasMany(Agendamento::class, 'medico_id', 'id');
+    }
 }

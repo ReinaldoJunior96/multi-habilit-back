@@ -17,7 +17,7 @@ class CreateAgendamentosTable extends Migration
             $table->id(); // Primary key com auto-incremento
             $table->unsignedBigInteger('atendente'); // Chave estrangeira para a tabela 'usuarios'
             $table->unsignedBigInteger('paciente');  // Chave estrangeira para a tabela 'pacientes'
-            $table->unsignedBigInteger('medico');    // Chave estrangeira para a tabela 'medicos'
+            $table->unsignedBigInteger('medico_id');    // Chave estrangeira para a tabela 'medicos'
             $table->unsignedBigInteger('convenio');
             $table->dateTime('data_agendada');       // Data do agendamento
             $table->tinyInteger('status');          // Status do agendamento
