@@ -20,7 +20,7 @@ class UsuarioRequest extends FormRequest
         $usuarioId = $this->route('id'); // Obtém o ID da rota
         Log::info('Validando com ID do usuário:', ['id' => $usuarioId]);
 
-        return [
+        $rules = [
             'nome_completo' => 'required|string|max:255',
             'email' => [
                 'required',
@@ -48,11 +48,38 @@ class UsuarioRequest extends FormRequest
             'celular' => 'nullable|string|max:20',
             'role' => 'nullable|in:admin-master,admin,atendente,medico,paciente',
         ];
+
+        // Validação condicional para médicos
+        if ($this->input('role') === 'medico') {
+            $rules['medico'] = 'required|array';
+            $rules['medico.regime_trabalhista'] = 'required|string|max:50';
+            $rules['medico.carga_horaria'] = 'required|integer|min:1|max:168'; // Exemplo de carga horária semanal
+            $rules['medico.cnpj'] = 'required|string|size:14'; // CNPJ deve ter 14 dígitos
+        }
+
+        // Validação condicional para pacientes
+        if ($this->input('role') === 'paciente') {
+            $rules['paciente'] = 'required|array';
+            $rules['paciente.estado_civil'] = 'required|string|max:20';
+            $rules['paciente.nome_mae'] = 'required|string|max:200';
+            $rules['paciente.nome_pai'] = 'nullable|string|max:200';
+            $rules['paciente.preferencial'] = 'required|boolean';
+            $rules['paciente.cns'] = 'nullable|string|max:15';
+            $rules['paciente.nome_conjuge'] = 'nullable|string|max:255';
+            $rules['paciente.cor_raca'] = 'nullable|string|max:50';
+            $rules['paciente.profissao'] = 'nullable|string|max:255';
+            $rules['paciente.instrucao'] = 'nullable|string|max:255';
+            $rules['paciente.nacionalidade'] = 'nullable|string|max:100';
+            $rules['paciente.tipo_sanguineo'] = 'nullable|string|max:5';
+        }
+
+        return $rules;
     }
 
     public function messages()
     {
         return [
+            // Mensagens gerais do usuário
             'nome_completo.required' => 'O nome completo é obrigatório.',
             'email.required' => 'O e-mail é obrigatório.',
             'email.email' => 'O e-mail deve ser válido.',
@@ -69,6 +96,35 @@ class UsuarioRequest extends FormRequest
             'cpf.unique' => 'Este CPF já está cadastrado.',
             'telefone.max' => 'O telefone deve ter no máximo 20 caracteres.',
             'celular.max' => 'O celular deve ter no máximo 20 caracteres.',
+            'role.in' => 'A role do usuário deve ser uma das seguintes: admin-master, admin, atendente, médico, paciente.',
+
+            // Mensagens para médico
+            'medico.required' => 'Os dados do médico são obrigatórios para o cadastro.',
+            'medico.regime_trabalhista.required' => 'O regime trabalhista do médico é obrigatório.',
+            'medico.regime_trabalhista.max' => 'O regime trabalhista do médico deve ter no máximo 50 caracteres.',
+            'medico.carga_horaria.required' => 'A carga horária do médico é obrigatória.',
+            'medico.carga_horaria.integer' => 'A carga horária do médico deve ser um número inteiro.',
+            'medico.carga_horaria.min' => 'A carga horária do médico deve ser no mínimo 1.',
+            'medico.carga_horaria.max' => 'A carga horária do médico deve ser no máximo 168 horas por semana.',
+            'medico.cnpj.required' => 'O CNPJ do médico é obrigatório.',
+            'medico.cnpj.size' => 'O CNPJ deve ter exatamente 14 caracteres.',
+
+            // Mensagens para paciente
+            'paciente.estado_civil.required' => 'O estado civil do paciente é obrigatório.',
+            'paciente.estado_civil.max' => 'O estado civil do paciente deve ter no máximo 20 caracteres.',
+            'paciente.nome_mae.required' => 'O nome da mãe do paciente é obrigatório.',
+            'paciente.nome_mae.max' => 'O nome da mãe do paciente deve ter no máximo 200 caracteres.',
+            'paciente.nome_pai.max' => 'O nome do pai do paciente deve ter no máximo 200 caracteres.',
+            'paciente.preferencial.required' => 'É necessário indicar se o paciente é preferencial.',
+            'paciente.preferencial.boolean' => 'O campo preferencial deve ser verdadeiro ou falso.',
+            'paciente.cns.max' => 'O CNS do paciente deve ter no máximo 15 caracteres.',
+            'paciente.nome_conjuge.max' => 'O nome do cônjuge do paciente deve ter no máximo 255 caracteres.',
+            'paciente.cor_raca.max' => 'A cor ou raça do paciente deve ter no máximo 50 caracteres.',
+            'paciente.profissao.max' => 'A profissão do paciente deve ter no máximo 255 caracteres.',
+            'paciente.instrucao.max' => 'O nível de instrução do paciente deve ter no máximo 255 caracteres.',
+            'paciente.nacionalidade.max' => 'A nacionalidade do paciente deve ter no máximo 100 caracteres.',
+            'paciente.tipo_sanguineo.max' => 'O tipo sanguíneo do paciente deve ter no máximo 5 caracteres.',
+
         ];
     }
 
