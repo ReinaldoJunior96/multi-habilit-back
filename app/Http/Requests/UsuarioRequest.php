@@ -46,7 +46,7 @@ class UsuarioRequest extends FormRequest
             'nome_social' => 'nullable|string|max:255',
             'telefone' => 'nullable|string|max:20',
             'celular' => 'nullable|string|max:20',
-            'role' => 'nullable|in:admin-master,admin,atendente,medico,paciente',
+            'role' => 'nullable|in:admin-master,admin,atendente,medico,paciente,colaborador',
         ];
 
         // Validação condicional para médicos

@@ -34,7 +34,7 @@ class Usuario extends Authenticatable implements JWTSubject
     ];
 
     public $timestamps = true;
-
+    public static $roles = ['admin-master', 'admin', 'atendente', 'medico', 'paciente', 'colaborador'];
 
     public function getJWTIdentifier()
     {
@@ -68,6 +68,6 @@ class Usuario extends Authenticatable implements JWTSubject
 
     public function isRole($role)
     {
-        return $this->role === $role;
+        return in_array($this->role, self::$roles);
     }
 }
