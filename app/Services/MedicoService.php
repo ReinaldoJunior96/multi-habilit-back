@@ -30,7 +30,6 @@ class MedicoService
 
             $this->medico->fill($data);
             $this->medico->save();
-
             Log::info("Médico criado com sucesso. ID Médico: {$this->medico->id}, Usuário logado: " . $this->getLoggedUserId());
             return response()->json($this->medico, 201);
         } catch (Exception $e) {
