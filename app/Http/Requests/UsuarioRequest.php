@@ -52,9 +52,9 @@ class UsuarioRequest extends FormRequest
         // Validação condicional para médicos
         if ($this->input('role') === 'medico') {
             $rules['medico'] = 'required|array';
-            $rules['medico.regime_trabalhista'] = 'required|string|max:50';
+            $rules['medico.regime_trabalhista'] = 'required|max:50';
             $rules['medico.carga_horaria'] = 'required|integer|min:1|max:168'; // Exemplo de carga horária semanal
-            $rules['medico.cnpj'] = 'required|string|size:14'; // CNPJ deve ter 14 dígitos
+            $rules['medico.cnpj'] = 'nullable|size:14'; // CNPJ deve ter 14 dígitos
         }
 
         // Validação condicional para pacientes
