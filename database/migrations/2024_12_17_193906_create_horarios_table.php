@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             //$table->foreign('medico_id')->references('id')->on('medicos')->onDelete('cascade');
             $table->foreignId('medico_id')->constrained('medicos')->onDelete('cascade');
-            $table->dateTime('data_hora'); // Horário de disponibilidade do médico
+            $table->dateTime('data_hora_inicial');
+            $table->dateTime('data_hora_final');
+            $table->boolean('disponivel')->default(true);
             $table->timestamps();
         });
     }

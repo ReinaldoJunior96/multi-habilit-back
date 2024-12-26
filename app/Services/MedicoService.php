@@ -104,7 +104,7 @@ class MedicoService
     public function findMedicoById($id)
     {
         try {
-            $medico = $this->medico->with('usuario', 'agendamentos.paciente.usuario', 'agendamentos.atendente')->findOrFail($id);
+            $medico = $this->medico->with('usuario', 'agendamentos.paciente.usuario', 'agendamentos.atendente', 'horarios')->findOrFail($id);
 
             Log::info("Médico ID {$id} encontrado com sucesso. Usuário logado: " . $this->getLoggedUserId());
             return response()->json($medico, 200);

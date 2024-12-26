@@ -28,4 +28,9 @@ class Medico extends Model
     {
         return $this->hasMany(Agendamento::class, 'medico_id', 'id');
     }
+
+    public function horarios()
+    {
+        return $this->hasMany(Horario::class, 'medico_id', 'id');
+    }
 }

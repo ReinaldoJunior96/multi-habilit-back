@@ -89,7 +89,8 @@ Route::prefix('horarios')->group(function () {
     Route::get('/{id}', [HorarioController::class, 'show']);   // Mostrar um horário específico
     Route::post('/', [HorarioController::class, 'store']);     // Criar um novo horário
     Route::put('/{id}', [HorarioController::class, 'update']); // Atualizar um horário
-    Route::delete('/{id}', [HorarioController::class, 'destroy']); // Deletar um horário
+    Route::delete('/{id}', [HorarioController::class, 'destroy']);
+    Route::get('/medicos/{data}', [HorarioController::class, 'buscarMedicosPorHorario']);
 });
 
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {

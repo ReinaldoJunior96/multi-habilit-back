@@ -16,12 +16,12 @@ class HorarioSeeder extends Seeder
         foreach ($medicos as $medico) {
             Horario::create([
                 'medico_id' => $medico->id,
-                'data_hora' => Carbon::now()->addDays(1)->setTime(8, 0), // Exemplo: Amanhã às 08:00
+                'data_hora_inicial' => Carbon::now()->addDays(1)->setTime(8, 0), // Exemplo: Amanhã às 08:00
             ]);
 
             Horario::create([
                 'medico_id' => $medico->id,
-                'data_hora' => Carbon::now()->addDays(3)->setTime(14, 0), // Exemplo: Daqui 3 dias às 14:00
+                'data_hora_inicial' => Carbon::now()->addDays(3)->setTime(14, 0), // Exemplo: Daqui 3 dias às 14:00
             ]);
         }
     }
