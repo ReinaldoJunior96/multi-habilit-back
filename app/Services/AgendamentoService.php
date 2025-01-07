@@ -25,36 +25,41 @@ class AgendamentoService
         try {
             $agendamentos = [];
 
-            $dataInicial = \Carbon\Carbon::parse($data['data_agendada']);
-            $quantidadeRecorrencias = ($data['recorrencia'] === 'semanal') ? 12 : 6; // 12 semanas ou 6 meses
+            $dataInicial = \Carbon\Carbon::parse($data['data_agendada']); // Data inicial do agendamento
+            $quantidadeRecorrencias = ($data['recorrencia'] === 'semanal') ? 12 : 6; // Total de repetições
 
-            if (!empty($data['recorrencia'])) {
-                for ($i = 0; $i < $quantidadeRecorrencias; $i++) {
-                    $agendamentoData = $data;
-                    $agendamentoData['data_agendada'] = $dataInicial->copy()->format('Y-m-d H:i:s');
+            // Verifica a disponibilidade apenas para a data inicial
+            if (!$this->isHorarioDisponivel($data['medico_id'], $dataInicial)) {
+                throw new \Exception('O horário selecionado não está disponível.');
+            }
 
-                    $agendamento = $this->agendamento->create($agendamentoData);
+            // Cria agendamentos para todas as recorrências
+            for ($i = 0; $i < $quantidadeRecorrencias; $i++) {
+                // Atualiza o dado de `data_agendada` para a data atual do loop
+                $data['data_agendada'] = $dataInicial->copy()->format('Y-m-d H:i:s');
 
-                    // Verifica o convênio e associa o paciente, se necessário
-                    $this->handleConvenioPaciente($data['paciente'], $data['convenio']);
+                // Cria o agendamento
+                $agendamento = $this->agendamento->create($data);
 
-                    $agendamentos[] = $agendamento;
+                // Atualiza o horário como indisponível
+                $this->marcarHorarioIndisponivel($data['medico_id'], $dataInicial);
 
-                    // Incrementa a data conforme a recorrência
-                    if ($data['recorrencia'] === 'semanal') {
-                        $dataInicial->addWeek();
-                    } elseif ($data['recorrencia'] === 'mensal') {
-                        $dataInicial->addMonth();
-                    }
-                }
-            } else {
-                // Cria apenas um agendamento único
-                $agendamentos[] = $this->agendamento->create($data);
+                // Verifica o convênio e associa o paciente, se necessário
                 $this->handleConvenioPaciente($data['paciente'], $data['convenio']);
+
+                // Adiciona o agendamento criado à lista
+                $agendamentos[] = $agendamento;
+
+                // Incrementa a data conforme a recorrência
+                if ($data['recorrencia'] === 'semanal') {
+                    $dataInicial->addWeek(); // Incrementa 7 dias
+                } elseif ($data['recorrencia'] === 'mensal') {
+                    $dataInicial->addMonth(); // Incrementa 1 mês
+                }
             }
 
             Log::info("Agendamento(s) criado(s) com sucesso.", ['usuario_logado' => $this->getLoggedUserId()]);
-            return $agendamentos;
+            return $agendamentos; // Retorna os agendamentos criados
         } catch (\Exception $e) {
             Log::error('Erro ao criar agendamento', [
                 'exception_message' => $e->getMessage(),
@@ -201,5 +206,23 @@ class AgendamentoService
 
             return response()->json(['message' => 'Erro ao buscar agendamento.'], 500);
         }
+    }
+
+    private function isHorarioDisponivel(int $medicoId, $dataAgendada): bool
+    {
+
+        return \App\Models\Horario::where('medico_id', $medicoId)
+            ->where('data_hora_inicial', '=', $dataAgendada)
+            ->where('disponivel', true)
+            ->exists();
+
+        //dd($teste);
+    }
+
+    private function marcarHorarioIndisponivel(int $medicoId,  $dataAgendada): void
+    {
+        \App\Models\Horario::where('medico_id', $medicoId)
+            ->where('data_hora_inicial', '=', $dataAgendada)
+            ->update(['disponivel' => false]);
     }
 }
