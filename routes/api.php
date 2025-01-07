@@ -14,6 +14,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ProcedimentoController;
 use App\Http\Controllers\ConvenioProcedimentoController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\CommandController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -92,6 +93,12 @@ Route::prefix('horarios')->group(function () {
     Route::delete('/{id}', [HorarioController::class, 'destroy']);
     Route::get('/medicos/{data}', [HorarioController::class, 'buscarMedicosPorHorario']);
 });
+
+
+Route::get('/commands/fresh-and-seed-users', [CommandController::class, 'freshAndSeedUsers']);
+
+// Executa todas as seeders
+Route::get('/commands/fresh-and-seed-all', [CommandController::class, 'freshAndSeedAll']);
 
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 //     Route::post('/convenios/pacientes', [ConvenioPacienteController::class, 'store']);
