@@ -30,14 +30,31 @@ class HorarioController extends Controller
     // Criar um novo horário
     public function store(Request $request)
     {
-        //$horario = Horario::create($request->validated());
-        foreach ($request->horarios as $key) {
-            Horario::create($key);
+        $horariosCriados = [];
+
+        foreach ($request->horarios as $horarioBase) {
+            $dataInicial = \Carbon\Carbon::parse($horarioBase['data_hora_inicial']);
+            $dataFinal = \Carbon\Carbon::parse($horarioBase['data_hora_final']);
+            $horarios = [];
+
+            // Gera horários para 1 ano (52 semanas)
+            for ($i = 0; $i < 52; $i++) {
+                $horarios[] = [
+                    'medico_id' => $horarioBase['medico_id'],
+                    'data_hora_inicial' => $dataInicial->copy()->addWeeks($i)->toDateTimeString(),
+                    'data_hora_final' => $dataFinal->copy()->addWeeks($i)->toDateTimeString(),
+                ];
+            }
+
+            // Salva os horários no banco
+            foreach ($horarios as $horario) {
+                $horariosCriados[] = Horario::create($horario);
+            }
         }
 
-
         return response()->json([
-            'message' => 'Horário criado com sucesso!'
+            'message' => 'Horários criados com sucesso!',
+            'data' => $horariosCriados,
         ], 201);
     }
 
