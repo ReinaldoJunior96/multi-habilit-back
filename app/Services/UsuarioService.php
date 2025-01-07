@@ -27,7 +27,6 @@ class UsuarioService
     {
         try {
             $usuarios = $this->usuario->with(['medico', 'paciente'])->get();
-
             Log::info("Usuário [{$this->getLoggedUserId()}] buscou todos os usuários com sucesso.");
             return response()->json($usuarios, 200);
         } catch (\Exception $e) {
@@ -45,7 +44,6 @@ class UsuarioService
     {
         try {
             $usuario = $this->usuario->with(['medico', 'paciente', 'convenios'])->findOrFail($id);
-
             Log::info("Usuário [{$this->getLoggedUserId()}] buscou o usuário [ID: {$id}] com sucesso.");
             return response()->json($usuario, 200);
         } catch (ModelNotFoundException $e) {
@@ -110,7 +108,7 @@ class UsuarioService
                 $pacienteService = app(PacienteService::class);
                 $response = $pacienteService->createPaciente($data['paciente']);
 
-                // Verifica se o cadastro do médico falhou
+                // Verifica se o cadastro do paciente falhou
                 if ($response->getStatusCode() !== 201) {
                     throw new \Exception('Erro ao cadastrar paciente: ' . json_encode($response->getData()));
                 }

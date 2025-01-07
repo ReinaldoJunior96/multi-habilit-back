@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Procedimento;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProcedimentoService
 {
@@ -14,32 +13,59 @@ class ProcedimentoService
         $this->procedimento = $procedimento;
     }
 
-    public function getAllProcedimentos()
+    // Retorna todos os procedimentos
+    public function getAllProcedimentos($withTrashed = false)
     {
-        return $this->procedimento->all();
+        $query = $this->procedimento->with('convenio');
+        if ($withTrashed) {
+            $query = $query->withTrashed();
+        }
+        return $query->get();
     }
 
-    public function getProcedimentoById($id)
+    // Busca um procedimento por ID, com ou sem registros excluídos logicamente
+    public function getProcedimentoById($id, $withTrashed = false)
     {
-        return $this->procedimento->findOrFail($id);
+        $query = $withTrashed ? $this->procedimento->withTrashed() : $this->procedimento;
+        return $query->findOrFail($id);
     }
 
+    // Cria um novo procedimento
     public function createProcedimento(array $data)
     {
-
         return $this->procedimento->create($data);
     }
 
+    // Atualiza um procedimento existente
     public function updateProcedimento($id, array $data)
     {
         $procedimento = $this->getProcedimentoById($id);
-        $procedimento->update($data);
+        $procedimento->fill($data);
+        $procedimento->save();
+
         return $procedimento;
     }
 
+    // Exclui logicamente um procedimento
     public function deleteProcedimento($id)
     {
         $procedimento = $this->getProcedimentoById($id);
         $procedimento->delete();
+    }
+
+    // Restaura um procedimento excluído logicamente
+    public function restoreProcedimento($id)
+    {
+        $procedimento = $this->getProcedimentoById($id, true);
+        $procedimento->restore();
+
+        return $procedimento;
+    }
+
+    // Exclui permanentemente um procedimento
+    public function forceDeleteProcedimento($id)
+    {
+        $procedimento = $this->getProcedimentoById($id, true);
+        $procedimento->forceDelete();
     }
 }

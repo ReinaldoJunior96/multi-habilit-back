@@ -29,6 +29,7 @@ class ConvenioController extends Controller
             Log::info('Convênios listados com sucesso', [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
+
             return response()->json($convenios, 200);
         } catch (\Exception $e) {
             Log::error('Erro ao listar convênios', [

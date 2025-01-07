@@ -24,9 +24,9 @@ class ConvenioService
     public function getAllConvenios()
     {
         try {
+
             // Carrega convênios com os pacientes associados
             $convenios = $this->convenio->with('procedimentos')->get();
-
             Log::info('Convênios listados com sucesso.', [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
