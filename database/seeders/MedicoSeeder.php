@@ -31,5 +31,7 @@ class MedicoSeeder extends Seeder
             // Caso o usuário não exista, lança uma mensagem de erro
             throw new \Exception("Usuário com o e-mail 'medico@medico.com' não encontrado.");
         }
+
+        Medico::factory(10)->create();
     }
 }
