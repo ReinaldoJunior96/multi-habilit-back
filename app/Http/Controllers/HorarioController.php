@@ -146,4 +146,22 @@ class HorarioController extends Controller
             'total_deletados' => $horariosDeletados->count(),
         ], 200);
     }
+
+    public function uniqueHorarios()
+    {
+        // Busca todos os horários com os relacionamentos necessários
+        $horarios = Horario::with('medico.usuario')
+            ->where('disponivel', 1) // Apenas horários disponíveis
+            ->get()
+            ->groupBy(function ($horario) {
+                // Agrupa pelo horário (hora e minuto) da data_hora_inicial
+                return \Carbon\Carbon::parse($horario->data_hora_inicial)->format('H:i');
+            })
+            ->map(function ($grupo) {
+                // Retorna apenas o primeiro registro de cada grupo
+                return $grupo->first();
+            });
+        //dd($horarios);
+        return response()->json($horarios->values(), 200);
+    }
 }
