@@ -151,7 +151,6 @@ class HorarioController extends Controller
     {
         // Busca todos os horários com os relacionamentos necessários
         $horarios = Horario::with('medico.usuario')
-            ->where('disponivel', 1) // Apenas horários disponíveis
             ->get()
             ->groupBy(function ($horario) {
                 // Agrupa pelo horário (hora e minuto) da data_hora_inicial
