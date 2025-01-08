@@ -93,4 +93,57 @@ class HorarioController extends Controller
         $horarios = Horario::where('data_hora_inicial', 'like',   $data . '%')->get();
         return response()->json(['message' =>   $horarios], 200);
     }
+
+    public function destroyRecorrente(Request $request)
+    {
+        //dd($request->all());
+        $medicoId = $request->input('medico_id');
+        $diaSemana = $request->input('dia_semana'); // Exemplo: "segunda-feira"
+        $horarioInicial = $request->input('data_hora_inicial'); // Exemplo: "15:00:00"
+
+        if (!$medicoId || !$diaSemana || !$horarioInicial) {
+            return response()->json(['message' => 'Parâmetros inválidos. Certifique-se de enviar "medico_id", "dia_semana" e "data_hora_inicial".'], 400);
+        }
+
+        // Mapeia o dia da semana em número (0 = Domingo, 6 = Sábado)
+        $diasSemanaMap = [
+            'domingo' => 0,
+            'segunda-feira' => 1,
+            'terca-feira' => 2,
+            'quarta-feira' => 3,
+            'quinta-feira' => 4,
+            'sexta-feira' => 5,
+            'sabado' => 6,
+        ];
+
+        $diaSemanaNumero = $diasSemanaMap[strtolower($diaSemana)] ?? null;
+
+        if ($diaSemanaNumero === null) {
+            return response()->json(['message' => 'Dia da semana inválido.'], 400);
+        }
+
+        // Filtra os horários
+        $horariosDeletados = Horario::where('medico_id', $medicoId)
+            ->where('disponivel', 1) // Apenas horários disponíveis
+            ->whereTime('data_hora_inicial', '=', $horarioInicial) // Verifica o horário
+            ->get()
+            ->filter(function ($horario) use ($diaSemanaNumero) {
+                // Verifica se o dia da semana da data_hora_inicial corresponde
+                return \Carbon\Carbon::parse($horario->data_hora_inicial)->dayOfWeek === $diaSemanaNumero;
+            });
+
+        if ($horariosDeletados->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhum horário encontrado para os critérios fornecidos.',
+            ], 404);
+        }
+
+        // Deleta os horários filtrados
+        $totalDeletados = $horariosDeletados->each->delete();
+
+        return response()->json([
+            'message' => "Todos os horários recorrentes do médico com ID $medicoId, no dia $diaSemana e horário inicial $horarioInicial foram deletados com sucesso.",
+            'total_deletados' => $horariosDeletados->count(),
+        ], 200);
+    }
 }

@@ -92,6 +92,7 @@ Route::prefix('horarios')->group(function () {
     Route::put('/{id}', [HorarioController::class, 'update']); // Atualizar um horário
     Route::delete('/{id}', [HorarioController::class, 'destroy']);
     Route::get('/medicos/{data}', [HorarioController::class, 'buscarMedicosPorHorario']);
+    Route::delete('/medicos/recorrencia', [HorarioController::class, 'destroyRecorrente']);
 });
 
 
