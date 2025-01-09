@@ -1,0 +1,36 @@
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - develop # Ou a branch que deseja monitorar
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clonar o código do repositório
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configurar a chave SSH
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # 3. Deploy no servidor via SSH
+      - name: Deploy via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no user@seu-servidor << 'EOF'
+          cd /caminho/do/projeto
+          git pull origin main
+          composer install --no-dev --optimize-autoloader
+          php artisan migrate --force
+          php artisan cache:clear
+          php artisan config:cache
+          npm install --production
+          npm run build
+          sudo systemctl restart php-fpm
+          EOF
