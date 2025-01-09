@@ -94,6 +94,7 @@ Route::prefix('horarios')->group(function () {
     Route::delete('/{id}', [HorarioController::class, 'destroy']);
     Route::get('/medicos/{data}', [HorarioController::class, 'buscarMedicosPorHorario']);
     Route::delete('/medicos/recorrencia', [HorarioController::class, 'destroyRecorrente']);
+    Route::post('/adicionar-feriado/{data}', [HorarioController::class, 'addFeriado']);
 });
 
 

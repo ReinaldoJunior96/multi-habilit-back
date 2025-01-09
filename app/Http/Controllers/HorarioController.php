@@ -164,4 +164,35 @@ class HorarioController extends Controller
         //dd($horarios);
         return response()->json($horarios->values(), 200);
     }
+
+    public function addFeriado($data)
+    {
+        // Valida se a data foi fornecida
+        if (!$data) {
+            return response()->json(['message' => 'A data é obrigatória.'], 400);
+        }
+
+        try {
+            // Verifica se a data é válida
+            $data = \Carbon\Carbon::parse($data)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Formato de data inválido. Use o formato YYYY-MM-DD.'], 400);
+        }
+
+        // Busca e remove os registros que têm a mesma data
+        $horariosDeletados = Horario::whereDate('data_hora_inicial', $data)
+            ->delete();
+
+
+        if ($horariosDeletados > 0) {
+            return response()->json([
+                'message' => "Horários no dia $data foram removidos com sucesso.",
+                'total_deletados' => $horariosDeletados,
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => "Nenhum horário encontrado no dia $data.",
+        ], 404);
+    }
 }
