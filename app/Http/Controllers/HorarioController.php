@@ -11,7 +11,7 @@ class HorarioController extends Controller
     // Listar todos os horários
     public function index()
     {
-        dd("O DEPLOY FUNCIINOUUU PORRAAA");
+        dd("O DEPLOY FUNCIINOUUU PORRAAA agora vaiii");
         $horarios = Horario::with('medico.usuario')->get();
         return response()->json($horarios, 200);
     }
