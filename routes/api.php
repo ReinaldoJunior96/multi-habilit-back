@@ -15,7 +15,11 @@ use App\Http\Controllers\ProcedimentoController;
 use App\Http\Controllers\ConvenioProcedimentoController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\CommandController;
+use App\Http\Controllers\DeployController;
 
+
+
+Route::post('deploy', [DeployController::class, 'deploy']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
@@ -102,6 +106,8 @@ Route::get('/commands/fresh-and-seed-users', [CommandController::class, 'freshAn
 
 // Executa todas as seeders
 Route::get('/commands/fresh-and-seed-all', [CommandController::class, 'freshAndSeedAll']);
+
+
 
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 //     Route::post('/convenios/pacientes', [ConvenioPacienteController::class, 'store']);
