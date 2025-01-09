@@ -8,12 +8,9 @@ class DeployController extends Controller
 {
     public function deploy(Request $request)
     {
-        // Caminho do repositório no servidor
-        $repoPath = '/root/multi-habilit-back';
-
         // Executa o comando de deploy
         $output = [];
-        exec("cd {$repoPath} && git pull origin main", $output);
+        exec("cd /root/multi-habilit-back && git pull origin develop", $output);
 
         // Retorna o resultado do deploy
         return response()->json([
