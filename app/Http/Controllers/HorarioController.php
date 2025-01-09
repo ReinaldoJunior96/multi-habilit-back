@@ -11,7 +11,7 @@ class HorarioController extends Controller
     // Listar todos os horários
     public function index()
     {
-        dd("testando git pull novamente");
+        dd("testando git pull novamente sera?");
         $horarios = Horario::with('medico.usuario')->get();
         return response()->json($horarios, 200);
     }
