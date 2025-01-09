@@ -147,10 +147,11 @@ class HorarioController extends Controller
         ], 200);
     }
 
-    public function uniqueHorarios()
+    public function uniqueHorarios($id)
     {
-        // Busca todos os horários com os relacionamentos necessários
+
         $horarios = Horario::with('medico.usuario')
+            ->where('medico_id', $id)
             ->get()
             ->groupBy(function ($horario) {
                 // Agrupa pelo horário (hora e minuto) da data_hora_inicial

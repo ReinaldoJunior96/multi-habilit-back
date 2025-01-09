@@ -86,7 +86,7 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 });
 
 Route::prefix('horarios')->group(function () {
-    Route::get('/recorrencia-unica', [HorarioController::class, 'uniqueHorarios']);
+    Route::get('/recorrencia-unica/{id}', [HorarioController::class, 'uniqueHorarios']);
     Route::get('/', [HorarioController::class, 'index']);      // Listar todos os horários
     Route::get('/{id}', [HorarioController::class, 'show']);   // Mostrar um horário específico
     Route::post('/', [HorarioController::class, 'store']);     // Criar um novo horário
