@@ -13,7 +13,7 @@ class DeployController extends Controller
 
         // Executa o comando de deploy
         $output = [];
-        exec("cd {$repoPath} && git pull origin develop 2>&1", $output);
+        exec("cd {$repoPath} && git pull origin main 2>&1", $output);
 
         // Retorna o resultado do deploy
         return response()->json([
