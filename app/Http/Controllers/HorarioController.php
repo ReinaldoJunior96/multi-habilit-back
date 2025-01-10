@@ -31,17 +31,44 @@ class HorarioController extends Controller
     // Criar um novo horário
     public function store(Request $request)
     {
-        $horariosCriados = [];
-
+        // Percorre todos os horários enviados
         foreach ($request->horarios as $horarioBase) {
             $dataInicial = \Carbon\Carbon::parse($horarioBase['data_hora_inicial']);
             $dataFinal = \Carbon\Carbon::parse($horarioBase['data_hora_final']);
-            $horarios = [];
+            $medicoId = $horarioBase['medico_id'];
+
+            // Verifica se já existe um horário que se sobrepõe
+            $conflito = Horario::where('medico_id', $medicoId)
+                ->where(function ($query) use ($dataInicial, $dataFinal) {
+                    $query->whereBetween('data_hora_inicial', [$dataInicial, $dataFinal])
+                        ->orWhereBetween('data_hora_final', [$dataInicial, $dataFinal])
+                        ->orWhere(function ($query) use ($dataInicial, $dataFinal) {
+                            $query->where('data_hora_inicial', '<=', $dataInicial)
+                                ->where('data_hora_final', '>=', $dataFinal);
+                        });
+                })
+                ->exists();
+
+            if ($conflito) {
+                // Retorna erro e cancela todo o processo
+                return response()->json([
+                    'message' => "Já existe um horário registrado para esse médico na data {$dataInicial->format('Y-m-d H:i')}. Nenhum horário foi cadastrado.",
+                ], 400);
+            }
+        }
+
+        // Se não houve conflitos, cria os horários
+        $horariosCriados = [];
+        foreach ($request->horarios as $horarioBase) {
+            $dataInicial = \Carbon\Carbon::parse($horarioBase['data_hora_inicial']);
+            $dataFinal = \Carbon\Carbon::parse($horarioBase['data_hora_final']);
+            $medicoId = $horarioBase['medico_id'];
 
             // Gera horários para 1 ano (52 semanas)
+            $horarios = [];
             for ($i = 0; $i < 52; $i++) {
                 $horarios[] = [
-                    'medico_id' => $horarioBase['medico_id'],
+                    'medico_id' => $medicoId,
                     'data_hora_inicial' => $dataInicial->copy()->addWeeks($i)->toDateTimeString(),
                     'data_hora_final' => $dataFinal->copy()->addWeeks($i)->toDateTimeString(),
                 ];
@@ -53,11 +80,14 @@ class HorarioController extends Controller
             }
         }
 
+        // Retorna os horários criados
         return response()->json([
             'message' => 'Horários criados com sucesso!',
             'data' => $horariosCriados,
         ], 201);
     }
+
+
 
     // Atualizar um horário existente
     public function update(Request $request, $id)
@@ -166,34 +196,59 @@ class HorarioController extends Controller
         return response()->json($horarios->values(), 200);
     }
 
-    public function addFeriado($data)
+    public function addFeriado(Request $request)
     {
         // Valida se a data foi fornecida
-        if (!$data) {
-            return response()->json(['message' => 'A data é obrigatória.'], 400);
+        $data = $request->input('data');
+        $observacao = $request->input('observacao');
+
+        if (!$data || !$observacao) {
+            return response()->json(['message' => 'A data e a observação são obrigatórias.'], 400);
         }
 
         try {
             // Verifica se a data é válida
-            $data = \Carbon\Carbon::parse($data)->format('Y-m-d');
+            $dataFormatada = \Carbon\Carbon::parse($data)->format('Y-m-d');
         } catch (\Exception $e) {
             return response()->json(['message' => 'Formato de data inválido. Use o formato YYYY-MM-DD.'], 400);
         }
 
-        // Busca e remove os registros que têm a mesma data
-        $horariosDeletados = Horario::whereDate('data_hora_inicial', $data)
-            ->delete();
+        // Busca os horários que têm a mesma data
+        $horarios = Horario::whereDate('data_hora_inicial', $dataFormatada)->get();
 
-
-        if ($horariosDeletados > 0) {
+        if ($horarios->isEmpty()) {
             return response()->json([
-                'message' => "Horários no dia $data foram removidos com sucesso.",
-                'total_deletados' => $horariosDeletados,
-            ], 200);
+                'message' => "Nenhum horário encontrado no dia $dataFormatada.",
+            ], 404);
+        }
+
+        // Atualiza os horários com a observação antes de deletá-los
+        foreach ($horarios as $horario) {
+            $horario->update(['observacao' => $observacao]);
+            $horario->delete(); // Deleta o registro
         }
 
         return response()->json([
-            'message' => "Nenhum horário encontrado no dia $data.",
-        ], 404);
+            'message' => "Horários no dia $dataFormatada foram removidos com sucesso com a observação adicionada.",
+            'total_deletados' => $horarios->count(),
+        ], 200);
+    }
+
+    public function listarDeletados()
+    {
+        // Obtém os horários deletados
+        $horariosDeletados = Horario::onlyTrashed()->get(['data_hora_inicial', 'observacao', 'deleted_at']);
+
+        if ($horariosDeletados->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhum horário deletado foi encontrado.',
+            ], 404);
+        }
+
+        // Retorna os dados
+        return response()->json([
+            'message' => 'Feriados encontrados.',
+            'data' => $horariosDeletados,
+        ], 200);
     }
 }

@@ -91,14 +91,16 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 
 Route::prefix('horarios')->group(function () {
     Route::get('/recorrencia-unica/{id}', [HorarioController::class, 'uniqueHorarios']);
-    Route::get('/', [HorarioController::class, 'index']);      // Listar todos os horários
-    Route::get('/{id}', [HorarioController::class, 'show']);   // Mostrar um horário específico
-    Route::post('/', [HorarioController::class, 'store']);     // Criar um novo horário
-    Route::put('/{id}', [HorarioController::class, 'update']); // Atualizar um horário
+    Route::get('/feriados', [HorarioController::class, 'listarDeletados']);
+    Route::get('/', [HorarioController::class, 'index']);
+    Route::get('/{id}', [HorarioController::class, 'show']);
+    Route::post('/', [HorarioController::class, 'store']);
+    Route::put('/{id}', [HorarioController::class, 'update']);
     Route::delete('/{id}', [HorarioController::class, 'destroy']);
     Route::get('/medicos/{data}', [HorarioController::class, 'buscarMedicosPorHorario']);
     Route::delete('/medicos/recorrencia', [HorarioController::class, 'destroyRecorrente']);
-    Route::post('/adicionar-feriado/{data}', [HorarioController::class, 'addFeriado']);
+
+    Route::post('/adicionar-feriado', [HorarioController::class, 'addFeriado']);
 });
 
 

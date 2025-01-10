@@ -18,6 +18,8 @@ return new class extends Migration
             $table->dateTime('data_hora_inicial');
             $table->dateTime('data_hora_final');
             $table->boolean('disponivel')->default(true);
+            $table->string('observacao')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
