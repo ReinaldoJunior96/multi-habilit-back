@@ -71,6 +71,7 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::post('convenios', [ConvenioController::class, 'store']);
     Route::put('convenios/{id}', [ConvenioController::class, 'update']);
     Route::delete('convenios/{id}', [ConvenioController::class, 'destroy']);
+    Route::get('convenios/{id}/procedimentos', [ConvenioController::class, 'buscarPorConvenio']);
 });
 
 

@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConvenioRequest;
+use App\Models\Procedimento;
 use App\Services\ConvenioService;
+use App\Services\ProcedimentoService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 
 class ConvenioController extends Controller
 {
     protected $convenioService;
+    protected $procedimentoService;
 
-    public function __construct(ConvenioService $convenioService)
+    public function __construct(ConvenioService $convenioService, ProcedimentoService $procedimentoService)
     {
         $this->convenioService = $convenioService;
+        $this->procedimentoService = $procedimentoService;
     }
 
     private function getLoggedUserId()
@@ -148,6 +152,40 @@ class ConvenioController extends Controller
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
             return response()->json(['message' => 'Erro ao deletar convênio.'], 500);
+        }
+    }
+
+    public function buscarPorConvenio($id)
+    {
+        try {
+
+            $procedimentos = Procedimento::where("convenio_id", "=", $id)->get();
+            //dd($procedimentos);
+
+            // $procedimentos = $convenio->procedimentos;
+            Log::info('Procedimentos do convênio listados com sucesso', [
+                'convenio_id' => $id,
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+            return response()->json($procedimentos, 200);
+        } catch (ModelNotFoundException $e) {
+            Log::error('Convênio não encontrado para listar procedimentos', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'convenio_id' => $id,
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+            return response()->json(['message' => 'Convênio não encontrado.'], 404);
+        } catch (\Exception $e) {
+            Log::error('Erro ao listar procedimentos do convênio', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'convenio_id' => $id,
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+            return response()->json(['message' => 'Erro ao listar procedimentos do convênio.'], 500);
         }
     }
 }
