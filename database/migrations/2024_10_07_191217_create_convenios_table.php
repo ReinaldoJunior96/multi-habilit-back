@@ -47,7 +47,7 @@ class CreateConveniosTable extends Migration
             $table->string('numero')->nullable(); // Número
             $table->string('complemento')->nullable(); // Complemento
             $table->string('bairro')->nullable(); // Bairro
-
+            $table->softDeletes();
             $table->timestamps(); // Campos de criação e atualização
         });
     }
