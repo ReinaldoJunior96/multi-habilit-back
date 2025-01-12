@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nome_mae', 200)->nullable();
             $table->string('nome_pai', 200)->nullable();
             $table->boolean('preferencial')->default(false);
-            $table->string('cns')->nullable(); // Cartão Nacional de Saúde
+            $table->string('cns')->nullable();
             $table->string('nome_conjuge')->nullable();
             $table->string('cor_raca')->nullable();
             $table->string('profissao')->nullable();
