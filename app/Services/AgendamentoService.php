@@ -128,6 +128,7 @@ class AgendamentoService
             Log::info("Agendamento ID {$id} deletado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
+            dd($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
             $this->marcarHorarioDisponivel($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
 
             return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
