@@ -119,20 +119,27 @@ class AgendamentoService
         }
     }
 
-    public function deleteAgendamento(int $id, $infoAgendamento)
+    public function deleteAgendamento(int $id)
     {
         try {
-            dd($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
-            //$this->marcarHorarioDisponivel($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
+            // Recupera o agendamento pelo ID
             $agendamento = $this->agendamento->findOrFail($id);
+
+            // Pega o médico e a data agendada do agendamento
+            $medicoId = $agendamento->medico_id;
+            $dataAgendada = $agendamento->data_agendada;
+
+            // Marca o horário como disponível novamente
+            $this->marcarHorarioDisponivel($medicoId, $dataAgendada);
+
+            // Deleta o agendamento
             $agendamento->delete();
 
-            Log::info("Agendamento ID {$id} deletado com sucesso.", [
+            Log::info("Agendamento ID {$id} deletado com sucesso e horário marcado como disponível.", [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-
-            return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
+            return response()->json(['message' => 'Agendamento deletado com sucesso e horário liberado.'], 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Agendamento não encontrado para exclusão', [
                 'exception_message' => $e->getMessage(),

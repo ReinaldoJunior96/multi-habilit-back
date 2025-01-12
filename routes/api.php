@@ -61,7 +61,7 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::get('agendamentos/{id}', [AgendamentoController::class, 'show']);
     Route::post('agendamentos', [AgendamentoController::class, 'store']);
     Route::put('agendamentos/{id}', [AgendamentoController::class, 'update']);
-    Route::delete('agendamentos/{id}/{data}', [AgendamentoController::class, 'destroy']);
+    Route::delete('agendamentos/{id}', [AgendamentoController::class, 'destroy']);
 });
 
 
