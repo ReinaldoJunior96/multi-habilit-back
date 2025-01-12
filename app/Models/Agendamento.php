@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Agendamento extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // Defina os campos que podem ser preenchidos em massa
     protected $fillable = [

@@ -20,8 +20,9 @@ class CreateAgendamentosTable extends Migration
             $table->unsignedBigInteger('medico_id');    // Chave estrangeira para a tabela 'medicos'
             $table->unsignedBigInteger('convenio');
             $table->dateTime('data_agendada');       // Data do agendamento
-            $table->tinyInteger('status');          // Status do agendamento
-            $table->timestamps();                   // Campos 'created_at' e 'updated_at'
+            $table->tinyInteger('status');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
