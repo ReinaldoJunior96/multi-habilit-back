@@ -119,7 +119,7 @@ class AgendamentoService
         }
     }
 
-    public function deleteAgendamento(int $id)
+    public function deleteAgendamento(int $id, $infoAgendamento)
     {
         try {
             $agendamento = $this->agendamento->findOrFail($id);
@@ -128,6 +128,7 @@ class AgendamentoService
             Log::info("Agendamento ID {$id} deletado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
+            $this->marcarHorarioDisponivel($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
 
             return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
         } catch (ModelNotFoundException $e) {
@@ -224,5 +225,12 @@ class AgendamentoService
         \App\Models\Horario::where('medico_id', $medicoId)
             ->where('data_hora_inicial', '=', $dataAgendada)
             ->update(['disponivel' => false]);
+    }
+
+    private function marcarHorarioDisponivel(int $medicoId,  $dataAgendada): void
+    {
+        \App\Models\Horario::where('medico_id', $medicoId)
+            ->where('data_hora_inicial', '=', $dataAgendada)
+            ->update(['disponivel' => true]);
     }
 }
