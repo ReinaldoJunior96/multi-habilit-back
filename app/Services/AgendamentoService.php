@@ -122,14 +122,15 @@ class AgendamentoService
     public function deleteAgendamento(int $id, $infoAgendamento)
     {
         try {
+            dd($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
+            //$this->marcarHorarioDisponivel($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
             $agendamento = $this->agendamento->findOrFail($id);
             $agendamento->delete();
 
             Log::info("Agendamento ID {$id} deletado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
-            dd($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
-            $this->marcarHorarioDisponivel($infoAgendamento['medico_id'], $infoAgendamento['medico_id']);
+
 
             return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
         } catch (ModelNotFoundException $e) {
