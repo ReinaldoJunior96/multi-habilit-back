@@ -18,7 +18,8 @@ services:
                 done &&
                 php artisan config:clear &&
                 php artisan cache:clear &&
-                supervisord -c /etc/supervisor/supervisord.conf"
+                supervisord -c /etc/supervisor/supervisord.conf &&
+                php-fpm"
 
     # Serviço do Nginx
     webserver:
