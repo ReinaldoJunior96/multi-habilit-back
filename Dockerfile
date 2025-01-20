@@ -27,7 +27,9 @@ COPY . .
 # Instalar dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-RUN mkdir -p /var/run && mkdir -p /var/log/supervisor
+# Criar diretórios necessários para o Supervisor
+RUN mkdir -p /var/run/supervisor /var/log/supervisor && \
+    chmod -R 755 /var/run/supervisor /var/log/supervisor
 
 # Definir permissões
 RUN chown -R www-data:www-data /var/www \
@@ -39,5 +41,5 @@ COPY .docker/supervisor/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 # Expor as portas do PHP-FPM e do WebSocket
 EXPOSE 9000 8080
 
-# Comando para iniciar o Supervisor
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
+# Inicializar o Supervisor diretamente no CMD
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
