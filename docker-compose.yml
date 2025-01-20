@@ -18,6 +18,7 @@ services:
                 done &&
                 php artisan config:clear &&
                 php artisan cache:clear &&
+                mkdir -p /var/run/supervisor && 
                 supervisord -c /etc/supervisor/supervisord.conf"
 
     # Serviço do Nginx

@@ -27,6 +27,8 @@ COPY . .
 # Instalar dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
+RUN mkdir -p /var/run && mkdir -p /var/log/supervisor
+
 # Definir permissões
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
