@@ -10,6 +10,15 @@ services:
       - laravel_network
     depends_on:
       - db
+    command: >
+      sh -c "until mysqladmin ping -h db --silent; do
+          echo 'Waiting for database...';
+          sleep 2;
+          done &&
+          php artisan migrate --force &&
+          php artisan config:clear &&
+          php artisan cache:clear &&
+          supervisord -c /etc/supervisor/conf.d/supervisor.conf"
 
   webserver:
     image: nginx:alpine
