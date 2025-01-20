@@ -12,11 +12,7 @@ services:
         depends_on:
             - db
         command: >
-            sh -c "until mysqladmin ping -h db --silent; do
-                echo 'Waiting for database...';
-                sleep 2;
-                done &&
-                php artisan config:clear &&
+            sh -c "php artisan config:clear &&
                 php artisan cache:clear &&
                 supervisord -c /etc/supervisor/supervisord.conf"
 
