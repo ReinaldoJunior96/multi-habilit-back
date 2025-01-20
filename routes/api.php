@@ -111,6 +111,9 @@ Route::get('/commands/fresh-and-seed-users', [CommandController::class, 'freshAn
 Route::get('/commands/fresh-and-seed-all', [CommandController::class, 'freshAndSeedAll']);
 
 
+Route::post('/chamada', [App\Http\Controllers\FilaChamadaController::class, 'chamarPaciente']);
+
+
 
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 //     Route::post('/convenios/pacientes', [ConvenioPacienteController::class, 'store']);

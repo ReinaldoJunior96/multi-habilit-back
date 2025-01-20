@@ -1,5 +1,5 @@
-# Usar a imagem oficial do PHP com FPM e PHP 8.2
-FROM php:8.2-fpm
+# Usar a imagem oficial do PHP com FPM e PHP 8.3
+FROM php:8.3-fpm
 
 # Instalar dependências do sistema
 RUN apt-get update && apt-get install -y \
@@ -10,14 +10,13 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
-    curl
-
-# Instalar extensões PHP necessárias
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install gd pdo pdo_mysql zip
+    curl \
+    supervisor && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install gd pdo pdo_mysql zip pcntl
 
 # Instalar o Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Definir o diretório de trabalho
 WORKDIR /var/www
@@ -26,13 +25,17 @@ WORKDIR /var/www
 COPY . .
 
 # Instalar dependências do Laravel
-RUN composer install
+RUN composer install --no-dev --optimize-autoloader
 
 # Definir permissões
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
-# Expor a porta do PHP-FPM
-EXPOSE 9000
+# Copiar o arquivo de configuração do Supervisor
+COPY .docker/supervisor/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
-CMD ["php-fpm"]
+# Expor as portas do PHP-FPM e do WebSocket
+EXPOSE 9000 8080
+
+# Comando para iniciar o Supervisor
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisor.conf"]

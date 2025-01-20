@@ -11,6 +11,10 @@ services:
             - laravel_network
         depends_on:
             - db
+        command: >
+            sh -c "php artisan config:clear &&
+                php artisan cache:clear &&
+                supervisord -c /etc/supervisor/supervisord.conf"
 
     # Serviço do Nginx
     webserver:
