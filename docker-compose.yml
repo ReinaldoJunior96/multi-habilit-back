@@ -10,6 +10,8 @@ services:
       - laravel_network
     depends_on:
       - db
+    ports:
+      - "8090:8090" # Exponha a porta 8090 para o WebSocket
 
   webserver:
     image: nginx:alpine
