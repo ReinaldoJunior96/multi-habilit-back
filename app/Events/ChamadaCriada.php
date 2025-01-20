@@ -7,6 +7,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ChamadaCriada implements ShouldBroadcast
 {
@@ -19,14 +20,16 @@ class ChamadaCriada implements ShouldBroadcast
      */
     public function __construct($mensagem)
     {
+        Log::info('Evento iniciado', ['mensagem' => $mensagem]);
         $this->mensagem = $mensagem;
     }
 
     /**
      * Define os canais nos quais o evento será transmitido.
      */
-    public function broadcastOn(): Channel
+    public function broadcastOn()
     {
+        Log::info('Transmitindo no canal fila-chamada');
         return new Channel('fila-chamada');
     }
 }
