@@ -22,6 +22,10 @@ class Agendamento extends Model
     ];
 
     // Relacionamento com Atendente
+    public function atendente()
+    {
+        return $this->belongsTo(Usuario::class, 'atendente', 'id');
+    }
 
     // Relacionamento com Paciente (usuário)
     public function paciente()
@@ -34,13 +38,17 @@ class Agendamento extends Model
     {
         return $this->belongsTo(Medico::class, 'medico_id', 'id');
     }
+
     public function convenio()
     {
         return $this->belongsTo(Convenio::class, 'convenio', 'id');
     }
 
-    public function atendente()
+    /**
+     * Relacionamento: um agendamento tem vários atendimentos.
+     */
+    public function atendimentos()
     {
-        return $this->belongsTo(Usuario::class, 'atendente', 'id');
+        return $this->hasMany(Atendimento::class, 'agendamento_id', 'id');
     }
 }

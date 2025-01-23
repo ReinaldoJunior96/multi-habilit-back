@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\AtendenteController;
+use App\Http\Controllers\AtendimentoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConvenioController;
 use App\Http\Controllers\EnderecoController;
@@ -112,7 +113,14 @@ Route::get('/commands/fresh-and-seed-all', [CommandController::class, 'freshAndS
 
 
 Route::post('/chamada', [App\Http\Controllers\FilaChamadaController::class, 'chamarPaciente']);
+//Route::post('atendeimento')
 
+
+Route::prefix('atendimentos')->group(function () {
+    Route::get('/{id}', [AtendimentoController::class, 'index']);
+    Route::post('/', [AtendimentoController::class, 'store']);
+    Route::put('/{id}', [AtendimentoController::class, 'update']);
+});
 
 
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {

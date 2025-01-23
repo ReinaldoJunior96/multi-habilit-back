@@ -32,7 +32,7 @@ class AgendamentoRequest extends FormRequest
                     $fail('A data agendada deve ser no futuro ou hoje com hora válida.');
                 }
             }],
-            'status' => 'required|integer|in:0,1,2',
+            'status' => 'required|integer|in:0,1,2,3,4,5',
             'convenio' => 'nullable|exists:convenios,id',
             'numero_guia' => 'required|string',
             'recorrencia' => 'nullable|in:semanal,mensal',
