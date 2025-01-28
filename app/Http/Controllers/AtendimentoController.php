@@ -48,4 +48,12 @@ class AtendimentoController extends Controller
     {
         return response()->json($atendimento);
     }
+
+    public function atendimentoPorMedico($idMedico){
+        $atendimentos = Atendimento::whereHas('agendamento', function($query) use ($idMedico){
+            $query->where('medico_id', $idMedico);
+        })->get();
+
+        return response()->json($atendimentos);
+    }
 }
