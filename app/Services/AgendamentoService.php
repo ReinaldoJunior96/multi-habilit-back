@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\AgendamentoResource;
 use App\Models\Agendamento;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
@@ -173,6 +174,31 @@ class AgendamentoService
             ]);
 
             return response()->json($agendamentos, 200);
+        } catch (\Exception $e) {
+            Log::error('Erro ao buscar agendamentos', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
+            return response()->json(['message' => 'Erro ao buscar agendamentos.'], 500);
+        }
+    }
+
+    public function agendamentosSimplificado()
+    {
+        try {
+            $agendamentos = $this->agendamento
+                ->with(['medico.usuario', 'paciente.usuario', 'convenio', 'atendente'])
+                ->get();
+
+            if ($agendamentos->isEmpty()) {
+                //dd($agendamentos);
+                return response()->json(['message' => 'Nenhum agendamento encontrado.'], 200);
+            }
+            //dd($agendamentos);
+            return response()->json(AgendamentoResource::collection($agendamentos), 200);
         } catch (\Exception $e) {
             Log::error('Erro ao buscar agendamentos', [
                 'exception_message' => $e->getMessage(),

@@ -43,6 +43,26 @@ class AgendamentoController extends Controller
         }
     }
 
+    public function agendamentosSimplificado()
+    {
+        try {
+            $agendamentos = $this->agendamentoService->agendamentosSimplificado();
+
+            Log::info('Agendamentos listados com sucesso', [
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+            return response()->json($agendamentos, 200);
+        } catch (Exception $e) {
+            Log::error('Erro ao buscar agendamentos', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+            return response()->json(['message' => 'Erro ao buscar agendamentos.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
     public function show($id)
     {
         try {

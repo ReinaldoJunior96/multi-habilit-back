@@ -24,7 +24,7 @@ class AgendamentosTableSeeder extends Seeder
         $mesAtual = Carbon::now()->month;
         $anoAtual = Carbon::now()->year;
 
-        foreach (range(1, Carbon::now()->daysInMonth) as $dia) {
+        foreach (range(1, 2) as $dia) {
             $numeroAgendamentos = rand(2, 5); // Entre 2 e 5 agendamentos por dia
 
             for ($i = 0; $i < $numeroAgendamentos; $i++) {

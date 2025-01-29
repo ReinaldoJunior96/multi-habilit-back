@@ -42,7 +42,7 @@ class ConvenioRequest extends FormRequest
             'medicamentos' => 'nullable',
             'taxas' => 'nullable',
             'materiais' => 'nullable',
-            'valor_filme' => 'nullable|numeric|min:0',
+            'valor_filme' => 'nullable|min:0',
             'dias_retorno_eletivo' => 'required|integer|min:0',
             'dias_retorno_emergencia' => 'required|integer|min:0',
             'vencimento_contrato' => 'nullable|date',
@@ -98,7 +98,6 @@ class ConvenioRequest extends FormRequest
             'email.max' => 'O email não pode exceder 255 caracteres.',
 
             'valor_filme.required' => 'O valor do filme é obrigatório.',
-            'valor_filme.numeric' => 'O valor do filme deve ser numérico.',
             'valor_filme.min' => 'O valor do filme não pode ser negativo.',
 
             'dias_retorno_eletivo.integer' => 'Os dias de retorno eletivo devem ser um número inteiro.',
