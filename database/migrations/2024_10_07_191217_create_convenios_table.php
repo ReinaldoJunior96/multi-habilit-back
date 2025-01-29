@@ -31,7 +31,7 @@ class CreateConveniosTable extends Migration
             $table->string('medicamentos')->nullable(); // Medicamentos (array JSON)
             $table->string('taxas')->nullable(); // Taxas (array JSON)
             $table->string('materiais')->nullable(); // Materiais (array JSON)
-            $table->decimal('valor_filme', 10, 2)->default(0); // Valor Filme
+            $table->decimal('valor_filme', 10, 2)->default(0)->nullable(); // Valor Filme
             $table->integer('dias_retorno_eletivo')->nullable(); // Dias Retorno Eletivo
             $table->integer('dias_retorno_emergencia')->nullable(); // Dias Retorno Emergência
             $table->date('vencimento_contrato')->nullable(); // Vencimento do Contrato
