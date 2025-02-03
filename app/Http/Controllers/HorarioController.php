@@ -31,40 +31,29 @@ class HorarioController extends Controller
     // Criar um novo horário
     public function store(Request $request)
     {
-        // Percorre todos os horários enviados
+        $horariosCriados = [];
+
         foreach ($request->horarios as $horarioBase) {
             $dataInicial = \Carbon\Carbon::parse($horarioBase['data_hora_inicial']);
             $dataFinal = \Carbon\Carbon::parse($horarioBase['data_hora_final']);
             $medicoId = $horarioBase['medico_id'];
+            $diaSemana = $dataInicial->dayOfWeek; // Obtém o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado)
 
-            // Verifica se já existe um horário que se sobrepõe
-            $conflito = Horario::where('medico_id', $medicoId)
-                ->where(function ($query) use ($dataInicial, $dataFinal) {
-                    $query->whereBetween('data_hora_inicial', [$dataInicial, $dataFinal])
-                        ->orWhereBetween('data_hora_final', [$dataInicial, $dataFinal])
-                        ->orWhere(function ($query) use ($dataInicial, $dataFinal) {
-                            $query->where('data_hora_inicial', '<=', $dataInicial)
-                                ->where('data_hora_final', '>=', $dataFinal);
-                        });
-                })
+            // 🔹 Verifica se já existe uma recorrência futura no mesmo dia da semana
+            $recorrenciaFutura = Horario::where('medico_id', $medicoId)
+                ->whereRaw('WEEKDAY(data_hora_inicial) = ?', [$diaSemana - 1]) // Filtra pelo mesmo dia da semana
+                ->where('data_hora_inicial', '>=', $dataInicial) // Apenas horários futuros
                 ->exists();
 
-            if ($conflito) {
-                // Retorna erro e cancela todo o processo
-                return response()->json([
-                    'message' => "Já existe um horário registrado para esse médico na data {$dataInicial->format('Y-m-d H:i')}. Nenhum horário foi cadastrado.",
-                ], 400);
+            if ($recorrenciaFutura) {
+                // 🔥 Se já existe uma recorrência futura e a nova data é anterior, apagamos os registros futuros
+                Horario::where('medico_id', $medicoId)
+                    ->whereRaw('WEEKDAY(data_hora_inicial) = ?', [$diaSemana - 1])
+                    ->where('data_hora_inicial', '>=', $dataInicial)
+                    ->delete();
             }
-        }
 
-        // Se não houve conflitos, cria os horários
-        $horariosCriados = [];
-        foreach ($request->horarios as $horarioBase) {
-            $dataInicial = \Carbon\Carbon::parse($horarioBase['data_hora_inicial']);
-            $dataFinal = \Carbon\Carbon::parse($horarioBase['data_hora_final']);
-            $medicoId = $horarioBase['medico_id'];
-
-            // Gera horários para 1 ano (52 semanas)
+            // 🔹 Agora, criamos a nova recorrência para 1 ano (52 semanas)
             $horarios = [];
             for ($i = 0; $i < 52; $i++) {
                 $horarios[] = [
@@ -74,13 +63,12 @@ class HorarioController extends Controller
                 ];
             }
 
-            // Salva os horários no banco
+            // 🔹 Salva os novos horários no banco
             foreach ($horarios as $horario) {
                 $horariosCriados[] = Horario::create($horario);
             }
         }
 
-        // Retorna os horários criados
         return response()->json([
             'message' => 'Horários criados com sucesso!',
             'data' => $horariosCriados,
