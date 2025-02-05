@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UsuariosTableSeeder::class,          // Cria os usuários
-            // MedicoSeeder::class,                 // Médicos independentes
+            MedicoSeeder::class,                 // Médicos independentes
             //HorarioSeeder::class,
             //PacientesTableSeeder::class,         // Pacientes antes dos convênios
             //ConveniosTableSeeder::class,
