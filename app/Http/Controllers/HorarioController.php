@@ -38,18 +38,21 @@ class HorarioController extends Controller
             $dataFinal = \Carbon\Carbon::parse($horarioBase['data_hora_final']);
             $medicoId = $horarioBase['medico_id'];
             $diaSemana = $dataInicial->dayOfWeek; // Obtém o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado)
+            $horaInicial = $dataInicial->format('H:i:s'); // Captura a hora exata
 
-            // 🔹 Verifica se já existe uma recorrência futura no mesmo dia da semana
+            // 🔹 Verifica se já existe uma recorrência futura no mesmo dia da semana e mesmo horário
             $recorrenciaFutura = Horario::where('medico_id', $medicoId)
                 ->whereRaw('WEEKDAY(data_hora_inicial) = ?', [$diaSemana - 1]) // Filtra pelo mesmo dia da semana
+                ->whereTime('data_hora_inicial', '=', $horaInicial) // Filtra pelo mesmo horário
                 ->where('data_hora_inicial', '>=', $dataInicial) // Apenas horários futuros
                 ->exists();
 
             if ($recorrenciaFutura) {
                 // 🔥 Se já existe uma recorrência futura e a nova data é anterior, apagamos os registros futuros
                 Horario::where('medico_id', $medicoId)
-                    ->whereRaw('WEEKDAY(data_hora_inicial) = ?', [$diaSemana - 1])
-                    ->where('data_hora_inicial', '>=', $dataInicial)
+                    ->whereRaw('WEEKDAY(data_hora_inicial) = ?', [$diaSemana - 1]) // Mesmo dia da semana
+                    ->whereTime('data_hora_inicial', '=', $horaInicial) // Mesmo horário
+                    ->where('data_hora_inicial', '>=', $dataInicial) // Apenas horários futuros
                     ->delete();
             }
 
@@ -74,6 +77,7 @@ class HorarioController extends Controller
             'data' => $horariosCriados,
         ], 201);
     }
+
 
 
 
