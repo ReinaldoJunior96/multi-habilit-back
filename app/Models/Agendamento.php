@@ -18,6 +18,7 @@ class Agendamento extends Model
         'data_agendada',
         'status',
         'convenio',
+        'procedimento',
         'numero_guia',
     ];
 

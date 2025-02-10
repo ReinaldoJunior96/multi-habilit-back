@@ -45,7 +45,7 @@ class Convenio extends Model
 
     public function procedimentos()
     {
-        return $this->hasMany(Procedimento::class);
+        return $this->hasMany(Procedimento::class, 'convenio_id', 'id');
     }
     // Relacionamento com Pacientes
     public function pacientes()

@@ -17,8 +17,7 @@ use App\Http\Controllers\ConvenioProcedimentoController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\CommandController;
 use App\Http\Controllers\DeployController;
-
-
+use App\Http\Controllers\FinanceiroController;
 
 Route::post('deploy', [DeployController::class, 'deploy']);
 Route::post('login', [AuthController::class, 'login']);
@@ -121,6 +120,15 @@ Route::prefix('atendimentos')->group(function () {
     Route::get('/{id}', [AtendimentoController::class, 'index']);
     Route::post('/', [AtendimentoController::class, 'store']);
     Route::put('/{id}', [AtendimentoController::class, 'update']);
+});
+
+
+Route::prefix('financeiro')->group(function () {
+    Route::get('/quantidade/atendimento/convenio/{convenio}', [FinanceiroController::class, 'quantidadeDeAtendimentoPorConvenio']);
+    Route::get('/faturamento/convenio/{convenio}', [FinanceiroController::class, 'atendimentosPorConvenio']);
+
+    Route::get('/quantidade/atendimento/terapeuta/{terapeuta}', [FinanceiroController::class, 'quantidadeAtendimentoPorMedico']);
+    Route::get('/faturamento/terapeuta/{terapeuta}', [FinanceiroController::class, 'faturamentoPorMedico']);
 });
 
 

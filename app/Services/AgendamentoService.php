@@ -26,6 +26,8 @@ class AgendamentoService
         try {
             $agendamentos = [];
 
+
+
             $dataInicial = \Carbon\Carbon::parse($data['data_agendada']); // Data inicial do agendamento
             $quantidadeRecorrencias = ($data['recorrencia'] === 'semanal') ? 12 : 6; // Total de repetições
 

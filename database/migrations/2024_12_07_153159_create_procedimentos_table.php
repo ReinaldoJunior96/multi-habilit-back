@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('num_auxiliares')->nullable();
             $table->integer('tempo')->nullable();
             $table->decimal('valor_filme', 10, 2)->default(0);
-            $table->foreignId('convenio_id')->constrained('convenios')->onDelete('cascade'); // Relação com convênios
+            $table->foreignId('convenio_id')->constrained('convenios')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

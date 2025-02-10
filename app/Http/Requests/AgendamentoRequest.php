@@ -34,6 +34,7 @@ class AgendamentoRequest extends FormRequest
             }],
             'status' => 'required|integer|in:0,1,2,3,4,5',
             'convenio' => 'nullable|exists:convenios,id',
+            'procedimento' => 'nullable|exists:procedimentos,id',
             'numero_guia' => 'nullable|string',
             'recorrencia' => 'nullable|in:semanal,mensal',
         ];
@@ -60,6 +61,7 @@ class AgendamentoRequest extends FormRequest
             'status.integer' => 'O status deve ser um número inteiro.',
             'status.in' => 'O status deve ser 0 (pendente), 1 (confirmado) ou 2 (cancelado).',
             'convenio.exists' => 'O convênio informado não existe.',
+            'procedimento.exists' => 'O procedimento informado não existe.',
             'numero_guia.string' => 'O número da guia deve ser um numero válido.',
         ];
     }

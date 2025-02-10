@@ -33,6 +33,7 @@ class AddForeignKeysToAgendamentosTable extends Migration
             $table->dropForeign(['paciente']);
             $table->dropForeign(['medico']);
             $table->dropForeign(['convenio']);
+            $table->dropForeign(['procedimento']);
         });
     }
 }

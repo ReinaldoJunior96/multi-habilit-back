@@ -8,6 +8,7 @@ use App\Models\Paciente;
 use App\Models\Usuario;
 use App\Models\Medico;
 use App\Models\Convenio;
+use App\Models\Procedimento;
 use Carbon\Carbon;
 
 class AgendamentosTableSeeder extends Seeder
@@ -17,6 +18,7 @@ class AgendamentosTableSeeder extends Seeder
         $pacientes = Paciente::all();
         $atendentes = Usuario::factory()->count(5)->create();
         $convenios = Convenio::factory()->count(5)->create();
+        $procedimentos = Procedimento::factory()->count(5)->create();
 
         // Médico específico
         $usuario = Usuario::where('email', '=', 'medico@medico.com')->first();
@@ -41,8 +43,9 @@ class AgendamentosTableSeeder extends Seeder
                     // Médico específico
                     'medico_id' => $medicoEspecifico->id,
                     'data_agendada' => $dataAgendada,
-                    'status' => rand(0, 1),
+                    'status' => rand(3, 4),
                     'convenio' => $convenio->id,
+                    'procedimento' => $procedimentos->id,
                     'numero_guia' => 'GUID-' . strtoupper(bin2hex(random_bytes(3))),
                 ]);
             }

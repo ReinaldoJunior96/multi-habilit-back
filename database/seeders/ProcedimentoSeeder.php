@@ -15,7 +15,7 @@ class ProcedimentoSeeder extends Seeder
     public function run(): void
     {
         // Cria 5 convênios
-        $convenios = Convenio::factory(10)->create();
+        $convenios = Convenio::factory(50)->create();
 
         // Para cada convênio, cria Procedimentos associados
         foreach ($convenios as $convenio) {
