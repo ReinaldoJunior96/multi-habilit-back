@@ -19,7 +19,7 @@ class CreateAgendamentosTable extends Migration
             $table->unsignedBigInteger('paciente');
             $table->unsignedBigInteger('medico_id');
             $table->unsignedBigInteger('convenio');
-            $table->unsignedBigInteger('procedimento');
+            $table->unsignedBigInteger('procedimento')->nullable();
             $table->dateTime('data_agendada');
             $table->tinyInteger('status')->default(0);
             $table->softDeletes();

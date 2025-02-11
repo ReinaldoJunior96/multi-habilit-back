@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\FinanceiroAtendimentosPorConvenioResource;
+use App\Http\Resources\FaturamentoPorConvenioCollection;
+use App\Http\Resources\FaturamentoPorConvenioResource;
 use App\Models\Agendamento;
-use Illuminate\Http\Request;
 
 class FinanceiroController extends Controller
 {
@@ -21,14 +21,12 @@ class FinanceiroController extends Controller
 
     public function faturamentoPorConvenio($convenio)
     {
-        $agendamentosFinalizados = Agendamento::with('convenio', 'procedimento')
+        $agendamentosFinalizados = Agendamento::with(['convenio', 'procedimento'])
             ->where('convenio', $convenio)
             ->where('status', 4)
-            ->count();
+            ->get();
 
-
-
-        return response()->json($agendamentosFinalizados, 200);
+        return new FaturamentoPorConvenioCollection(FaturamentoPorConvenioResource::collection($agendamentosFinalizados));
     }
 
     public function faturamentoPorMedico($medico)
