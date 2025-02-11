@@ -125,7 +125,7 @@ Route::prefix('atendimentos')->group(function () {
 
 Route::prefix('financeiro')->group(function () {
     Route::get('/quantidade/atendimento/convenio/{convenio}', [FinanceiroController::class, 'quantidadeDeAtendimentoPorConvenio']);
-    Route::get('/faturamento/convenio/{convenio}', [FinanceiroController::class, 'atendimentosPorConvenio']);
+    Route::get('/faturamento/convenio/{convenio}', [FinanceiroController::class, 'faturamentoPorConvenio']);
 
     Route::get('/quantidade/atendimento/terapeuta/{terapeuta}', [FinanceiroController::class, 'quantidadeAtendimentoPorMedico']);
     Route::get('/faturamento/terapeuta/{terapeuta}', [FinanceiroController::class, 'faturamentoPorMedico']);

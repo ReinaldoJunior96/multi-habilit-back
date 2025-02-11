@@ -21,12 +21,14 @@ class FinanceiroController extends Controller
 
     public function faturamentoPorConvenio($convenio)
     {
-        $agendamentosFinalizados = Agendamento::with('convenio')
+        $agendamentosFinalizados = Agendamento::with('convenio', 'procedimento')
             ->where('convenio', $convenio)
             ->where('status', 4)
-            ->get();
+            ->count();
 
-        return response()->json(FinanceiroAtendimentosPorConvenioResource::collection($agendamentosFinalizados), 200);
+
+
+        return response()->json($agendamentosFinalizados, 200);
     }
 
     public function faturamentoPorMedico($medico)

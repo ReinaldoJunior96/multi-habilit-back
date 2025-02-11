@@ -49,7 +49,7 @@ class ConvenioService
     {
         try {
             // Carrega o convênio com os pacientes associados
-            $convenio = $this->convenio->with('pacientes')->findOrFail($id);
+            $convenio = $this->convenio->with('pacientes', 'procedimentos')->findOrFail($id);
 
             Log::info("Convênio ID {$id} encontrado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()

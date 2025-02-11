@@ -52,4 +52,9 @@ class Agendamento extends Model
     {
         return $this->hasMany(Atendimento::class, 'agendamento_id', 'id');
     }
+
+    public function procedimento()
+    {
+        return $this->belongsTo(Procedimento::class, 'procedimento', 'id');
+    }
 }
