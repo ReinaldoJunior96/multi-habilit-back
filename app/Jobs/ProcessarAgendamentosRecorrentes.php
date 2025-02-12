@@ -25,8 +25,8 @@ class ProcessarAgendamentosRecorrentes implements ShouldQueue
         $hoje = Carbon::today();
 
         // Obtém os agendamentos do dia específico
-        $agendamentos = Agendamento::where('data_agendada', "=", $hoje)
-            ->where("recorrencia", "=", true)
+        $agendamentos = Agendamento::whereDate('data_agendada',  $hoje)
+            ->where("recorrencia",  true)
             ->get();
 
         Log::info('📌 Total de agendamentos encontrados: ');

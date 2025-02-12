@@ -28,7 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withSchedule(function (Schedule $schedule) {
         $schedule->call(function () {
             dispatch(new ProcessarAgendamentosRecorrentes());
-        })->dailyAt('18:00')->timezone('America/Sao_Paulo');
+        })->dailyAt('15:00')->timezone('America/Sao_Paulo');
     })
 
 
