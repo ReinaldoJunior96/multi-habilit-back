@@ -7,6 +7,15 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class FaturamentoPorConvenioCollection extends ResourceCollection
 {
+
+    protected $totalValorCH;
+
+    public function __construct($resource, $totalValorCH)
+    {
+        parent::__construct($resource);
+        $this->totalValorCH = $totalValorCH;
+    }
+
     /**
      * Transform the resource collection into an array.
      *
@@ -15,15 +24,8 @@ class FaturamentoPorConvenioCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
 
-        $totalValorCH = $this->collection->sum(function ($agendamento) {
-            return isset($agendamento->procedimento) && is_object($agendamento->procedimento)
-                ? $agendamento->procedimento->valor_ch
-                : 0;
-        });
-        dd($totalValorCH);
-
         return [
-            'total_valor_ch' => $totalValorCH,
+            'total_valor_ch' => $this->totalValorCH,
             'agendamentos' => $this->collection
         ];
     }

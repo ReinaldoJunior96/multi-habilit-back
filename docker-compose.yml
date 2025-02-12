@@ -12,6 +12,7 @@ services:
       - db
     ports:
       - "8090:8090" # Exponha a porta 8090 para o WebSocket
+    restart: unless-stopped
 
   webserver:
     image: nginx:alpine

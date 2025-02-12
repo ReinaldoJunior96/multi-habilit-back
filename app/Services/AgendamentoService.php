@@ -25,44 +25,34 @@ class AgendamentoService
     {
         try {
             $agendamentos = [];
-
-
-
             $dataInicial = \Carbon\Carbon::parse($data['data_agendada']); // Data inicial do agendamento
-            $quantidadeRecorrencias = ($data['recorrencia'] === 'semanal') ? 12 : 6; // Total de repetições
 
-            // Verifica a disponibilidade apenas para a data inicial
+            // Define a recorrência baseado no tipo de agendamento
+            $data['recorrencia'] = ($data['tipo_agendamento'] === 'terapia' ? true : false);
+
+            // Verifica a disponibilidade da data inicial
             if (!$this->isHorarioDisponivel($data['medico_id'], $dataInicial)) {
                 throw new \Exception('O horário selecionado não está disponível.');
             }
 
-            // Cria agendamentos para todas as recorrências
-            for ($i = 0; $i < $quantidadeRecorrencias; $i++) {
-                // Atualiza o dado de `data_agendada` para a data atual do loop
-                $data['data_agendada'] = $dataInicial->copy()->format('Y-m-d H:i:s');
+            // Cria o agendamento
+            $agendamento = $this->agendamento->create($data);
 
-                // Cria o agendamento
-                $agendamento = $this->agendamento->create($data);
+            // Marca o horário como indisponível
+            $this->marcarHorarioIndisponivel($data['medico_id'], $dataInicial);
 
-                // Atualiza o horário como indisponível
-                $this->marcarHorarioIndisponivel($data['medico_id'], $dataInicial);
+            // Verifica o convênio e associa o paciente, se necessário
+            $this->handleConvenioPaciente($data['paciente'], $data['convenio']);
 
-                // Verifica o convênio e associa o paciente, se necessário
-                $this->handleConvenioPaciente($data['paciente'], $data['convenio']);
+            // Adiciona o agendamento criado à lista
+            $agendamentos[] = $agendamento;
 
-                // Adiciona o agendamento criado à lista
-                $agendamentos[] = $agendamento;
+            Log::info("Agendamento criado com sucesso.", [
+                'usuario_logado' => $this->getLoggedUserId(),
+                'agendamento_id' => $agendamento->id
+            ]);
 
-                // Incrementa a data conforme a recorrência
-                if ($data['recorrencia'] === 'semanal') {
-                    $dataInicial->addWeek(); // Incrementa 7 dias
-                } elseif ($data['recorrencia'] === 'mensal') {
-                    $dataInicial->addMonth(); // Incrementa 1 mês
-                }
-            }
-
-            Log::info("Agendamento(s) criado(s) com sucesso.", ['usuario_logado' => $this->getLoggedUserId()]);
-            return $agendamentos; // Retorna os agendamentos criados
+            return $agendamentos;
         } catch (\Exception $e) {
             Log::error('Erro ao criar agendamento', [
                 'exception_message' => $e->getMessage(),
@@ -75,6 +65,7 @@ class AgendamentoService
             throw $e;
         }
     }
+
 
     private function handleConvenioPaciente($pacienteId, $convenioId)
     {

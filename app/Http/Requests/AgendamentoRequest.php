@@ -36,7 +36,8 @@ class AgendamentoRequest extends FormRequest
             'convenio' => 'nullable|exists:convenios,id',
             'procedimento' => 'nullable|exists:procedimentos,id',
             'numero_guia' => 'nullable|string',
-            'recorrencia' => 'nullable|in:semanal,mensal',
+            'recorrencia' => 'nullable|boolean',
+            'tipo_agendamento' => 'nullable|string',
         ];
     }
 

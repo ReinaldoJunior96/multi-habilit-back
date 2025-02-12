@@ -20,6 +20,8 @@ class Agendamento extends Model
         'convenio',
         'procedimento',
         'numero_guia',
+        'recorrencia',
+        'tipo_agendamento'
     ];
 
     // Relacionamento com Atendente

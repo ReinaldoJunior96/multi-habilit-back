@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('agendamentos', function (Blueprint $table) {
-            $table->string('recorrencia')->nullable()->after('status'); // 'semanal' ou 'mensal'
+            $table->boolean('recorrencia')->nullable()->default(false)->after('status');
+            $table->string('tipo_agendamento')->nullable()->after('recorrencia'); // 'semanal' ou 'mensal'
         });
     }
 

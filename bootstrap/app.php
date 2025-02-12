@@ -6,6 +6,9 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 
+use App\Jobs\ProcessarAgendamentosRecorrentes;
+use Illuminate\Console\Scheduling\Schedule;
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
@@ -22,4 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         // Configurações para exceções
     })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->call(function () {
+            dispatch(new ProcessarAgendamentosRecorrentes());
+        })->dailyAt('21:30')->timezone('America/Sao_Paulo');
+    })
+
+
     ->create();

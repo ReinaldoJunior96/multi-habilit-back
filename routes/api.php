@@ -132,6 +132,13 @@ Route::prefix('financeiro')->group(function () {
 });
 
 
+Route::get('/executar-job', function () {
+    dispatch(new App\Jobs\ProcessarAgendamentosRecorrentes());
+
+    return response()->json(['message' => 'Job enviado para execução!'], 200);
+});
+
+
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 //     Route::post('/convenios/pacientes', [ConvenioPacienteController::class, 'store']);
 //     Route::delete('/convenios/pacientes', [ConvenioPacienteController::class, 'remover']);

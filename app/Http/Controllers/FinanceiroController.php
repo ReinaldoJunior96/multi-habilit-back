@@ -21,12 +21,28 @@ class FinanceiroController extends Controller
 
     public function faturamentoPorConvenio($convenio)
     {
+
+
+
         $agendamentosFinalizados = Agendamento::with(['convenio', 'procedimento'])
             ->where('convenio', $convenio)
             ->where('status', 4)
             ->get();
 
-        return new FaturamentoPorConvenioCollection(FaturamentoPorConvenioResource::collection($agendamentosFinalizados));
+
+
+
+
+
+        $totalValorCH = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
+            ->where('agendamentos.convenio', $convenio)
+            ->where('agendamentos.status', 4)
+            ->sum('procedimentos.valor_ch');
+
+
+
+
+        return new FaturamentoPorConvenioCollection(FaturamentoPorConvenioResource::collection($agendamentosFinalizados), $totalValorCH);
     }
 
     public function faturamentoPorMedico($medico)
@@ -36,7 +52,22 @@ class FinanceiroController extends Controller
             ->where('status', 4)
             ->get();
 
-        return response()->json($faturamentoMedico, 200);
+        // $totalValorCH = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
+        //     ->where('agendamentos.medico', $medico)
+        //     ->where('agendamentos.status', 4)
+        //     ->get();
+
+        $totalProcedimentos = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
+            ->where('medico_id', $medico)
+            ->where('agendamentos.status', 4)
+            ->sum('procedimentos.valor_ch');
+
+        $totaSum = Agendamento::with('procedimento')
+            ->where('medico_id', $medico)
+            ->where('agendamentos.status', 4)
+            ->count();
+
+        return response()->json($totalValorCH, 200);
     }
 
     public function quantidadeAtendimentoPorMedico($medico)
