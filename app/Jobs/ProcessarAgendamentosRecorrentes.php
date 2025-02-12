@@ -22,9 +22,11 @@ class ProcessarAgendamentosRecorrentes implements ShouldQueue
     public function handle()
     {
         Log::info('🔥 Job ProcessarAgendamentosRecorrentes iniciado.');
+        $hoje = Carbon::today();
 
         // Obtém os agendamentos do dia específico
-        $agendamentos = Agendamento::where('data_agendada', "=", "2025-02-13 09:00:00")
+        $agendamentos = Agendamento::where('data_agendada', "=", $hoje)
+            ->where("recorrencia", "=", true)
             ->get();
 
         Log::info('📌 Total de agendamentos encontrados: ');
