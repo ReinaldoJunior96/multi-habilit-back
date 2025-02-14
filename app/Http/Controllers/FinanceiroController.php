@@ -2,81 +2,162 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\FaturamentoPorConvenioCollection;
-use App\Http\Resources\FaturamentoPorConvenioResource;
 use App\Models\Agendamento;
+use App\Models\Procedimento;
+use App\Models\Convenio;
+use App\Models\Medico;
+use Illuminate\Http\Request;
 
 class FinanceiroController extends Controller
 {
-
-    public function quantidadeDeAtendimentoPorConvenio($convenio)
+    public function quantidadeDeAtendimentoPorConvenio($convenio, Request $request)
     {
+        $query = Agendamento::where('convenio', $convenio)
+            ->where('status', 4);
 
-        $totalAtendimentos = Agendamento::where('convenio', $convenio)
-            ->where('status', 4)
-            ->count();
+        // Aplicando filtro de datas
+        if ($request->has('data_inicio')) {
+            $query->where('data_agendada', '>=', $request->data_inicio);
+        }
+        if ($request->has('data_fim')) {
+            $query->where('data_agendada', '<=', $request->data_fim);
+        }
 
-        return response()->json(['total: ' => $totalAtendimentos], 200);
+        $agendamentos = $query->get();
+        $totalAtendimentos = $agendamentos->count();
+
+        $dadosFormatados = $this->formatarAtendimentos($agendamentos);
+
+        return response()->json([
+            'total_atendimentos' => $totalAtendimentos,
+            'lista_atendimentos' => $dadosFormatados
+        ], 200);
     }
 
-    public function faturamentoPorConvenio($convenio)
+    public function faturamentoPorConvenio($convenio, Request $request)
     {
+        $query = Agendamento::where('convenio', $convenio)
+            ->where('status', 4);
 
+        if ($request->has('data_inicio')) {
+            $query->where('data_agendada', '>=', $request->data_inicio);
+        }
+        if ($request->has('data_fim')) {
+            $query->where('data_agendada', '<=', $request->data_fim);
+        }
 
-
-        $agendamentosFinalizados = Agendamento::with(['convenio', 'procedimento'])
-            ->where('convenio', $convenio)
-            ->where('status', 4)
-            ->get();
-
-
-
-
-
+        $agendamentos = $query->get();
 
         $totalValorCH = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
             ->where('agendamentos.convenio', $convenio)
             ->where('agendamentos.status', 4)
+            ->when($request->data_inicio, fn($q) => $q->where('agendamentos.data_agendada', '>=', $request->data_inicio))
+            ->when($request->data_fim, fn($q) => $q->where('agendamentos.data_agendada', '<=', $request->data_fim))
             ->sum('procedimentos.valor_ch');
 
+        $dadosFormatados = $this->formatarAtendimentos($agendamentos);
 
-
-
-        return new FaturamentoPorConvenioCollection(FaturamentoPorConvenioResource::collection($agendamentosFinalizados), $totalValorCH);
+        return response()->json([
+            'total_faturado' => $totalValorCH,
+            'lista_atendimentos' => $dadosFormatados
+        ], 200);
     }
 
-    public function faturamentoPorMedico($medico)
+    public function faturamentoPorMedico($medico, Request $request)
     {
-        $faturamentoMedico = Agendamento::with('medico', 'convenio.procedimentos')
-            ->where('medico_id', $medico)
-            ->where('status', 4)
-            ->get();
+        $query = Agendamento::where('medico_id', $medico)
+            ->where('status', 4);
 
-        // $totalValorCH = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
-        //     ->where('agendamentos.medico', $medico)
-        //     ->where('agendamentos.status', 4)
-        //     ->get();
+        if ($request->has('data_inicio')) {
+            $query->where('data_agendada', '>=', $request->data_inicio);
+        }
+        if ($request->has('data_fim')) {
+            $query->where('data_agendada', '<=', $request->data_fim);
+        }
 
-        $totalProcedimentos = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
-            ->where('medico_id', $medico)
+        $agendamentos = $query->get();
+
+        $totalFaturado = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
+            ->where('agendamentos.medico_id', $medico)
             ->where('agendamentos.status', 4)
+            ->when($request->data_inicio, fn($q) => $q->where('agendamentos.data_agendada', '>=', $request->data_inicio))
+            ->when($request->data_fim, fn($q) => $q->where('agendamentos.data_agendada', '<=', $request->data_fim))
             ->sum('procedimentos.valor_ch');
 
-        $totaSum = Agendamento::with('procedimento')
-            ->where('medico_id', $medico)
-            ->where('agendamentos.status', 4)
-            ->count();
+        $medicoInfo = $this->buscarDadosMedico($medico);
+        $dadosFormatados = $this->formatarAtendimentos($agendamentos);
 
-        return response()->json($totalValorCH, 200);
+        return response()->json([
+            'total_faturado' => $totalFaturado,
+            'medico' => $medicoInfo,
+            'lista_procedimentos' => $dadosFormatados
+        ], 200);
     }
 
-    public function quantidadeAtendimentoPorMedico($medico)
+    public function quantidadeAtendimentoPorMedico($medico, Request $request)
     {
+        $query = Agendamento::where('medico_id', $medico)
+            ->where('status', 4);
 
-        $totalAtendimentosPorMedico = Agendamento::where('medico_id', $medico)
-            ->where('status', 4)
-            ->count();
+        if ($request->has('data_inicio')) {
+            $query->where('data_agendada', '>=', $request->data_inicio);
+        }
+        if ($request->has('data_fim')) {
+            $query->where('data_agendada', '<=', $request->data_fim);
+        }
 
-        return response()->json(['total: ' => $totalAtendimentosPorMedico], 200);
+        $agendamentos = $query->get();
+        $totalAtendimentos = $agendamentos->count();
+
+        $dadosFormatados = $this->formatarAtendimentos($agendamentos);
+
+        return response()->json([
+            'total_atendimentos' => $totalAtendimentos,
+            'lista_atendimentos' => $dadosFormatados
+        ], 200);
+    }
+
+    private function formatarAtendimentos($agendamentos)
+    {
+        return $agendamentos->map(function ($agendamento) {
+            return [
+                'data_agendada' => $agendamento->data_agendada,
+                'numero_guia' => $agendamento->numero_guia,
+
+                'convenio' => Convenio::find($agendamento->convenio) ? [
+                    'codigo' => Convenio::find($agendamento->convenio)->codigo,
+                    'razao_social' => Convenio::find($agendamento->convenio)->razao_social,
+                ] : [
+                    'codigo' => 'N/A',
+                    'razao_social' => 'N/A',
+                ],
+
+                'procedimento' => Procedimento::find($agendamento->procedimento) ? [
+                    'codigo' => Procedimento::find($agendamento->procedimento)->codigo,
+                    'nome' => Procedimento::find($agendamento->procedimento)->nome,
+                    'valor_unitario' => Procedimento::find($agendamento->procedimento)->valor_ch ?? 0,
+                ] : [
+                    'codigo' => 'N/A',
+                    'nome' => 'N/A',
+                    'valor_unitario' => 0,
+                ]
+            ];
+        });
+    }
+
+    private function buscarDadosMedico($medico)
+    {
+        $medicoData = Medico::find($medico);
+        return $medicoData ? [
+            'id' => $medicoData->id,
+            'nome' => optional($medicoData->usuario)->nome_completo ?? 'N/A',
+            'crm' => $medicoData->cnpj ?? 'N/A',
+            'carga_horaria' => $medicoData->carga_horaria ?? 'N/A'
+        ] : [
+            'id' => 'N/A',
+            'nome' => 'N/A',
+            'crm' => 'N/A',
+            'carga_horaria' => 'N/A'
+        ];
     }
 }
