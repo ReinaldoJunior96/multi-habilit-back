@@ -13,7 +13,7 @@ class FinanceiroController extends Controller
     public function quantidadeDeAtendimentoPorConvenio($convenio, Request $request)
     {
         $query = Agendamento::where('convenio', $convenio)
-            ->where('status', 4);
+            ->where('status', 1);
 
         // Aplicando filtro de datas
         if ($request->has('data_inicio')) {
@@ -37,7 +37,7 @@ class FinanceiroController extends Controller
     public function faturamentoPorConvenio($convenio, Request $request)
     {
         $query = Agendamento::where('convenio', $convenio)
-            ->where('status', 4);
+            ->where('status', 1);
 
         if ($request->has('data_inicio')) {
             $query->where('data_agendada', '>=', $request->data_inicio);
@@ -50,7 +50,7 @@ class FinanceiroController extends Controller
 
         $totalValorCH = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
             ->where('agendamentos.convenio', $convenio)
-            ->where('agendamentos.status', 4)
+            ->where('agendamentos.status', 1)
             ->when($request->data_inicio, fn($q) => $q->where('agendamentos.data_agendada', '>=', $request->data_inicio))
             ->when($request->data_fim, fn($q) => $q->where('agendamentos.data_agendada', '<=', $request->data_fim))
             ->sum('procedimentos.valor_ch');
@@ -66,7 +66,7 @@ class FinanceiroController extends Controller
     public function faturamentoPorMedico($medico, Request $request)
     {
         $query = Agendamento::where('medico_id', $medico)
-            ->where('status', 4);
+            ->where('status', 1);
 
         if ($request->has('data_inicio')) {
             $query->where('data_agendada', '>=', $request->data_inicio);
@@ -79,7 +79,7 @@ class FinanceiroController extends Controller
 
         $totalFaturado = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
             ->where('agendamentos.medico_id', $medico)
-            ->where('agendamentos.status', 4)
+            ->where('agendamentos.status', 1)
             ->when($request->data_inicio, fn($q) => $q->where('agendamentos.data_agendada', '>=', $request->data_inicio))
             ->when($request->data_fim, fn($q) => $q->where('agendamentos.data_agendada', '<=', $request->data_fim))
             ->sum('procedimentos.valor_ch');
@@ -97,7 +97,7 @@ class FinanceiroController extends Controller
     public function quantidadeAtendimentoPorMedico($medico, Request $request)
     {
         $query = Agendamento::where('medico_id', $medico)
-            ->where('status', 4);
+            ->where('status', 1);
 
         if ($request->has('data_inicio')) {
             $query->where('data_agendada', '>=', $request->data_inicio);
