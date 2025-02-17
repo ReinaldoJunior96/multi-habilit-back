@@ -13,7 +13,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8090:8090"
+      - "8090:443"
     restart: unless-stopped
 
   webserver:
