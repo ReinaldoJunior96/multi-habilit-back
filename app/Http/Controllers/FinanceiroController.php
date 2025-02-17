@@ -42,31 +42,38 @@ class FinanceiroController extends Controller
 
     public function faturamentoPorConvenio($convenio, Request $request)
     {
+
         $query = Agendamento::where('convenio', $convenio)
             ->where('status', 1);
 
         if ($request->has('data_inicio')) {
-            $query->where('data_agendada', '>=', $request->data_inicio);
-        }
-        if ($request->has('data_fim')) {
-            $query->where('data_agendada', '<=', $request->data_fim);
+            $query->whereDate('data_agendada', '>=', $request->data_inicio);
         }
 
-        // Filtro por unidade (se enviado)
+        if ($request->has('data_fim')) {
+            $query->whereDate('data_agendada', '<=', $request->data_fim);
+        }
+
         if ($request->has('unidade')) {
             $query->where('unidade', $request->unidade);
         }
 
         $agendamentos = $query->get();
 
-        $totalValorCH = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
-            ->where('agendamentos.convenio', $convenio)
-            ->where('agendamentos.status', 1)
-            ->when($request->data_inicio, fn($q) => $q->where('agendamentos.data_agendada', '>=', $request->data_inicio))
-            ->when($request->data_fim, fn($q) => $q->where('agendamentos.data_agendada', '<=', $request->data_fim))
-            ->when($request->unidade, fn($q) => $q->where('agendamentos.unidade', $request->unidade))
+
+        if ($agendamentos->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhum agendamento encontrado para os filtros aplicados.',
+                'total_faturado' => 0,
+                'lista_atendimentos' => []
+            ], 200);
+        }
+
+        // Calcular faturamento usando a mesma query base
+        $totalValorCH = $query->join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
             ->sum('procedimentos.valor_ch');
 
+        // Formatar os atendimentos
         $dadosFormatados = $this->formatarAtendimentos($agendamentos);
 
         return response()->json([
@@ -74,6 +81,7 @@ class FinanceiroController extends Controller
             'lista_atendimentos' => $dadosFormatados
         ], 200);
     }
+
 
 
     public function faturamentoPorMedico($medico, Request $request)

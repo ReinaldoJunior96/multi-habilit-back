@@ -128,11 +128,21 @@ class UsuarioService
         }
     }
 
+
     public function updateUsuario(array $data, $id)
     {
         try {
             $usuario = $this->usuario->findOrFail($id);
+
+            // Atualiza a senha separadamente se ela foi enviada
+            $this->atualizarSenhaSeNecessario($usuario, $data);
+
+            // Remove o password para evitar sobrescrever com null
+            unset($data['password']);
+
+            // Atualiza os demais dados
             $usuario->update($data);
+
             Log::info("Usuário [{$this->getLoggedUserId()}] atualizou o usuário [ID: {$id}] com sucesso.");
             return response()->json($usuario, 200);
         } catch (ModelNotFoundException $e) {
@@ -148,6 +158,19 @@ class UsuarioService
             return response()->json(['message' => 'Erro ao atualizar usuário.'], 500);
         }
     }
+
+    /**
+     * Atualiza a senha do usuário apenas se for enviada
+     */
+    private function atualizarSenhaSeNecessario($usuario, array &$data)
+    {
+        if (!empty($data['password'])) {
+            $usuario->password = Hash::make($data['password']);
+            $usuario->save();
+            //dd("Senha recebida:", $data['password'], "Senha criptografada:", Hash::make($data['password']));
+        }
+    }
+
 
     public function deleteUsuario($id)
     {

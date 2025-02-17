@@ -29,11 +29,11 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 });
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::post('usuarios', [UsuarioController::class, 'store']);  // Apenas admin-master ou admin podem criar usuários
-    Route::get('usuarios', [UsuarioController::class, 'index']);  // Apenas admin-master ou admin podem listar usuários
-    Route::get('usuarios/{id}', [UsuarioController::class, 'show']); // Apenas admin-master ou admin podem visualizar um usuário
-    Route::put('usuarios/{id}', [UsuarioController::class, 'update']); // Apenas admin-master ou admin podem atualizar um usuário
-    Route::delete('usuarios/{id}', [UsuarioController::class, 'destroy']); // Apenas admin-master ou admin podem excluir usuários
+    Route::post('usuarios', [UsuarioController::class, 'store']);
+    Route::get('usuarios', [UsuarioController::class, 'index']);
+    Route::get('usuarios/{id}', [UsuarioController::class, 'show']);
+    Route::delete('usuarios/{id}', [UsuarioController::class, 'destroy']);
+    Route::put('usuarios/edit/{id}', [UsuarioController::class, 'updateUsuario']);
 });
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
@@ -42,9 +42,6 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::post('medicos', [MedicoController::class, 'store']);
     Route::put('medicos/{id}', [MedicoController::class, 'update']);
     Route::delete('medicos/{id}', [MedicoController::class, 'destroy']);
-    // Route::middleware('role:admin-master,admin')->group(function () {
-
-    // });
 });
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {

@@ -95,7 +95,7 @@ class UsuarioController extends Controller
         }
     }
 
-    public function update(UsuarioRequest $request, $id)
+    public function updateUsuario(UsuarioRequest $request, $id)
     {
         try {
             return $this->usuarioService->updateUsuario($request->all(), $id);
