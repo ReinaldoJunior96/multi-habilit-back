@@ -21,6 +21,7 @@ class Agendamento extends Model
         'procedimento',
         'numero_guia',
         'recorrencia',
+        'unidade',
         'tipo_agendamento'
     ];
 

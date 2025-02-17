@@ -21,6 +21,7 @@ class CreateAgendamentosTable extends Migration
             $table->unsignedBigInteger('convenio');
             $table->unsignedBigInteger('procedimento')->nullable();
             $table->dateTime('data_agendada');
+            $table->string('unidade')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->softDeletes();
             $table->timestamps();
