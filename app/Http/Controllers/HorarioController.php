@@ -32,7 +32,7 @@ class HorarioController extends Controller
     public function store(Request $request)
     {
         $horariosCriados = [];
-
+        dd($request->all());
         foreach ($request->horarios as $horarioBase) {
             $dataInicial = \Carbon\Carbon::parse($horarioBase['data_hora_inicial']);
             $dataFinal = \Carbon\Carbon::parse($horarioBase['data_hora_final']);
@@ -119,7 +119,7 @@ class HorarioController extends Controller
 
     public function destroyRecorrente(Request $request)
     {
-        //dd($request->all());
+
         $medicoId = $request->input('medico_id');
         $diaSemana = $request->input('dia_semana'); // Exemplo: "segunda-feira"
         $horarioInicial = $request->input('data_hora_inicial'); // Exemplo: "15:00:00"
@@ -144,6 +144,7 @@ class HorarioController extends Controller
         if ($diaSemanaNumero === null) {
             return response()->json(['message' => 'Dia da semana inválido.'], 400);
         }
+        dd($diaSemanaNumero);
 
         // Filtra os horários
         $horariosDeletados = Horario::where('medico_id', $medicoId)
