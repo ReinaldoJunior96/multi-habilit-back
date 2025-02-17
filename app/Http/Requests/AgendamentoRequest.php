@@ -38,6 +38,7 @@ class AgendamentoRequest extends FormRequest
             'numero_guia' => 'nullable|string',
             'recorrencia' => 'nullable|boolean',
             'tipo_agendamento' => 'nullable|string',
+            'unidade' => 'nullable|string',
         ];
     }
 
