@@ -78,31 +78,41 @@ class FinanceiroController extends Controller
 
     public function faturamentoPorMedico($medico, Request $request)
     {
+        // Construindo a consulta base
         $query = Agendamento::where('medico_id', $medico)
             ->where('status', 1);
 
+        // Aplicando filtros opcionais
         if ($request->has('data_inicio')) {
-            $query->where('data_agendada', '>=', $request->data_inicio);
-        }
-        if ($request->has('data_fim')) {
-            $query->where('data_agendada', '<=', $request->data_fim);
+            $query->whereDate('data_agendada', '>=', $request->data_inicio);
         }
 
-        // Filtro por unidade (se enviado)
+        if ($request->has('data_fim')) {
+            $query->whereDate('data_agendada', '<=', $request->data_fim);
+        }
+
         if ($request->has('unidade')) {
             $query->where('unidade', $request->unidade);
         }
 
+        // Obtem os agendamentos
         $agendamentos = $query->get();
 
-        $totalFaturado = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
-            ->where('agendamentos.medico_id', $medico)
-            ->where('agendamentos.status', 1)
-            ->when($request->data_inicio, fn($q) => $q->where('agendamentos.data_agendada', '>=', $request->data_inicio))
-            ->when($request->data_fim, fn($q) => $q->where('agendamentos.data_agendada', '<=', $request->data_fim))
-            ->when($request->unidade, fn($q) => $q->where('agendamentos.unidade', $request->unidade))
+        // Se não houver agendamentos, já retorna
+        if ($agendamentos->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhum agendamento encontrado para os filtros aplicados.',
+                'total_faturado' => 0,
+                'medico' => null,
+                'lista_procedimentos' => []
+            ], 200);
+        }
+
+        // Calcular faturamento com a mesma query base
+        $totalFaturado = $query->join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
             ->sum('procedimentos.valor_ch');
 
+        // Buscar informações do médico e formatar os atendimentos
         $medicoInfo = $this->buscarDadosMedico($medico);
         $dadosFormatados = $this->formatarAtendimentos($agendamentos);
 
@@ -112,6 +122,7 @@ class FinanceiroController extends Controller
             'lista_procedimentos' => $dadosFormatados
         ], 200);
     }
+
 
 
     public function quantidadeAtendimentoPorMedico($medico, Request $request)
