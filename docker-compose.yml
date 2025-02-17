@@ -16,18 +16,18 @@ services:
       - "8090:8090"
     restart: unless-stopped
 
-  webserver:
-    image: nginx:alpine
-    container_name: nginx_server
-    volumes:
-      - ./:/var/www
-      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - "8081:80"
-    networks:
-      - multihabilitsystem_default  # Adiciona à rede correta
-    depends_on:
-      - app
+  #webserver:
+    #image: nginx:alpine
+    #container_name: nginx_server
+    #volumes:
+    #  - ./:/var/www
+    #  - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    #ports:
+    #  - "8081:80"
+    #networks:
+    #  - multihabilitsystem_default  # Adiciona à rede correta
+    #depends_on:
+    #  - app
 
   db:
     image: mysql:8.0
@@ -42,10 +42,12 @@ services:
       - "3307:3306"
     networks:
       - multihabilitsystem_default  # Adiciona à rede correta
+      - public_network
 
 networks:
   multihabilitsystem_default:
     external: true  # Usa a rede já existente
-
+  public_network:
+    external: true  # Usa a rede já existente
 volumes:
   dbdata:
