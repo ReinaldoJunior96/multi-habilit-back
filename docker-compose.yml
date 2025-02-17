@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build:
@@ -7,11 +9,11 @@ services:
     volumes:
       - ./:/var/www
     networks:
-      - laravel_network
+      - multihabilitsystem_default  # Adiciona à rede correta
     depends_on:
       - db
     ports:
-      - "8090:8090" # Exponha a porta 8090 para o WebSocket
+      - "8090:8090"
     restart: unless-stopped
 
   webserver:
@@ -23,7 +25,7 @@ services:
     ports:
       - "8081:80"
     networks:
-      - laravel_network
+      - multihabilitsystem_default  # Adiciona à rede correta
     depends_on:
       - app
 
@@ -39,10 +41,11 @@ services:
     ports:
       - "3307:3306"
     networks:
-      - laravel_network
+      - multihabilitsystem_default  # Adiciona à rede correta
 
 networks:
-  laravel_network:
+  multihabilitsystem_default:
+    external: true  # Usa a rede já existente
 
 volumes:
   dbdata:
