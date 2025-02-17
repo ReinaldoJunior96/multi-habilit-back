@@ -23,6 +23,11 @@ class FinanceiroController extends Controller
             $query->where('data_agendada', '<=', $request->data_fim);
         }
 
+        // Filtro por unidade (se enviado)
+        if ($request->has('unidade')) {
+            $query->where('unidade', $request->unidade);
+        }
+
         $agendamentos = $query->get();
         $totalAtendimentos = $agendamentos->count();
 
@@ -33,6 +38,7 @@ class FinanceiroController extends Controller
             'lista_atendimentos' => $dadosFormatados
         ], 200);
     }
+
 
     public function faturamentoPorConvenio($convenio, Request $request)
     {
@@ -46,6 +52,11 @@ class FinanceiroController extends Controller
             $query->where('data_agendada', '<=', $request->data_fim);
         }
 
+        // Filtro por unidade (se enviado)
+        if ($request->has('unidade')) {
+            $query->where('unidade', $request->unidade);
+        }
+
         $agendamentos = $query->get();
 
         $totalValorCH = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
@@ -53,6 +64,7 @@ class FinanceiroController extends Controller
             ->where('agendamentos.status', 1)
             ->when($request->data_inicio, fn($q) => $q->where('agendamentos.data_agendada', '>=', $request->data_inicio))
             ->when($request->data_fim, fn($q) => $q->where('agendamentos.data_agendada', '<=', $request->data_fim))
+            ->when($request->unidade, fn($q) => $q->where('agendamentos.unidade', $request->unidade))
             ->sum('procedimentos.valor_ch');
 
         $dadosFormatados = $this->formatarAtendimentos($agendamentos);
@@ -62,6 +74,7 @@ class FinanceiroController extends Controller
             'lista_atendimentos' => $dadosFormatados
         ], 200);
     }
+
 
     public function faturamentoPorMedico($medico, Request $request)
     {
@@ -75,6 +88,11 @@ class FinanceiroController extends Controller
             $query->where('data_agendada', '<=', $request->data_fim);
         }
 
+        // Filtro por unidade (se enviado)
+        if ($request->has('unidade')) {
+            $query->where('unidade', $request->unidade);
+        }
+
         $agendamentos = $query->get();
 
         $totalFaturado = Agendamento::join('procedimentos', 'agendamentos.procedimento', '=', 'procedimentos.id')
@@ -82,6 +100,7 @@ class FinanceiroController extends Controller
             ->where('agendamentos.status', 1)
             ->when($request->data_inicio, fn($q) => $q->where('agendamentos.data_agendada', '>=', $request->data_inicio))
             ->when($request->data_fim, fn($q) => $q->where('agendamentos.data_agendada', '<=', $request->data_fim))
+            ->when($request->unidade, fn($q) => $q->where('agendamentos.unidade', $request->unidade))
             ->sum('procedimentos.valor_ch');
 
         $medicoInfo = $this->buscarDadosMedico($medico);
@@ -93,6 +112,7 @@ class FinanceiroController extends Controller
             'lista_procedimentos' => $dadosFormatados
         ], 200);
     }
+
 
     public function quantidadeAtendimentoPorMedico($medico, Request $request)
     {
@@ -106,6 +126,11 @@ class FinanceiroController extends Controller
             $query->where('data_agendada', '<=', $request->data_fim);
         }
 
+        // Filtro por unidade (se enviado)
+        if ($request->has('unidade')) {
+            $query->where('unidade', $request->unidade);
+        }
+
         $agendamentos = $query->get();
         $totalAtendimentos = $agendamentos->count();
 
@@ -116,6 +141,7 @@ class FinanceiroController extends Controller
             'lista_atendimentos' => $dadosFormatados
         ], 200);
     }
+
 
     private function formatarAtendimentos($agendamentos)
     {
