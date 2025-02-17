@@ -32,7 +32,7 @@ class HorarioController extends Controller
     public function store(Request $request)
     {
         $horariosCriados = [];
-        dd($request->all());
+        //dd($request->all());
         foreach ($request->horarios as $horarioBase) {
             $dataInicial = \Carbon\Carbon::parse($horarioBase['data_hora_inicial']);
             $dataFinal = \Carbon\Carbon::parse($horarioBase['data_hora_final']);
