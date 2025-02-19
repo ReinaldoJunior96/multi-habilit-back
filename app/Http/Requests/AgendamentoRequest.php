@@ -18,20 +18,8 @@ class AgendamentoRequest extends FormRequest
         return [
             'atendente' => 'required',
             'paciente' => 'required|exists:usuarios,id',
+            'data_agendada' => 'required',
             'medico_id' => 'required|exists:medicos,id',
-            'data_agendada' => ['required', 'date', function ($attribute, $value, $fail) {
-                $agora = now();
-
-                $dataHoraAgendada = \Carbon\Carbon::parse($value);
-
-                if ($dataHoraAgendada->isToday() && $dataHoraAgendada->lt($agora)) {
-                    // Caso a data seja hoje e a hora seja anterior ao horário atual
-                    $fail('A hora da data agendada deve ser posterior à hora atual.');
-                } elseif ($dataHoraAgendada->lt($agora->startOfDay())) {
-                    // Caso a data seja no passado
-                    $fail('A data agendada deve ser no futuro ou hoje com hora válida.');
-                }
-            }],
             'status' => 'required|integer|in:0,1,2,3,4,5',
             'convenio' => 'nullable|exists:convenios,id',
             'procedimento' => 'nullable|exists:procedimentos,id',

@@ -10,13 +10,12 @@ class Horario extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'medico_id',
-        'data_hora_inicial',
-        'data_hora_final',
-        'observacao',
-        'disponivel'
-    ];
+    protected $fillable = ['medico_id', 'dia_semana', 'observacao', 'disponivel', 'horario'];
+
+
+
+
+
 
     public function medico()
     {

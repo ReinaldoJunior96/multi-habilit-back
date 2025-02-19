@@ -31,21 +31,21 @@ class AgendamentoService
             $data['recorrencia'] = ($data['tipo_agendamento'] === 'terapia' ? true : false);
 
             // Verifica a disponibilidade da data inicial
-            if (!$this->isHorarioDisponivel($data['medico_id'], $dataInicial)) {
-                throw new \Exception('O horário selecionado não está disponível.');
-            }
+            // if (!$this->isHorarioDisponivel($data['medico_id'], $dataInicial)) {
+            //     throw new \Exception('O horário selecionado não está disponível.');
+            // }
 
             // Cria o agendamento
             $agendamento = $this->agendamento->create($data);
 
             // Marca o horário como indisponível
-            $this->marcarHorarioIndisponivel($data['medico_id'], $dataInicial);
+            //$this->marcarHorarioIndisponivel($data['medico_id'], $dataInicial);
 
             // Verifica o convênio e associa o paciente, se necessário
-            $this->handleConvenioPaciente($data['paciente'], $data['convenio']);
+            //$this->handleConvenioPaciente($data['paciente'], $data['convenio']);
 
             // Adiciona o agendamento criado à lista
-            $agendamentos[] = $agendamento;
+            //$agendamentos[] = $agendamento;
 
             Log::info("Agendamento criado com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId(),
