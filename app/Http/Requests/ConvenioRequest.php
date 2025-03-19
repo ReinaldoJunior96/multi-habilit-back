@@ -131,6 +131,8 @@ class ConvenioRequest extends FormRequest
         ];
     }
 
+    
+
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
         // Personaliza a resposta JSON em caso de erro de validação

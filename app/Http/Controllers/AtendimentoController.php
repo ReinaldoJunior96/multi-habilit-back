@@ -4,56 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Models\Atendimento;
 use Illuminate\Http\Request;
-use Mews\Purifier\Facades\Purifier;
+use App\Http\Requests\AtendimentoRequest;
 
 class AtendimentoController extends Controller
 {
-    public function store(Request $request)
+    public function index()
     {
-        // $validated = $request->validate([
-        //     'title' => 'required|string|max:255',
-        //     'content' => 'required|string', // Valida que o campo é do tipo texto
-        // ]);
-
-        $request->conteudo = Purifier::clean($request->conteudo);
-
-        Atendimento::create($request->all());
-
-        return response()->json(['message' => 'Atendimento criado com sucesso!']);
+        $atendimentos = Atendimento::all();
+        return response()->json($atendimentos);
     }
 
-    public function update(Request $request, Atendimento $atendimento)
+    public function store(AtendimentoRequest $request)
     {
-        // $validated = $request->validate([
-        //     'title' => 'required|string|max:255',
-        //     'content' => 'required|string', // Valida que o campo é do tipo texto
-        // ]);
-
-        $request->conteudo = Purifier::clean($request->conteudo);
-
-        $atendimento->update($request->all());
-
-        return response()->json(['message' => 'Atendimento atualizado com sucesso!']);
+        $atendimento = Atendimento::create($request->validated());
+        return response()->json($atendimento, 201);
     }
 
-
-    public function destroy(Atendimento $atendimento)
+    public function show($id)
     {
-        $atendimento->delete();
-
-        return response()->json(['message' => 'Atendimento deletado com sucesso!']);
-    }
-
-    public function show(Atendimento $atendimento)
-    {
+        $atendimento = Atendimento::findOrFail($id);
         return response()->json($atendimento);
     }
 
-    public function atendimentoPorMedico($idMedico){
-        $atendimentos = Atendimento::whereHas('agendamento', function($query) use ($idMedico){
-            $query->where('medico_id', $idMedico);
-        })->get();
+    public function update(AtendimentoRequest $request, $id)
+    {
+        $atendimento = Atendimento::findOrFail($id);
+        $atendimento->update($request->validated());
+        return response()->json($atendimento);
+    }
 
-        return response()->json($atendimentos);
+    public function destroy($id)
+    {
+        $atendimento = Atendimento::findOrFail($id);
+        $atendimento->delete();
+        return response()->json(['message' => 'Atendimento deletado com sucesso']);
     }
 }

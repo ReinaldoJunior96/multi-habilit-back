@@ -108,9 +108,11 @@ Route::post('/chamada', [App\Http\Controllers\FilaChamadaController::class, 'cha
 
 
 Route::prefix('atendimentos')->group(function () {
-    Route::get('/{id}', [AtendimentoController::class, 'index']);
+    Route::get('/', [AtendimentoController::class, 'index']);
     Route::post('/', [AtendimentoController::class, 'store']);
+    Route::get('/{id}', [AtendimentoController::class, 'show']);
     Route::put('/{id}', [AtendimentoController::class, 'update']);
+    Route::delete('/{id}', [AtendimentoController::class, 'destroy']);
 });
 
 

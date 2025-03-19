@@ -17,6 +17,7 @@ class AddForeignKeysToAgendamentosTable extends Migration
             $table->foreign('atendente')->references('id')->on('usuarios')->onDelete('cascade');
             $table->foreign('paciente')->references('id')->on('pacientes')->onDelete('cascade');
             $table->foreign('medico_id')->references('id')->on('medicos')->onDelete('cascade');
+            $table->foreign('medico_substituto')->references('id')->on('medicos')->onDelete('cascade');
             $table->foreign('convenio')->references('id')->on('convenios')->onDelete('cascade');
         });
     }
@@ -31,7 +32,8 @@ class AddForeignKeysToAgendamentosTable extends Migration
         Schema::table('agendamentos', function (Blueprint $table) {
             $table->dropForeign(['atendente']);
             $table->dropForeign(['paciente']);
-            $table->dropForeign(['medico']);
+            $table->dropForeign(['medico_id']);
+            $table->dropForeign(['medico_substituto']);
             $table->dropForeign(['convenio']);
             $table->dropForeign(['procedimento']);
         });
