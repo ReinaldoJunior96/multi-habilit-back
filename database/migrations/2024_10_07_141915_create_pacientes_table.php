@@ -4,35 +4,50 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();
-            $table->string('estado_civil', 20)->nullable();
-            $table->string('nome_mae', 200)->nullable();
-            $table->string('nome_pai', 200)->nullable();
-            $table->boolean('preferencial')->default(false);
+
+            // Informações do Paciente
+            $table->string('nome')->nullable();
+            $table->string('nome_social')->nullable();
+            $table->date('nascimento')->nullable();
+            $table->string('sexo')->nullable();
+            $table->string('estado_civil')->nullable();
+            $table->string('preferencial')->nullable();
+            $table->string('inscricao_municipal')->nullable();
+            $table->string('telefone')->nullable();
+            $table->string('identidade_rg')->nullable();
             $table->string('cns')->nullable();
-            $table->string('nome_conjuge')->nullable();
+            $table->string('cpf')->nullable();
+            $table->string('mae')->nullable();
+            $table->string('pai')->nullable();
+            $table->boolean('rn')->nullable();
+            $table->boolean('oncologico')->nullable();
+            $table->string('conjuge')->nullable();
             $table->string('cor_raca')->nullable();
-            $table->string('profissao')->nullable();
-            $table->text('instrucao')->nullable();
             $table->string('nacionalidade')->nullable();
-            $table->string('tipo_sanguineo')->nullable();
-            $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade');
-            //$table->foreignId('id_responsavel')->nullable()->constrained('usuarios')->onDelete('cascade'); // O responsável também é um usuário
+            $table->string('profissao')->nullable();
+            $table->string('instrucao')->nullable();
+
+            // Dados do Responsável
+            $table->string('responsavel_nome')->nullable();
+            $table->string('responsavel_rg')->nullable();
+            $table->string('responsavel_telefone')->nullable();
+            $table->string('responsavel_parentesco')->nullable();
+            $table->string('responsavel_ocupacao')->nullable();
+            $table->string('responsavel_email')->nullable();
+
+            // Contatos adicionais
+            $table->string('contato_celular')->nullable();
+            $table->string('contato_email')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('pacientes');

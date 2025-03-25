@@ -3,28 +3,48 @@
 namespace Database\Factories;
 
 use App\Models\Paciente;
-use App\Models\Usuario;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PacienteFactory extends Factory
 {
     protected $model = Paciente::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
-            'estado_civil' => $this->faker->randomElement(['solteiro', 'casado', 'viúvo', 'divorciado']),
-            'nome_mae' => $this->faker->name('female'),
-            'nome_pai' => $this->faker->name('male'),
-            'preferencial' => $this->faker->boolean,
-            'cns' => $this->faker->numerify('###############'), // CNS com 15 números
-            'nome_conjuge' => $this->faker->name,
-            'cor_raca' => $this->faker->randomElement(['branca', 'parda', 'negra', 'amarela', 'indígena']),
-            'profissao' => $this->faker->jobTitle,
-            'instrucao' => $this->faker->text,
+            // Informações do Paciente
+            'nome' => $this->faker->name,
+            'nome_social' => $this->faker->name,
+            'nascimento' => $this->faker->date(),
+            'sexo' => $this->faker->randomElement(['Masculino', 'Feminino', 'Outro']),
+            'estado_civil' => $this->faker->randomElement(['Solteiro', 'Casado', 'Divorciado', 'Viúvo']),
+            'preferencial' => $this->faker->randomElement(['Sim', 'Não']),
+            'inscricao_municipal' => $this->faker->numerify('###########'),
+            'telefone' => $this->faker->phoneNumber,
+            'identidade_rg' => $this->faker->numerify('##.###.###-#'),
+            'cns' => $this->faker->numerify('###############'),
+            'cpf' => $this->faker->numerify('###########'),
+            'mae' => $this->faker->name('female'),
+            'pai' => $this->faker->name('male'),
+            'rn' => $this->faker->boolean,
+            'oncologico' => $this->faker->boolean,
+            'conjuge' => $this->faker->name,
+            'cor_raca' => $this->faker->randomElement(['Branca', 'Parda', 'Preta', 'Amarela', 'Indígena']),
             'nacionalidade' => $this->faker->country,
-            'tipo_sanguineo' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
-            'id_usuario' => Usuario::factory(), // Cria e associa ao usuário
+            'profissao' => $this->faker->jobTitle,
+            'instrucao' => $this->faker->randomElement(['Fundamental', 'Médio', 'Superior', 'Pós-graduação']),
+
+            // Responsável
+            'responsavel_nome' => $this->faker->name,
+            'responsavel_rg' => $this->faker->numerify('##.###.###-#'),
+            'responsavel_telefone' => $this->faker->phoneNumber,
+            'responsavel_parentesco' => $this->faker->randomElement(['Pai', 'Mãe', 'Tio(a)', 'Avô(ó)', 'Outro']),
+            'responsavel_ocupacao' => $this->faker->jobTitle,
+            'responsavel_email' => $this->faker->safeEmail,
+
+            // Contatos adicionais
+            'contato_celular' => $this->faker->phoneNumber,
+            'contato_email' => $this->faker->safeEmail,
         ];
     }
 }

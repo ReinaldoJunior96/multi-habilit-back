@@ -1,64 +1,48 @@
 <?php
+
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class EnderecoRequest extends FormRequest
 {
-    /**
-     * Determina se o usuário está autorizado a fazer essa solicitação.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Define as regras de validação.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'cep' => 'required|string|size:8',
-            'logradouro' => 'nullable|required|string|max:255',
-            'complemento' => 'nullable|string|max:255',
-            'bairro' => 'required|string|max:100',
-            'uf' => 'required|string|size:2',
-            'id_usuario' => 'required',
+            'cep' => 'nullable|string',
+            'logradouro' => 'nullable|string',
+            'complemento' => 'nullable|string',
+            'bairro' => 'nullable|string',
+            'municipio' => 'nullable|string',
+            'numero' => 'nullable|string',
+            'estado' => 'nullable|string',
+            'uf' => 'nullable|string|size:2',
+            'id_paciente' => 'required|exists:pacientes,id|unique:enderecos,id_paciente',
         ];
     }
 
-    /**
-     * Define mensagens personalizadas para erros de validação.
-     *
-     * @return array
-     */
-    public function messages()
+    public function messages(): array
     {
         return [
-            'cep.required' => 'O campo CEP é obrigatório.',
-            'cep.size' => 'O CEP deve ter 8 caracteres.',
-            'logradouro.required' => 'O logradouro é obrigatório.',
-            'bairro.required' => 'O bairro é obrigatório.',
-            'uf.required' => 'O campo UF é obrigatório.',
-            'uf.size' => 'O campo UF deve ter 2 caracteres.',
-            'id_usuario.required' => 'O ID do usuário é obrigatório.',
-            'id_usuario.exists' => 'O usuário informado não existe.',
+            'id_paciente.required' => 'O campo id_paciente é obrigatório.',
+            'id_paciente.exists' => 'O paciente informado não foi encontrado.',
+            'id_paciente.unique' => 'Este paciente já possui um endereço cadastrado.',
+            '*.string' => 'O campo :attribute deve ser um texto.',
+            'uf.size' => 'O campo UF deve conter exatamente 2 caracteres.',
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        // Personaliza a resposta JSON em caso de erro de validação
         throw new HttpResponseException(response()->json([
-            'message' => 'Os dados fornecidos são inválidos.',
-            'errors' => $validator->errors()
+            'message' => 'Erro de validação.',
+            'errors' => $validator->errors(),
         ], 422));
     }
 }

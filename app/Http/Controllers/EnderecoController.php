@@ -3,32 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EnderecoRequest;
-use App\Services\EnderecoService;
+use App\Models\Endereco;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 class EnderecoController extends Controller
 {
-    protected $enderecoService;
-
-    public function __construct(EnderecoService $enderecoService)
-    {
-        $this->enderecoService = $enderecoService;
-    }
-
     private function getLoggedUserId()
     {
         return auth('api')->check() ? auth('api')->user()->id : 'usuário não autenticado';
     }
 
-    // Listar todos os endereços
     public function index()
     {
         try {
-            $enderecos = $this->enderecoService->getAllEnderecos();
+            $enderecos = Endereco::all();
             return response()->json($enderecos, 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao listar endereços", [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
@@ -39,11 +32,10 @@ class EnderecoController extends Controller
         }
     }
 
-    // Mostrar um endereço específico
     public function show($id)
     {
         try {
-            $endereco = $this->enderecoService->getEnderecoById($id);
+            $endereco = Endereco::findOrFail($id);
             return response()->json($endereco, 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Endereço não encontrado', [
@@ -53,7 +45,7 @@ class EnderecoController extends Controller
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
             return response()->json(['message' => 'Endereço não encontrado.'], 404);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao buscar endereço", [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
@@ -64,18 +56,18 @@ class EnderecoController extends Controller
         }
     }
 
-    // Criar um novo endereço
     public function store(EnderecoRequest $request)
     {
         try {
-            $endereco = $this->enderecoService->createEndereco($request->validated());
+            $endereco = Endereco::create($request->validated());
 
             Log::info('Endereço criado com sucesso', [
                 'endereco_id' => $endereco->id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
+
             return response()->json($endereco, 201);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao criar endereço", [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
@@ -86,15 +78,17 @@ class EnderecoController extends Controller
         }
     }
 
-    // Atualizar um endereço
     public function update(EnderecoRequest $request, $id)
     {
         try {
-            $endereco = $this->enderecoService->updateEndereco($request->validated(), $id);
+            $endereco = Endereco::findOrFail($id);
+            $endereco->update($request->validated());
+
             Log::info('Endereço atualizado com sucesso', [
                 'endereco_id' => $endereco->id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
+
             return response()->json($endereco, 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Endereço não encontrado para atualização', [
@@ -104,7 +98,7 @@ class EnderecoController extends Controller
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
             return response()->json(['message' => 'Endereço não encontrado.'], 404);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao atualizar endereço", [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),
@@ -115,15 +109,17 @@ class EnderecoController extends Controller
         }
     }
 
-    // Deletar um endereço
     public function destroy($id)
     {
         try {
-            $this->enderecoService->deleteEndereco($id);
+            $endereco = Endereco::findOrFail($id);
+            $endereco->delete();
+
             Log::info('Endereço deletado com sucesso', [
                 'endereco_id' => $id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
+
             return response()->json(['message' => 'Endereço deletado com sucesso.'], 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Endereço não encontrado para exclusão', [
@@ -133,7 +129,7 @@ class EnderecoController extends Controller
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
             return response()->json(['message' => 'Endereço não encontrado.'], 404);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao deletar endereço", [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),

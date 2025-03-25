@@ -15,13 +15,16 @@ class Endereco extends Model
         'logradouro',
         'complemento',
         'bairro',
+        'municipio',
+        'numero',
+        'estado',
         'uf',
-        'id_usuario',
+        'id_paciente',
     ];
 
     // Relacionamento com o modelo Usuario (um para muitos)
-    public function usuario()
+    public function paciente()
     {
-        return $this->belongsTo(Usuario::class, 'id_usuario');
+        return $this->belongsTo(Paciente::class, 'id_paciente');
     }
 }

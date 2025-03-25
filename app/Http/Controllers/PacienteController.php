@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PacienteRequest;
-use App\Services\PacienteService;
+use App\Models\Paciente;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
@@ -12,13 +12,6 @@ use Exception;
 
 class PacienteController extends Controller
 {
-    protected $pacienteService;
-
-    public function __construct(PacienteService $pacienteService)
-    {
-        $this->pacienteService = $pacienteService;
-    }
-
     private function getLoggedUserId()
     {
         return auth('api')->check() ? auth('api')->user()->id : 'usuário não autenticado';
@@ -27,7 +20,8 @@ class PacienteController extends Controller
     public function index()
     {
         try {
-            return response()->json($this->pacienteService->getAllPacientes(), 200);
+            $pacientes = Paciente::all();
+            return response()->json($pacientes, 200);
         } catch (Exception $e) {
             Log::error('Erro ao buscar pacientes', [
                 'exception_message' => $e->getMessage(),
@@ -42,7 +36,8 @@ class PacienteController extends Controller
     public function show($id)
     {
         try {
-            return response()->json($this->pacienteService->getPacienteById($id), 200);
+            $paciente = Paciente::findOrFail($id);
+            return response()->json($paciente, 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Paciente não encontrado', [
                 'exception_message' => $e->getMessage(),
@@ -66,7 +61,8 @@ class PacienteController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            return response()->json($this->pacienteService->createPaciente($validatedData), 201);
+            $paciente = Paciente::create($validatedData);
+            return response()->json($paciente, 201);
         } catch (ValidationException $e) {
             Log::error('Erro de validação ao criar paciente', [
                 'exception_message' => $e->getMessage(),
@@ -94,7 +90,9 @@ class PacienteController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            return response()->json($this->pacienteService->updatePaciente($validatedData, $id), 200);
+            $paciente = Paciente::findOrFail($id);
+            $paciente->update($validatedData);
+            return response()->json($paciente, 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Paciente não encontrado para atualização', [
                 'exception_message' => $e->getMessage(),
@@ -129,7 +127,10 @@ class PacienteController extends Controller
     public function destroy($id)
     {
         try {
-            return $this->pacienteService->deletePaciente($id);
+            $paciente = Paciente::findOrFail($id);
+            $paciente->delete();
+
+            return response()->json(['message' => 'Paciente removido com sucesso.']);
         } catch (ModelNotFoundException $e) {
             Log::error('Paciente não encontrado para exclusão', [
                 'exception_message' => $e->getMessage(),
