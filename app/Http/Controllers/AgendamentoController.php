@@ -28,6 +28,7 @@ class AgendamentoController extends Controller
     {
         try {
             $agendamentos = $this->agendamentoService->getAllAgendamentos();
+
             Log::info('Agendamentos listados com sucesso', [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);

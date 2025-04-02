@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
             UsuariosTableSeeder::class,          // Cria os usuários
             //MedicoSeeder::class,                 // Médicos independentes
             //HorarioSeeder::class,
-            PacientesTableSeeder::class,         // Pacientes antes dos convênios
-            EnderecosTableSeeder::class,
+            //PacientesTableSeeder::class,         // Pacientes antes dos convênios
+            //EnderecosTableSeeder::class,
             //ConveniosTableSeeder::class,
             //ProcedimentoSeeder::class,
             //ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
