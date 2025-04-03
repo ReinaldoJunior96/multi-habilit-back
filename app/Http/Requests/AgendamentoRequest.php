@@ -16,52 +16,45 @@ class AgendamentoRequest extends FormRequest
     public function rules()
     {
         return [
-            'atendente' => 'required',
-            'paciente' => 'required|exists:usuarios,id',
-            'data_agendada' => 'required',
+            'atendente' => 'required|exists:usuarios,id',
+            'paciente' => 'required|exists:pacientes,id',
             'medico_id' => 'required|exists:medicos,id',
-            'status' => 'required|integer|in:0,1,2,3,4,5',
-            'convenio' => 'nullable|exists:convenios,id',
+            'medico_substituto' => 'nullable|exists:medicos,id',
+            'convenio' => 'required|exists:convenios,id',
             'procedimento' => 'nullable|exists:procedimentos,id',
-            'numero_guia' => 'nullable|string',
-            'recorrencia' => 'nullable|boolean',
-            'tipo_agendamento' => 'nullable|string',
+            'data_agendada' => 'required|date',
             'unidade' => 'nullable|string',
+            'status' => 'required|integer|in:0,1,2,3,4,5',
         ];
     }
-
-
-
-
-
-
 
     public function messages()
     {
         return [
-            'recorrencia.in' => 'O campo recorrência deve ser "semanal" ou "mensal".',
             'atendente.required' => 'O campo atendente é obrigatório.',
+            'atendente.exists' => 'O atendente informado não existe.',
             'paciente.required' => 'O campo paciente é obrigatório.',
             'paciente.exists' => 'O paciente informado não existe.',
             'medico_id.required' => 'O campo médico é obrigatório.',
-            'medico.exists' => 'O médico informado não existe.',
+            'medico_id.exists' => 'O médico informado não existe.',
+            'medico_substituto.exists' => 'O médico substituto informado não existe.',
             'data_agendada.required' => 'A data agendada é obrigatória.',
             'data_agendada.date' => 'A data agendada deve ser uma data válida.',
             'status.required' => 'O status é obrigatório.',
             'status.integer' => 'O status deve ser um número inteiro.',
-            'status.in' => 'O status deve ser 0 (pendente), 1 (confirmado) ou 2 (cancelado).',
+            'status.in' => 'O status deve ser entre 0 e 5.',
+            'convenio.required' => 'O convênio é obrigatório.',
             'convenio.exists' => 'O convênio informado não existe.',
             'procedimento.exists' => 'O procedimento informado não existe.',
-            'numero_guia.string' => 'O número da guia deve ser um numero válido.',
+            'unidade.string' => 'A unidade deve ser uma string válida.',
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        // Personaliza a resposta JSON em caso de erro de validação
         throw new HttpResponseException(response()->json([
             'message' => 'Os dados fornecidos são inválidos.',
-            'errors' => $validator->errors()
+            'errors' => $validator->errors(),
         ], 422));
     }
 }

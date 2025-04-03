@@ -160,8 +160,8 @@ class AgendamentoService
     public function getAllAgendamentos()
     {
         try {
-            $agendamentos = $this->agendamento->with('medico.usuario', 'paciente.usuario', 'convenio.pacientes', 'atendente')->get();
-            dd($agendamentos);
+            $agendamentos = $this->agendamento->with('medico.usuario', 'paciente', 'convenio.pacientes', 'atendente')->get();
+            //dd($agendamentos);
             Log::info("Todos os agendamentos foram buscados com sucesso.", [
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
