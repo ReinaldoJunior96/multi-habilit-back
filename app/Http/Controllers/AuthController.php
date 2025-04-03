@@ -55,13 +55,13 @@ class AuthController extends Controller
         try {
             // Obtém o usuário autenticado
             $user = auth()->guard('api')->user();
-
+            // dd($user);
             if (!$user) {
                 return response()->json(['error' => 'Usuário não autenticado'], 401);
             }
 
             // Carrega as relações desejadas
-            $user->load(['medico', 'paciente', 'convenios']);
+            $user->load(['medico', 'convenios']);
 
             return response()->json($user, 200);
         } catch (\Exception $e) {
