@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->tinyInteger('regime_trabalhista');
             $table->integer('carga_horaria');
-            $table->string('cnpj', 14)->nullable();  // CNPJ único para garantir que cada médico tenha um CNPJ exclusivo
-            $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade')->unique(); // Garante que id_usuario seja único
+            $table->string('cnpj', 14)->nullable();
+            $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade')->unique();
             $table->timestamps();
         });
     }

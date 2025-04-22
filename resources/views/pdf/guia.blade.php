@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Guia Médica - SP/SADT</title>
+    <link rel="stylesheet" href="{{ public_path('tailwindpdf.css') }}">
+    {{-- <style>
+        body { font-family: "Times New Roman", serif; font-size: 12px; }
+        .container { width: 100%; margin: 0 auto; }
+        .section { margin-top: 20px; }
+        .title { font-size: 16px; font-weight: bold; text-align: center; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        th, td { border: 1px solid #000; padding: 5px; }
+        th { background-color: #f0f0f0; text-align: left; }
+        .row-title { font-weight: bold; }
+        .text-right { text-align: right; }
+    </style> --}}
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold underline bg-red-300">
+            Hello world!
+        </h1>
+        <div class="title">GUIA DE SERVIÇO PROFISSIONAL / SERVIÇO AUXILIAR DE DIAGNÓSTICO E TERAPIA - SP / SADT</div>
+
+        <!-- Identificação -->
+        <div class="section">
+            <table>
+                <tr><th colspan="6">Identificação</th></tr>
+                <tr>
+                    <td>1 - Registro ANS: {{ $guia['registroANS'] }}</td>
+                    <td>2 - Nº Guia: {{ $guia['numeroGuia'] }}</td>
+                    <td>3 - Nº Guia Principal: {{ $guia['numeroGuiaPrincipal'] }}</td>
+                    <td>4 - Data da Autorização: {{ $guia['dataAutorizacao'] }}</td>
+                    <td>5 - Senha: {{ $guia['senha'] }}</td>
+                    <td>6 - Validade da Senha: {{ $guia['validadeSenha'] }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6">7 - Data de Emissão da Guia: {{ $guia['dataEmissao'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Dados do Beneficiário -->
+        <div class="section">
+            <table>
+                <tr><th colspan="5">Dados do Beneficiário</th></tr>
+                <tr>
+                    <td>8 - Número da Carteira: {{ $guia['numeroCarteira'] }}</td>
+                    <td>9 - Plano: {{ $guia['plano'] }}</td>
+                    <td>10 - Validade da Carteira: {{ $guia['validadeCarteira'] }}</td>
+                    <td colspan="2">11 - Nome: {{ $guia['nomeBeneficiario'] }}</td>
+                </tr>
+                <tr>
+                    <td colspan="5">12 - Cartão Nacional de Saúde: {{ $guia['cartaoNacionalSaude'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Outras seções continuam abaixo... -->
+        <!-- As demais seções serão adicionadas no próximo passo -->
+    </div>
+</body>
+</html>
+
+        <!-- Dados do Contratado Solicitante -->
+        <div class="section">
+            <table>
+                <tr><th colspan="5">Dados do Contratado Solicitante</th></tr>
+                <tr>
+                    <td>13 - Código na Operadora / CPF / CNPJ: {{ $guia['documentoSolicitante'] }}</td>
+                    <td colspan="2">14 - Nome do Contratado: {{ $guia['nomeContratado'] }}</td>
+                    <td>15 - Código CNES: {{ $guia['cnesSolicitante'] }}</td>
+                    <td>CoParticipação: {{ $guia['coParticipacao'] }}</td>
+                </tr>
+                <tr>
+                    <td colspan="5">16 - Nome do Profissional Solicitante: {{ $guia['nomeProfSolicitante'] }}</td>
+                </tr>
+                <tr>
+                    <td>17 - Conselho Profissional: {{ $guia['conselho'] }}</td>
+                    <td>18 - Nº Conselho: {{ $guia['numeroConselho'] }}</td>
+                    <td>19 - UF: {{ $guia['ufConselho'] }}</td>
+                    <td colspan="2">20 - Código CBO S: {{ $guia['cbo'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Solicitação / Procedimentos -->
+        <div class="section">
+            <table>
+                <tr><th colspan="4">Dados da Solicitação / Procedimentos</th></tr>
+                <tr>
+                    <td>21 - Data/Hora da Solicitação: {{ $guia['dataHoraSolicitacao'] }}</td>
+                    <td>22 - Caráter de Solicitação: {{ $guia['caraterSolicitacao'] }}</td>
+                    <td>23 - CID 10: {{ $guia['cid10'] }}</td>
+                    <td>24 - Indicação Clínica: {{ $guia['indicacaoClinica'] }}</td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <th>25 - Tabela</th>
+                    <th>26 - Código Procedimento</th>
+                    <th>27 - Descrição</th>
+                    <th>28 - Qtde. Solicitada</th>
+                    <th>29 - Qtde. Autorizada</th>
+                </tr>
+                @foreach ($guia['procedimentosSolicitados'] as $p)
+                <tr>
+                    <td>{{ $p['tabela'] }}</td>
+                    <td>{{ $p['codigo'] }}</td>
+                    <td>{{ $p['descricao'] }}</td>
+                    <td>{{ $p['qtdSolicitada'] }}</td>
+                    <td>{{ $p['qtdAutorizada'] }}</td>
+                </tr>
+                @endforeach
+            </table>
+        </div>
+
+        <!-- Contratado Executante -->
+        <div class="section">
+            <table>
+                <tr><th colspan="5">Dados do Contratado Executante</th></tr>
+                <tr>
+                    <td>30 - Código CPF/CNPJ: {{ $guia['documentoExecutante'] }}</td>
+                    <td>31 - Nome: {{ $guia['nomeExecutante'] }}</td>
+                    <td>32-T.L.: {{ $guia['tipoLogradouro'] }}</td>
+                    <td colspan="2">33-34-35: {{ $guia['logradouro'] }} {{ $guia['numeroEndereco'] }} {{ $guia['complemento'] }}</td>
+                </tr>
+                <tr>
+                    <td>36 - Município: {{ $guia['municipio'] }}</td>
+                    <td>37 - UF: {{ $guia['ufEndereco'] }}</td>
+                    <td>38 - Cód. IBGE: {{ $guia['codigoIbge'] }}</td>
+                    <td>39 - CEP: {{ $guia['cep'] }}</td>
+                    <td>40 - Código CNES: {{ $guia['cnesExecutante'] }}</td>
+                </tr>
+                <tr>
+                    <td>40a - CPF Exec. Compl: {{ $guia['cpfComplementar'] }}</td>
+                    <td colspan="2">41 - Nome Prof. Compl: {{ $guia['nomeComplementar'] }}</td>
+                    <td>42 - Conselho: {{ $guia['conselhoCompl'] }}</td>
+                    <td>43 - Nº Conselho: {{ $guia['numeroConselhoCompl'] }}</td>
+                </tr>
+                <tr>
+                    <td>44 - UF: {{ $guia['ufCompl'] }}</td>
+                    <td>45 - CBO S: {{ $guia['cboCompl'] }}</td>
+                    <td colspan="3">45a - Grau Participação: {{ $guia['grauParticipacao'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Atendimento -->
+        <div class="section">
+            <table>
+                <tr><th colspan="3">Dados do Atendimento</th></tr>
+                <tr>
+                    <td>46 - Tipo Atendimento: {{ $guia['tipoAtendimento'] }}</td>
+                    <td>47 - Indicação de Paciente: {{ $guia['indicacaoPaciente'] }}</td>
+                    <td>48 - Tipo de Saída: {{ $guia['tipoSaida'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Consulta Referência -->
+        <div class="section">
+            <table>
+                <tr><th colspan="2">Consulta Referência</th></tr>
+                <tr>
+                    <td>49 - Tipo de Doença: {{ $guia['tipoDoenca'] }}</td>
+                    <td>50 - Tempo de Doença: {{ $guia['tempoDoenca'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Procedimentos Realizados -->
+        <div class="section">
+            <table>
+                <tr>
+                    <th>51 - Data</th><th>52 - H.Ini.</th><th>53 - H.Fim</th><th>54 - Tabela</th>
+                    <th>55 - Código</th><th>56 - Descrição</th><th>57 - Qtde</th>
+                    <th>58 - Via</th><th>58 - Tec</th><th>60% Red./Acresc.</th><th>61 - V.Unit</th><th>62 - V.Total</th>
+                </tr>
+                @foreach ($guia['procedimentosRealizados'] as $r)
+                <tr>
+                    <td>{{ $r['data'] }}</td><td>{{ $r['horaIni'] }}</td><td>{{ $r['horaFim'] }}</td><td>{{ $r['tabela'] }}</td>
+                    <td>{{ $r['codigo'] }}</td><td>{{ $r['descricao'] }}</td><td>{{ $r['qtd'] }}</td>
+                    <td>{{ $r['via'] }}</td><td>{{ $r['tec'] }}</td><td>{{ $r['redAcresc'] }}</td><td>{{ $r['vUnit'] }}</td><td>{{ $r['vTotal'] }}</td>
+                </tr>
+                @endforeach
+            </table>
+        </div>
+
+        <!-- Assinaturas e Observações -->
+        <div class="section">
+            <table>
+                <tr><th colspan="5">63 - Assinatura de Procedimentos em Série</th></tr>
+                <tr>
+                    <td>1 - ___</td><td>2 - ___</td><td>3 - ___</td><td>4 - ___</td><td>5 - ___</td>
+                </tr>
+                <tr>
+                    <td>6 - ___</td><td>7 - ___</td><td>8 - ___</td><td>9 - ___</td><td>10 - ___</td>
+                </tr>
+            </table>
+            <table>
+                <tr><th>64 - Observação</th></tr>
+                <tr><td>{{ $guia['observacao'] }}</td></tr>
+            </table>
+        </div>
+
+        <!-- Totais -->
+        <div class="section">
+            <table>
+                <tr>
+                    <td>65 - Total Procedimentos: {{ $guia['totalProcedimentos'] }}</td>
+                    <td>66 - Total Taxas: {{ $guia['totalTaxas'] }}</td>
+                    <td>67 - Total Materiais: {{ $guia['totalMateriais'] }}</td>
+                    <td>68 - Total Medicamentos: {{ $guia['totalMedicamentos'] }}</td>
+                </tr>
+                <tr>
+                    <td>69 - Total Diárias: {{ $guia['totalDiarias'] }}</td>
+                    <td>70 - Total Gases: {{ $guia['totalGases'] }}</td>
+                    <td colspan="2">71 - Total Geral: {{ $guia['totalGeral'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Assinaturas Finais -->
+        <div class="section">
+            <table>
+                <tr>
+                    <td>86 - Ass. Solicitante: {{ $guia['assinaturaSolicitante'] }}</td>
+                    <td>87 - Ass. Autorizador: {{ $guia['assinaturaAutorizador'] }}</td>
+                    <td>88 - Ass. Beneficiário: {{ $guia['assinaturaBeneficiario'] }}</td>
+                    <td>86 - Ass. Prestador: {{ $guia['assinaturaPrestador'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+</body>
+</html>

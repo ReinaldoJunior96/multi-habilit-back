@@ -18,6 +18,9 @@ use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\CommandController;
 use App\Http\Controllers\DeployController;
 use App\Http\Controllers\FinanceiroController;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\FichaMedicaController;
 
 Route::post('deploy', [DeployController::class, 'deploy']);
 Route::post('login', [AuthController::class, 'login']);
@@ -130,6 +133,17 @@ Route::get('/executar-job', function () {
 
     return response()->json(['message' => 'Job enviado para execução!'], 200);
 });
+
+
+Route::get('/guia-pdf', function () {
+    $dados = json_decode(file_get_contents(storage_path('app/public/fake-guia-data.json')), true);
+    $pdf = Pdf::loadView('pdf.guia', ['guia' => $dados]);
+    return $pdf->stream('guia.pdf');
+});
+
+
+Route::apiResource('fichas-medicas', FichaMedicaController::class);
+
 
 
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
