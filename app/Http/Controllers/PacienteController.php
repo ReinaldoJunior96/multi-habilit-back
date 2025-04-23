@@ -20,7 +20,7 @@ class PacienteController extends Controller
     public function index()
     {
         try {
-            $pacientes = Paciente::all();
+            $pacientes = Paciente::with(['filiacao'])->get();
             return response()->json($pacientes, 200);
         } catch (Exception $e) {
             Log::error('Erro ao buscar pacientes', [
