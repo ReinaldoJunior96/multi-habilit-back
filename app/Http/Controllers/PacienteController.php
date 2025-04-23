@@ -61,8 +61,17 @@ class PacienteController extends Controller
     {
         try {
             $validatedData = $request->validated();
+            $filiacaoData = $validatedData['filiacao'] ?? null;
+
+            unset($validatedData['filiacao']); // remove antes de salvar paciente
+
             $paciente = Paciente::create($validatedData);
-            return response()->json($paciente, 201);
+
+            if ($filiacaoData) {
+                $paciente->filiacao()->create($filiacaoData);
+            }
+
+            return response()->json($paciente->load('filiacao'), 201);
         } catch (ValidationException $e) {
             Log::error('Erro de validação ao criar paciente', [
                 'exception_message' => $e->getMessage(),
@@ -85,6 +94,7 @@ class PacienteController extends Controller
             return response()->json(['message' => 'Erro ao criar paciente.', 'error' => $e->getMessage()], 500);
         }
     }
+
 
     public function update(PacienteRequest $request, $id)
     {

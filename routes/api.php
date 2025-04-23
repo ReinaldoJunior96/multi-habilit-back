@@ -21,6 +21,7 @@ use App\Http\Controllers\FinanceiroController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\FichaMedicaController;
+use App\Http\Controllers\FiliacaoPacienteController;
 
 Route::post('deploy', [DeployController::class, 'deploy']);
 Route::post('login', [AuthController::class, 'login']);
@@ -145,6 +146,7 @@ Route::get('/guia-pdf', function () {
 Route::apiResource('fichas-medicas', FichaMedicaController::class);
 
 
+Route::apiResource('filiacao-paciente', FiliacaoPacienteController::class);
 
 // Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 //     Route::post('/convenios/pacientes', [ConvenioPacienteController::class, 'store']);

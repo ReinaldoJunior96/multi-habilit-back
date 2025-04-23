@@ -57,4 +57,9 @@ class Paciente extends Model
     {
         return $this->belongsToMany(Convenio::class, 'convenio_paciente');
     }
+
+    public function filiacao()
+    {
+        return $this->hasOne(FiliacaoPaciente::class);
+    }
 }

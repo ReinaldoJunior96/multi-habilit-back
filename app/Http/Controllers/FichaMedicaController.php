@@ -14,11 +14,12 @@ class FichaMedicaController extends Controller
 
     public function store(Request $request)
     {
+
         $data = $request->validate([
             'paciente_id' => 'required|exists:pacientes,id',
             'ficha' => 'required|array',
         ]);
-
+        //dd($request->all());
         $ficha = FichaMedica::create($data);
         return response()->json($ficha, 201);
     }

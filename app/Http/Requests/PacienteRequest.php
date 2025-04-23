@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -47,6 +48,8 @@ class PacienteRequest extends FormRequest
             // Contato
             'contato_celular' => 'nullable|string',
             'contato_email' => 'nullable|email',
+
+            'filiacao' => 'nullable|array',
         ];
     }
 
