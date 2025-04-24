@@ -167,4 +167,30 @@ class PacienteController extends Controller
             return response()->json(['message' => 'Erro ao remover paciente.', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function searchByCpf($cpf)
+    {
+        try {
+            $paciente = Paciente::where('cpf', $cpf)->with(['filiacao', 'endereco', 'FichasMedicas'])->first();
+
+            if (!$paciente) {
+                Log::warning('Paciente não encontrado por CPF', [
+                    'cpf_buscado' => $cpf,
+                    'usuario_logado' => $this->getLoggedUserId()
+                ]);
+                return response()->json(['message' => 'Paciente não encontrado.'], 404);
+            }
+
+            return response()->json($paciente, 200);
+        } catch (Exception $e) {
+            Log::error('Erro ao buscar paciente por CPF', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'cpf_buscado' => $cpf,
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+            return response()->json(['message' => 'Erro ao buscar paciente por CPF.', 'error' => $e->getMessage()], 500);
+        }
+    }
 }

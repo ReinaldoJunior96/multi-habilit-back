@@ -83,6 +83,7 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::post('pacientes', [PacienteController::class, 'store']);
     Route::put('pacientes/{id}', [PacienteController::class, 'update']);
     Route::delete('pacientes/{id}', [PacienteController::class, 'destroy']);
+    Route::get('/pacientes/cpf/{cpf}', [PacienteController::class, 'searchByCpf']);
 });
 
 

@@ -62,4 +62,9 @@ class Paciente extends Model
     {
         return $this->hasOne(FiliacaoPaciente::class);
     }
+
+    public function fichasMedicas()
+    {
+        return $this->hasMany(FichaMedica::class);
+    }
 }
