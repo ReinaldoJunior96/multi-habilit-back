@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->date('nascimento')->nullable();
             $table->string('sexo')->nullable();
             $table->string('estado_civil')->nullable();
-            $table->string('preferencial')->nullable();
+            $table->boolean('preferencial')->nullable();
             $table->string('inscricao_municipal')->nullable();
             $table->string('telefone')->nullable();
             $table->string('identidade_rg')->nullable();
@@ -34,6 +34,7 @@ return new class extends Migration {
 
             // Dados do Responsável
             $table->string('responsavel_nome')->nullable();
+            $table->string('responsavel_cpf')->nullable();
             $table->string('responsavel_rg')->nullable();
             $table->string('responsavel_telefone')->nullable();
             $table->string('responsavel_parentesco')->nullable();

@@ -4,30 +4,38 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Procedimento extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+
+    protected $table = 'procedimentos';
 
     protected $fillable = [
+        'id_convenio',
+        'tabela',
         'codigo',
-        'nome',
+        'procedimento',
+        'procedimento_padrao',
+        'grupo',
+        'vacina',
         'valor_ch',
+        'filme',
         'porte_anestesia',
         'ch_anestesista',
         'custo_operacional',
+        'numero_auxiliares',
         'codigo_tuss',
-        'num_auxiliares',
+        'instrumentador',
+        'porte_honorario',
         'tempo',
-        'valor_filme',
-        'convenio_id'
     ];
 
-    protected $dates = ['deleted_at'];
-
+    /**
+     * Relacionamento: um procedimento pertence a um convenio.
+     */
     public function convenio()
     {
-        return $this->belongsTo(Convenio::class, 'convenio_id');
+        return $this->belongsTo(Convenio::class, 'id_convenio');
     }
 }

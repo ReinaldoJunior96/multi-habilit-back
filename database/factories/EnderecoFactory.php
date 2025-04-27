@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Convenio;
 use App\Models\Endereco;
 use App\Models\Paciente;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,7 +22,8 @@ class EnderecoFactory extends Factory
             'numero' => $this->faker->buildingNumber(),
             'estado' => $this->faker->state(),
             'uf' => $this->faker->stateAbbr(),
-            'id_paciente' => Paciente::factory(), // Vincula corretamente ao paciente
+            'id_paciente' => Paciente::factory(),
+            'id_convenio' => Convenio::factory(),
         ];
     }
 }

@@ -4,27 +4,32 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateProcedimentosTable extends Migration
 {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('procedimentos', function (Blueprint $table) {
-            $table->id(); // ID do procedimento
-            $table->string('codigo')->nullable(); // Código do procedimento
-            $table->string('nome')->nullable(); // Nome ou descrição do procedimento
-            $table->decimal('valor_ch', 10, 2)->nullable();
-            $table->integer('porte_anestesia')->nullable();
-            $table->integer('ch_anestesista')->nullable();
-            $table->decimal('custo_operacional', 10, 2)->nullable();
-            $table->string('codigo_tuss')->nullable();
-            $table->integer('num_auxiliares')->nullable();
-            $table->integer('tempo')->nullable();
-            $table->decimal('valor_filme', 10, 2)->default(0);
-            $table->foreignId('convenio_id')->constrained('convenios')->onDelete('cascade');
-            $table->softDeletes();
+            $table->id();
+            $table->foreignId('id_convenio')->constrained('convenios')->onDelete('cascade');
+            $table->string('tabela')->nullable(); // Tabela
+            $table->string('codigo')->nullable(); // Código
+            $table->string('procedimento')->nullable(); // Procedimento
+            $table->string('procedimento_padrao')->nullable(); // Procedimento Padrão
+            $table->string('grupo')->nullable(); // Grupo
+            $table->string('vacina')->nullable(); // Vacina
+            $table->decimal('valor_ch', 10, 2)->nullable(); // Valor/CH
+            $table->decimal('filme', 10, 2)->nullable(); // Filme (m²)
+            $table->integer('porte_anestesia')->nullable(); // Porte Anestesia
+            $table->decimal('ch_anestesista', 10, 2)->nullable(); // CH Anestesista
+            $table->decimal('custo_operacional', 10, 2)->nullable(); // Custo Operacional
+            $table->integer('numero_auxiliares')->nullable(); // Nº Auxiliares
+            $table->string('codigo_tuss')->nullable(); // Código TUSS
+            $table->string('instrumentador')->nullable(); // Instrumentador
+            $table->integer('porte_honorario')->nullable(); // Porte Honorário
+            $table->string('tempo')->nullable(); // Tempo
             $table->timestamps();
         });
     }
@@ -32,8 +37,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('procedimentos');
     }
-};
+}

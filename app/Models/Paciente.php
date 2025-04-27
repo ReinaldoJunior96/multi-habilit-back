@@ -40,6 +40,7 @@ class Paciente extends Model
         'responsavel_parentesco',
         'responsavel_ocupacao',
         'responsavel_email',
+        'responsavel_cpf',
 
         // Contato
         'contato_celular',

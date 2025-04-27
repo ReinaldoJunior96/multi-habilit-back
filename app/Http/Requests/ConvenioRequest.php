@@ -62,76 +62,106 @@ class ConvenioRequest extends FormRequest
     public function messages()
     {
         return [
-            'codigo.string' => 'O código deve ser um texto.',
-            'codigo.max' => 'O código não pode exceder 255 caracteres.',
-            'codigo.unique' => 'Este código já está cadastrado.',
+            'codigo.string' => 'O campo código deve ser um texto.',
+            'modo_recebimento.string' => 'O campo modo de recebimento deve ser um texto.',
+            'descricao.string' => 'O campo descrição deve ser um texto.',
+            'razao_social.string' => 'O campo razão social deve ser um texto.',
+            'cnpj.string' => 'O campo CNPJ deve ser um texto.',
+            'inscricao_estadual.string' => 'O campo inscrição estadual deve ser um texto.',
+            'inscricao_municipal.string' => 'O campo inscrição municipal deve ser um texto.',
+            'telefone.string' => 'O campo telefone deve ser um texto.',
+            'contato.string' => 'O campo contato deve ser um texto.',
+            'site.string' => 'O campo site deve ser um texto.',
+            'email.email' => 'O campo email deve ser um endereço de email válido.',
+            'observacao.string' => 'O campo observação deve ser um texto.',
+            'procedimentos.string' => 'O campo procedimentos deve ser um texto.',
+            'medicamentos.string' => 'O campo medicamentos deve ser um texto.',
+            'taxas.string' => 'O campo taxas deve ser um texto.',
+            'materiais.string' => 'O campo materiais deve ser um texto.',
+            'valor_filme.numeric' => 'O campo valor filme deve ser um número.',
+            'dias_retorno_eletivo.integer' => 'O campo dias de retorno eletivo deve ser um número inteiro.',
+            'dias_retorno_emergencia.integer' => 'O campo dias de retorno emergência deve ser um número inteiro.',
+            'vencimento_contrato.date' => 'O campo vencimento do contrato deve ser uma data válida.',
+            'tag_impressao_de_saia.string' => 'O campo tag de impressão de saia deve ser um texto.',
+            'plano_de_contas.string' => 'O campo plano de contas deve ser um texto.',
+            'alerta_ficha_atendimento.string' => 'O campo alerta ficha de atendimento deve ser um texto.',
 
-            'modo_recebimento.string' => 'O modo de recebimento deve ser um texto.',
-            'modo_recebimento.max' => 'O modo de recebimento não pode exceder 255 caracteres.',
+            'apresenta_valor_do_procedimento.boolean' => 'O campo apresenta valor do procedimento deve ser verdadeiro ou falso.',
+            'convenio_apenas_solic_exame_cirurgia.boolean' => 'O campo convênio apenas solicitação de exame/cirurgia deve ser verdadeiro ou falso.',
+            'informa_procedimento_na_agenda.boolean' => 'O campo informa procedimento na agenda deve ser verdadeiro ou falso.',
+            'nao_lista_agenda_web_wpp.boolean' => 'O campo não listar na agenda web/wpp deve ser verdadeiro ou falso.',
+            'nao_entregar_laudo_web.boolean' => 'O campo não entregar laudo web deve ser verdadeiro ou falso.',
 
-            'descricao.string' => 'A descrição deve ser um texto.',
-            'descricao.max' => 'A descrição não pode exceder 255 caracteres.',
+            'plataforma.string' => 'O campo plataforma deve ser um texto.',
+            'codigo_interface.string' => 'O campo código interface deve ser um texto.',
+            'eligibilidade.string' => 'O campo elegibilidade deve ser um texto.',
+            'solicitacao_procedimento.string' => 'O campo solicitação procedimento deve ser um texto.',
+            'local_externo.string' => 'O campo local externo deve ser um texto.',
 
-            'razao_social.string' => 'A razão social deve ser um texto.',
-            'razao_social.max' => 'A razão social não pode exceder 255 caracteres.',
+            'repetir_numero_senha.boolean' => 'O campo repetir número senha deve ser verdadeiro ou falso.',
+            'exigir_numero_guia.boolean' => 'O campo exigir número guia deve ser verdadeiro ou falso.',
+            'exigir_numero_carteira.boolean' => 'O campo exigir número carteira deve ser verdadeiro ou falso.',
+            'termo_anexo.boolean' => 'O campo termo anexo deve ser verdadeiro ou falso.',
+            'nao_replicar_numero_guia.boolean' => 'O campo não replicar número guia deve ser verdadeiro ou falso.',
+            'guia_sadt_consulta.boolean' => 'O campo guia SADT consulta deve ser verdadeiro ou falso.',
+            'ocultar_valores_guias.boolean' => 'O campo ocultar valores das guias deve ser verdadeiro ou falso.',
+            'criticar_guia_repetida.boolean' => 'O campo criticar guia repetida deve ser verdadeiro ou falso.',
+            'exige_numero_senha.boolean' => 'O campo exige número senha deve ser verdadeiro ou falso.',
+            'exige_numero_guia_principal.boolean' => 'O campo exige número guia principal deve ser verdadeiro ou falso.',
+            'exige_validade_carteira.boolean' => 'O campo exige validade da carteira deve ser verdadeiro ou falso.',
+            'editar_valor_procedimento.boolean' => 'O campo editar valor do procedimento deve ser verdadeiro ou falso.',
+            'editar_valor_opme.boolean' => 'O campo editar valor de OPME deve ser verdadeiro ou falso.',
+            'obrigar_local_ext_sadt.boolean' => 'O campo obrigar local externo SADT deve ser verdadeiro ou falso.',
+            'agrupar_procedimento.boolean' => 'O campo agrupar procedimento deve ser verdadeiro ou falso.',
 
-            'cnpj.string' => 'O CNPJ deve ser um texto.',
-            'cnpj.size' => 'O CNPJ deve ter exatamente 14 caracteres.',
-            'cnpj.unique' => 'Este CNPJ já está cadastrado.',
+            'check_identificacao_fonte_pagadora.string' => 'O campo identificação da fonte pagadora deve ser um texto.',
+            'input_identificacao_fonte_pagadora.string' => 'O campo input identificação fonte pagadora deve ser um texto.',
+            'check_origem_cnpj_cpf.string' => 'O campo origem CNPJ/CPF deve ser um texto.',
+            'input_codigo_prestador_operador.string' => 'O campo código do prestador operador deve ser um texto.',
+            'destino.string' => 'O campo destino deve ser um texto.',
+            'empresa_credenciada.string' => 'O campo empresa credenciada deve ser um texto.',
 
-            'inscricao_estadual.string' => 'A inscrição estadual deve ser um texto.',
-            'inscricao_estadual.max' => 'A inscrição estadual não pode exceder 255 caracteres.',
+            'qtd_digitos_matricula.integer' => 'O campo quantidade de dígitos da matrícula deve ser um número inteiro.',
+            'codigo_credenciado.string' => 'O campo código credenciado deve ser um texto.',
+            'numero_registro_ans.string' => 'O campo número de registro ANS deve ser um texto.',
+            'versao_padrao.string' => 'O campo versão padrão deve ser um texto.',
+            'tabela_tiss_proced.string' => 'O campo tabela TISS procedimento deve ser um texto.',
+            'tabela_tiss_taxa.string' => 'O campo tabela TISS taxa deve ser um texto.',
+            'mascara_guia.string' => 'O campo máscara guia deve ser um texto.',
+            'mascara_guia_principal.string' => 'O campo máscara guia principal deve ser um texto.',
 
-            'inscricao_municipal.string' => 'A inscrição municipal deve ser um texto.',
-            'inscricao_municipal.max' => 'A inscrição municipal não pode exceder 255 caracteres.',
+            'documentos_executantes.string' => 'O campo documentos executantes deve ser um texto.',
+            'documentos_solicitantes.string' => 'O campo documentos solicitantes deve ser um texto.',
+            'padrao_posicao_profissional.string' => 'O campo padrão posição profissional deve ser um texto.',
 
-            'telefone.string' => 'O telefone deve ser um texto.',
-            'telefone.max' => 'O telefone não pode exceder 20 caracteres.',
+            'numeracao_automatica_guia.boolean' => 'O campo numeração automática guia deve ser verdadeiro ou falso.',
+            'numeracao_guia_inicio.integer' => 'O campo início da numeração da guia deve ser um número inteiro.',
+            'numeracao_guia_fim.integer' => 'O campo fim da numeração da guia deve ser um número inteiro.',
+            'numeracao_guia_atual.integer' => 'O campo numeração atual da guia deve ser um número inteiro.',
 
-            'contato.string' => 'O contato deve ser um texto.',
-            'contato.max' => 'O contato não pode exceder 255 caracteres.',
+            'numeracao_automatica_consulta.boolean' => 'O campo numeração automática consulta deve ser verdadeiro ou falso.',
+            'numeracao_consulta_inicio.integer' => 'O campo início da numeração da consulta deve ser um número inteiro.',
+            'numeracao_consulta_fim.integer' => 'O campo fim da numeração da consulta deve ser um número inteiro.',
+            'numeracao_consulta_atual.integer' => 'O campo numeração atual da consulta deve ser um número inteiro.',
 
-            'site.url' => 'O site deve ser uma URL válida.',
-            'site.max' => 'O site não pode exceder 255 caracteres.',
+            'numeracao_automatica_exame.boolean' => 'O campo numeração automática exame deve ser verdadeiro ou falso.',
+            'numeracao_exame_inicio.integer' => 'O campo início da numeração do exame deve ser um número inteiro.',
+            'numeracao_exame_fim.integer' => 'O campo fim da numeração do exame deve ser um número inteiro.',
+            'numeracao_exame_atual.integer' => 'O campo numeração atual do exame deve ser um número inteiro.',
 
-            'email.email' => 'O email deve ser um endereço de email válido.',
-            'email.max' => 'O email não pode exceder 255 caracteres.',
+            'numeracao_automatica_peq_atendimento.boolean' => 'O campo numeração automática pequeno atendimento deve ser verdadeiro ou falso.',
+            'numeracao_peq_atendimento_inicio.integer' => 'O campo início da numeração do pequeno atendimento deve ser um número inteiro.',
+            'numeracao_peq_atendimento_fim.integer' => 'O campo fim da numeração do pequeno atendimento deve ser um número inteiro.',
+            'numeracao_peq_atendimento_atual.integer' => 'O campo numeração atual do pequeno atendimento deve ser um número inteiro.',
 
-            'valor_filme.required' => 'O valor do filme é obrigatório.',
-            'valor_filme.min' => 'O valor do filme não pode ser negativo.',
-
-            'dias_retorno_eletivo.integer' => 'Os dias de retorno eletivo devem ser um número inteiro.',
-            'dias_retorno_eletivo.min' => 'Os dias de retorno eletivo não podem ser negativos.',
-
-            'dias_retorno_emergencia.integer' => 'Os dias de retorno emergência devem ser um número inteiro.',
-            'dias_retorno_emergencia.min' => 'Os dias de retorno emergência não podem ser negativos.',
-
-            'vencimento_contrato.date' => 'A data de vencimento deve ser uma data válida.',
-
-            'cep.string' => 'O CEP deve ser um texto.',
-            'cep.max' => 'O CEP não pode exceder 9 caracteres.',
-
-            'cidade.string' => 'A cidade deve ser um texto.',
-            'cidade.max' => 'A cidade não pode exceder 255 caracteres.',
-
-            'estado.string' => 'O estado deve ser um texto.',
-            'estado.max' => 'O estado não pode exceder 2 caracteres.',
-
-            'endereco.string' => 'O endereço deve ser um texto.',
-            'endereco.max' => 'O endereço não pode exceder 255 caracteres.',
-
-            'numero.string' => 'O número deve ser um texto.',
-            'numero.max' => 'O número não pode exceder 255 caracteres.',
-
-            'complemento.string' => 'O complemento deve ser um texto.',
-            'complemento.max' => 'O complemento não pode exceder 255 caracteres.',
-
-            'bairro.string' => 'O bairro deve ser um texto.',
-            'bairro.max' => 'O bairro não pode exceder 255 caracteres.',
+            'coparticipacao_consulta.numeric' => 'O campo coparticipação consulta deve ser um número.',
+            'coparticipacao_exame.numeric' => 'O campo coparticipação exame deve ser um número.',
+            'coparticipacao_internacao.numeric' => 'O campo coparticipação internação deve ser um número.',
+            'coparticipacao_peq_atendimento.numeric' => 'O campo coparticipação pequeno atendimento deve ser um número.',
         ];
     }
 
-    
+
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {

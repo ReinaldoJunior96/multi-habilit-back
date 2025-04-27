@@ -27,17 +27,23 @@ class ProcedimentoRequest extends FormRequest
     public function rules()
     {
         return [
-            'codigo' => 'required|string|max:50|unique:procedimentos,codigo,' . $this->route('procedimento'),
-            'nome' => 'required|string|max:255',
-            'valor_ch' => 'required|numeric|min:0',
-            'porte_anestesia' => 'nullable|integer|min:0',
-            'ch_anestesista' => 'nullable|integer|min:0',
-            'custo_operacional' => 'nullable|numeric|min:0',
-            'num_auxiliares' => 'nullable|integer|min:0',
-            'tempo' => 'nullable|integer|min:0',
-            'valor_filme' => 'nullable|numeric|min:0',
-            'codigo_tuss' => 'string|nullable',
-            'convenio_id' => 'required',
+            'id_convenio' => 'required|exists:convenios,id',
+            'tabela' => 'nullable|string|max:255',
+            'codigo' => 'nullable|string|max:255',
+            'procedimento' => 'nullable|string|max:255',
+            'procedimento_padrao' => 'nullable|string|max:255',
+            'grupo' => 'nullable|string|max:255',
+            'vacina' => 'nullable|string|max:255',
+            'valor_ch' => 'nullable|numeric',
+            'filme' => 'nullable|numeric',
+            'porte_anestesia' => 'nullable|integer',
+            'ch_anestesista' => 'nullable|numeric',
+            'custo_operacional' => 'nullable|numeric',
+            'numero_auxiliares' => 'nullable|integer',
+            'codigo_tuss' => 'nullable|string|max:255',
+            'instrumentador' => 'nullable|string|max:255',
+            'porte_honorario' => 'nullable|integer',
+            'tempo' => 'nullable|string|max:255',
         ];
     }
 
@@ -49,30 +55,49 @@ class ProcedimentoRequest extends FormRequest
     public function messages()
     {
         return [
-            'codigo.required' => 'O campo código é obrigatório.',
-            'codigo.string' => 'O campo código deve ser uma string.',
-            'codigo.max' => 'O campo código não pode ter mais que 50 caracteres.',
-            'codigo.unique' => 'O código informado já está em uso.',
-            'nome.required' => 'O nome do procedimento é obrigatório.',
-            'nome.string' => 'O campo nome deve ser uma string.',
-            'nome.max' => 'O nome do procedimento não pode ter mais que 255 caracteres.',
-            'valor_ch.required' => 'O campo valor/CH é obrigatório.',
-            'valor_ch.numeric' => 'O campo valor/CH deve ser numérico.',
-            'valor_ch.min' => 'O campo valor/CH deve ser maior ou igual a 0.',
-            'porte_anestesia.integer' => 'O campo porte anestésico deve ser um número inteiro.',
-            'porte_anestesia.min' => 'O campo porte anestésico deve ser maior ou igual a 0.',
-            'ch_anestesista.integer' => 'O campo CH do anestesista deve ser um número inteiro.',
-            'ch_anestesista.min' => 'O campo CH do anestesista deve ser maior ou igual a 0.',
+            'id_convenio.required' => 'O campo convênio é obrigatório.',
+            'id_convenio.exists' => 'O convênio selecionado não existe.',
+
+            'tabela.string' => 'O campo tabela deve ser um texto.',
+            'tabela.max' => 'O campo tabela não pode ter mais que 255 caracteres.',
+
+            'codigo.string' => 'O campo código deve ser um texto.',
+            'codigo.max' => 'O campo código não pode ter mais que 255 caracteres.',
+
+            'procedimento.string' => 'O campo procedimento deve ser um texto.',
+            'procedimento.max' => 'O campo procedimento não pode ter mais que 255 caracteres.',
+
+            'procedimento_padrao.string' => 'O campo procedimento padrão deve ser um texto.',
+            'procedimento_padrao.max' => 'O campo procedimento padrão não pode ter mais que 255 caracteres.',
+
+            'grupo.string' => 'O campo grupo deve ser um texto.',
+            'grupo.max' => 'O campo grupo não pode ter mais que 255 caracteres.',
+
+            'vacina.string' => 'O campo vacina deve ser um texto.',
+            'vacina.max' => 'O campo vacina não pode ter mais que 255 caracteres.',
+
+            'valor_ch.numeric' => 'O campo valor CH deve ser numérico.',
+
+            'filme.numeric' => 'O campo filme deve ser numérico.',
+
+            'porte_anestesia.integer' => 'O campo porte anestesia deve ser um número inteiro.',
+
+            'ch_anestesista.numeric' => 'O campo CH anestesista deve ser numérico.',
+
             'custo_operacional.numeric' => 'O campo custo operacional deve ser numérico.',
-            'custo_operacional.min' => 'O campo custo operacional deve ser maior ou igual a 0.',
-            'num_auxiliares.integer' => 'O campo número de auxiliares deve ser um número inteiro.',
-            'num_auxiliares.min' => 'O campo número de auxiliares deve ser maior ou igual a 0.',
-            'tempo.integer' => 'O campo tempo deve ser um número inteiro.',
-            'tempo.min' => 'O campo tempo deve ser maior ou igual a 0.',
-            'valor_filme.numeric' => 'O campo valor do filme deve ser numérico.',
-            'valor_filme.min' => 'O campo valor do filme deve ser maior ou igual a 0.',
-            'codigo_tuss.string' => 'O campo código deve ser uma string.',
-            'convenio_id.required' => 'Convenio é obrigatório',
+
+            'numero_auxiliares.integer' => 'O campo número de auxiliares deve ser um número inteiro.',
+
+            'codigo_tuss.string' => 'O campo código TUSS deve ser um texto.',
+            'codigo_tuss.max' => 'O campo código TUSS não pode ter mais que 255 caracteres.',
+
+            'instrumentador.string' => 'O campo instrumentador deve ser um texto.',
+            'instrumentador.max' => 'O campo instrumentador não pode ter mais que 255 caracteres.',
+
+            'porte_honorario.integer' => 'O campo porte honorário deve ser um número inteiro.',
+
+            'tempo.string' => 'O campo tempo deve ser um texto.',
+            'tempo.max' => 'O campo tempo não pode ter mais que 255 caracteres.',
         ];
     }
 

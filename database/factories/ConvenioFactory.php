@@ -17,7 +17,7 @@ class ConvenioFactory extends Factory
             'modo_recebimento' => $this->faker->randomElement(['Manual', 'Automático']), // Exemplo de modo de recebimento
             'descricao' => $this->faker->sentence(3), // Descrição
             'razao_social' => $this->faker->company, // Razão social
-            'cnpj' => $this->faker->numerify('##.###.###/####-##'), // CNPJ
+            'cnpj' => $this->faker->numerify('##############'), // CNPJ
             'inscricao_estadual' => $this->faker->numerify('########'), // Inscrição estadual
             'inscricao_municipal' => $this->faker->numerify('########'), // Inscrição municipal
             'telefone' => $this->faker->phoneNumber, // Telefone
@@ -37,14 +37,80 @@ class ConvenioFactory extends Factory
             'plano_de_contas' => $this->faker->word, // Plano de contas
             'alerta_ficha_atendimento' => $this->faker->sentence(3), // Alerta na ficha
 
-            // Endereço
-            'cep' => $this->faker->postcode, // CEP
-            'cidade' => $this->faker->city, // Cidade
-            'estado' => $this->faker->stateAbbr, // Estado
-            'endereco' => $this->faker->streetAddress, // Endereço
-            'numero' => $this->faker->buildingNumber, // Número
-            'complemento' => $this->faker->secondaryAddress, // Complemento
-            'bairro' => $this->faker->citySuffix, // Bairro
+            'apresenta_valor_do_procedimento' => $this->faker->boolean(),
+            'convenio_apenas_solic_exame_cirurgia' => $this->faker->boolean(),
+            'informa_procedimento_na_agenda' => $this->faker->boolean(),
+            'nao_lista_agenda_web_wpp' => $this->faker->boolean(),
+            'nao_entregar_laudo_web' => $this->faker->boolean(),
+
+            'plataforma' => $this->faker->word(),
+            'codigo_interface' => $this->faker->uuid(),
+
+            'eligibilidade' => $this->faker->word(),
+            'solicitacao_procedimento' => $this->faker->word(),
+
+            'local_externo' => $this->faker->city(),
+
+            'repetir_numero_senha' => $this->faker->boolean(),
+            'exigir_numero_guia' => $this->faker->boolean(),
+            'exigir_numero_carteira' => $this->faker->boolean(),
+            'termo_anexo' => $this->faker->boolean(),
+            'nao_replicar_numero_guia' => $this->faker->boolean(),
+            'guia_sadt_consulta' => $this->faker->boolean(),
+            'ocultar_valores_guias' => $this->faker->boolean(),
+            'criticar_guia_repetida' => $this->faker->boolean(),
+            'exige_numero_senha' => $this->faker->boolean(),
+            'exige_numero_guia_principal' => $this->faker->boolean(),
+            'exige_validade_carteira' => $this->faker->boolean(),
+            'editar_valor_procedimento' => $this->faker->boolean(),
+            'editar_valor_opme' => $this->faker->boolean(),
+            'obrigar_local_ext_sadt' => $this->faker->boolean(),
+            'agrupar_procedimento' => $this->faker->boolean(),
+
+            'check_identificacao_fonte_pagadora' => $this->faker->word(),
+            'input_identificacao_fonte_pagadora' => $this->faker->word(),
+            'check_origem_cnpj_cpf' => $this->faker->word(),
+            'input_codigo_prestador_operador' => $this->faker->word(),
+            'destino' => $this->faker->city(),
+            'empresa_credenciada' => $this->faker->company(),
+
+            'qtd_digitos_matricula' => $this->faker->randomElement([6, 8, 10]),
+            'codigo_credenciado' => $this->faker->word(),
+            'numero_registro_ans' => $this->faker->numerify('########'),
+            'versao_padrao' => '3.05.00',
+            'tabela_tiss_proced' => '00',
+            'tabela_tiss_taxa' => '00',
+            'mascara_guia' => '##########',
+            'mascara_guia_principal' => '##########',
+
+            'documentos_executantes' => json_encode(['CPF', 'RG']),
+            'documentos_solicitantes' => json_encode(['CPF', 'CRM']),
+            'padrao_posicao_profissional' => $this->faker->word(),
+
+            'numeracao_automatica_guia' => $this->faker->boolean(),
+            'numeracao_guia_inicio' => 1000,
+            'numeracao_guia_fim' => 9999,
+            'numeracao_guia_atual' => 1000,
+
+            'numeracao_automatica_consulta' => $this->faker->boolean(),
+            'numeracao_consulta_inicio' => 2000,
+            'numeracao_consulta_fim' => 2999,
+            'numeracao_consulta_atual' => 2000,
+
+            'numeracao_automatica_exame' => $this->faker->boolean(),
+            'numeracao_exame_inicio' => 3000,
+            'numeracao_exame_fim' => 3999,
+            'numeracao_exame_atual' => 3000,
+
+            'numeracao_automatica_peq_atendimento' => $this->faker->boolean(),
+            'numeracao_peq_atendimento_inicio' => 4000,
+            'numeracao_peq_atendimento_fim' => 4999,
+            'numeracao_peq_atendimento_atual' => 4000,
+
+            'coparticipacao_consulta' => $this->faker->randomFloat(2, 0, 100),
+            'coparticipacao_exame' => $this->faker->randomFloat(2, 0, 200),
+            'coparticipacao_internacao' => $this->faker->randomFloat(2, 0, 500),
+            'coparticipacao_peq_atendimento' => $this->faker->randomFloat(2, 0, 150),
 
             'created_at' => now(),
             'updated_at' => now(),

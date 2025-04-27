@@ -68,12 +68,9 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::get('convenios', [ConvenioController::class, 'index']);
-    Route::get('convenios/{id}', [ConvenioController::class, 'show']);
-    Route::post('convenios', [ConvenioController::class, 'store']);
-    Route::put('convenios/{id}', [ConvenioController::class, 'update']);
-    Route::delete('convenios/{id}', [ConvenioController::class, 'destroy']);
-    Route::get('convenios/{id}/procedimentos', [ConvenioController::class, 'buscarPorConvenio']);
+    Route::apiResource('convenios', ConvenioController::class);
+
+    // Route::get('convenios/{id}/procedimentos', [ConvenioController::class, 'buscarPorConvenio']);
 });
 
 
@@ -90,7 +87,7 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
 
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::apiResource('procedimentos', ProcedimentoController::class);
-    Route::post('convenio-procedimentos', [ConvenioProcedimentoController::class, 'store']);
+    //Route::post('convenio-procedimentos', [ConvenioProcedimentoController::class, 'store']);
 });
 
 Route::prefix('horarios')->group(function () {

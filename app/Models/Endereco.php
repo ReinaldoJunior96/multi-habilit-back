@@ -20,11 +20,17 @@ class Endereco extends Model
         'estado',
         'uf',
         'id_paciente',
+        'id_convenio',
     ];
 
     // Relacionamento com o modelo Usuario (um para muitos)
     public function paciente()
     {
         return $this->belongsTo(Paciente::class, 'id_paciente');
+    }
+
+    public function convenio()
+    {
+        return $this->belongsTo(Convenio::class, 'id_convenio');
     }
 }

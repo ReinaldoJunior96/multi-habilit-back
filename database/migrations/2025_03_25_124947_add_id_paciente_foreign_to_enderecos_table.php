@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('enderecos', function (Blueprint $table) {
-            $table->foreignId('id_paciente')->constrained('pacientes')->unique()->onDelete('cascade');
+            // $table->foreignId('id_paciente')->constrained('pacientes')->unique()->onDelete('cascade');
+            // $table->foreignId('id_convenio')->constrained('convenios')->unique()->onDelete('cascade');
+
+            $table->foreignId('id_paciente')->nullable()->constrained('pacientes')->unique()->onDelete('cascade');
+
+            $table->foreignId('id_convenio')->nullable()->constrained('convenios')->onDelete('cascade');
         });
     }
 
@@ -24,6 +29,9 @@ return new class extends Migration
         Schema::table('enderecos', function (Blueprint $table) {
             $table->dropForeign(['id_paciente']);
             $table->dropColumn('id_paciente');
+
+            $table->dropForeign(['id_convenio']);
+            $table->dropColumn('id_convenio');
         });
     }
 };

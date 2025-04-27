@@ -39,16 +39,103 @@ class CreateConveniosTable extends Migration
             $table->string('plano_de_contas')->nullable(); // Plano de Contas
             $table->string('alerta_ficha_atendimento')->nullable(); // Alerta Ficha de Atendimento
 
-            // Endereço
-            $table->string('cep')->nullable(); // CEP
-            $table->string('cidade')->nullable(); // Cidade
-            $table->string('estado')->nullable(); // Estado
-            $table->string('endereco')->nullable(); // Endereço
-            $table->string('numero')->nullable(); // Número
-            $table->string('complemento')->nullable(); // Complemento
-            $table->string('bairro')->nullable(); // Bairro
+            $table->boolean('apresenta_valor_do_procedimento')->default(false);
+            $table->boolean('convenio_apenas_solic_exame_cirurgia')->default(false);
+            $table->boolean('informa_procedimento_na_agenda')->default(false);
+            $table->boolean('nao_lista_agenda_web_wpp')->default(false);
+            $table->boolean('nao_entregar_laudo_web')->default(false);
+
+
+            $table->string('plataforma')->nullable();
+            $table->string('codigo_interface')->nullable();
+
+
+            $table->string('eligibilidade')->nullable();
+            $table->string('solicitacao_procedimento')->nullable();
+
+
+            $table->string('local_externo')->nullable();
+
+
+            $table->boolean('repetir_numero_senha')->default(false);
+            $table->boolean('exigir_numero_guia')->default(false);
+            $table->boolean('exigir_numero_carteira')->default(false);
+            $table->boolean('termo_anexo')->default(false);
+            $table->boolean('nao_replicar_numero_guia')->default(false);
+            $table->boolean('guia_sadt_consulta')->default(false);
+            $table->boolean('ocultar_valores_guias')->default(false);
+            $table->boolean('criticar_guia_repetida')->default(false);
+            $table->boolean('exige_numero_senha')->default(false);
+            $table->boolean('exige_numero_guia_principal')->default(false);
+            $table->boolean('exige_validade_carteira')->default(false);
+            $table->boolean('editar_valor_procedimento')->default(false);
+            $table->boolean('editar_valor_opme')->default(false);
+            $table->boolean('obrigar_local_ext_sadt')->default(false);
+            $table->boolean('agrupar_procedimento')->default(false);
+
+
+
+            //cabeçalho guia
+            $table->string('check_identificacao_fonte_pagadora')->nullable();
+            $table->string('input_identificacao_fonte_pagadora')->nullable();
+            $table->string('check_origem_cnpj_cpf')->nullable();
+            $table->string('input_codigo_prestador_operador')->nullable();
+            $table->string('destino')->nullable();
+            $table->string('empresa_credenciada')->nullable();
+
+
+            //config
+            $table->integer('qtd_digitos_matricula')->nullable();
+            $table->string('codigo_credenciado')->nullable();
+            $table->string('numero_registro_ans')->nullable();
+            $table->string('versao_padrao')->nullable();
+            $table->string('tabela_tiss_proced')->nullable();
+            $table->string('tabela_tiss_taxa')->nullable();
+            $table->string('mascara_guia')->nullable();
+            $table->string('mascara_guia_principal')->nullable();
+
+            //dados
+            $table->string('documentos_executantes')->nullable();
+            $table->string('documentos_solicitantes')->nullable();
+            $table->string('padrao_posicao_profissional')->nullable();
+
+
+            //regra geral guia
+            $table->boolean('numeracao_automatica_guia')->default(false);
+            $table->integer('numeracao_guia_inicio')->nullable();
+            $table->integer('numeracao_guia_fim')->nullable();
+            $table->integer('numeracao_guia_atual')->nullable();
+
+            //regra geral consulta
+            $table->boolean('numeracao_automatica_consulta')->default(false);
+            $table->integer('numeracao_consulta_inicio')->nullable();
+            $table->integer('numeracao_consulta_fim')->nullable();
+            $table->integer('numeracao_consulta_atual')->nullable();
+
+
+            //regra geral exame
+            $table->boolean('numeracao_automatica_exame')->default(false);
+            $table->integer('numeracao_exame_inicio')->nullable();
+            $table->integer('numeracao_exame_fim')->nullable();
+            $table->integer('numeracao_exame_atual')->nullable();
+
+
+            //regra pequeno atendimento
+            $table->boolean('numeracao_automatica_peq_atendimento')->default(false);
+            $table->integer('numeracao_peq_atendimento_inicio')->nullable();
+            $table->integer('numeracao_peq_atendimento_fim')->nullable();
+            $table->integer('numeracao_peq_atendimento_atual')->nullable();
+
+
+            //coorparticipação
+            $table->string('coparticipacao_consulta')->nullable();
+            $table->string('coparticipacao_exame')->nullable();
+            $table->string('coparticipacao_internacao')->nullable();
+            $table->string('coparticipacao_peq_atendimento')->nullable();
+
+
             $table->softDeletes();
-            $table->timestamps(); // Campos de criação e atualização
+            $table->timestamps();
         });
     }
 
