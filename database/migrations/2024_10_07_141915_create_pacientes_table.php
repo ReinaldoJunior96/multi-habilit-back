@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('sexo')->nullable();
             $table->string('estado_civil')->nullable();
             $table->boolean('preferencial')->nullable();
+            $table->boolean('select_preferencial')->nullable();
             $table->string('inscricao_municipal')->nullable();
             $table->string('telefone')->nullable();
             $table->string('identidade_rg')->nullable();

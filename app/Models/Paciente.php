@@ -18,6 +18,7 @@ class Paciente extends Model
         'sexo',
         'estado_civil',
         'preferencial',
+        'select_preferencial',
         'inscricao_municipal',
         'telefone',
         'identidade_rg',

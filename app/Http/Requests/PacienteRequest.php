@@ -22,6 +22,7 @@ class PacienteRequest extends FormRequest
             'sexo' => 'nullable|string|in:Masculino,Feminino,Outro',
             'estado_civil' => 'nullable|string',
             'preferencial' => 'nullable|boolean',
+            'select_preferencial' => 'nullable|string',
             'inscricao_municipal' => 'nullable|string',
             'telefone' => 'nullable|string',
             'identidade_rg' => 'nullable|string',
