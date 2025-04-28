@@ -14,23 +14,14 @@ class ConvenioRequest extends FormRequest
 
     public function rules()
     {
-        $convenioId = $this->route('id'); // Obtém o ID do convênio da rota
+        $convenioId = $this->route('id'); // Pega o ID da rota, usado para ignorar o único na edição.
 
         return [
-            'codigo' => [
-                'nullable',
-                'string',
-                'max:255',
-                'unique:convenios,codigo,' . $convenioId, // Ignora o convênio atual
-            ],
+            'codigo' => ['nullable', 'string', 'max:255', 'unique:convenios,codigo,' . $convenioId],
             'modo_recebimento' => 'nullable|string|max:255',
             'descricao' => 'nullable|string|max:255',
             'razao_social' => 'nullable|string|max:255',
-            'cnpj' => [
-                'string',
-                'size:14',
-                'unique:convenios,cnpj,' . $convenioId,
-            ],
+            'cnpj' => ['nullable', 'string', 'size:14', 'unique:convenios,cnpj,' . $convenioId],
             'inscricao_estadual' => 'nullable|string|max:255',
             'inscricao_municipal' => 'nullable|string|max:255',
             'telefone' => 'nullable|string|max:20',
@@ -38,26 +29,97 @@ class ConvenioRequest extends FormRequest
             'site' => 'nullable|url|max:255',
             'email' => 'nullable|email|max:255',
             'observacao' => 'nullable|string',
-            'procedimentos' => 'nullable',
-            'medicamentos' => 'nullable',
-            'taxas' => 'nullable',
-            'materiais' => 'nullable',
-            'valor_filme' => 'nullable|min:0',
+
+            'procedimentos' => 'nullable|string',
+            'medicamentos' => 'nullable|string',
+            'taxas' => 'nullable|string',
+            'materiais' => 'nullable|string',
+            'valor_filme' => 'nullable|numeric|min:0',
+
             'dias_retorno_eletivo' => 'required|integer|min:0',
             'dias_retorno_emergencia' => 'required|integer|min:0',
             'vencimento_contrato' => 'nullable|date',
+
             'tag_impressao_de_saia' => 'nullable|string|max:255',
             'plano_de_contas' => 'required|string|max:255',
             'alerta_ficha_atendimento' => 'nullable|string|max:255',
-            'cep' => 'nullable|string|max:9',
-            'cidade' => 'nullable|string|max:255',
-            'estado' => 'nullable|string|max:2',
-            'endereco' => 'nullable|string|max:255',
-            'numero' => 'nullable|string|max:255',
-            'complemento' => 'nullable|string|max:255',
-            'bairro' => 'nullable|string|max:255',
+
+            'apresenta_valor_do_procedimento' => 'nullable|boolean',
+            'convenio_apenas_solic_exame_cirurgia' => 'nullable|boolean',
+            'informa_procedimento_na_agenda' => 'nullable|boolean',
+            'nao_lista_agenda_web_wpp' => 'nullable|boolean',
+            'nao_entregar_laudo_web' => 'nullable|boolean',
+
+            'plataforma' => 'nullable|string|max:255',
+            'codigo_interface' => 'nullable|string|max:255',
+            'eligibilidade' => 'nullable|string|max:255',
+            'solicitacao_procedimento' => 'nullable|string|max:255',
+
+            'local_externo' => 'nullable|string|max:255',
+
+            'repetir_numero_senha' => 'nullable|boolean',
+            'exigir_numero_guia' => 'nullable|boolean',
+            'exigir_numero_carteira' => 'nullable|boolean',
+            'termo_anexo' => 'nullable|boolean',
+            'nao_replicar_numero_guia' => 'nullable|boolean',
+            'guia_sadt_consulta' => 'nullable|boolean',
+            'ocultar_valores_guias' => 'nullable|boolean',
+            'criticar_guia_repetida' => 'nullable|boolean',
+            'exige_numero_senha' => 'nullable|boolean',
+            'exige_numero_guia_principal' => 'nullable|boolean',
+            'exige_validade_carteira' => 'nullable|boolean',
+            'editar_valor_procedimento' => 'nullable|boolean',
+            'editar_valor_opme' => 'nullable|boolean',
+            'obrigar_local_ext_sadt' => 'nullable|boolean',
+            'agrupar_procedimento' => 'nullable|boolean',
+
+            'check_identificacao_fonte_pagadora' => 'nullable|string|max:255',
+            'input_identificacao_fonte_pagadora' => 'nullable|string|max:255',
+            'check_origem_cnpj_cpf' => 'nullable|string|max:255',
+            'input_codigo_prestador_operador' => 'nullable|string|max:255',
+            'destino' => 'nullable|string|max:255',
+            'empresa_credenciada' => 'nullable|string|max:255',
+
+            'qtd_digitos_matricula' => 'nullable|integer|min:0',
+            'codigo_credenciado' => 'nullable|string|max:255',
+            'numero_registro_ans' => 'nullable|string|max:255',
+            'versao_padrao' => 'nullable|string|max:255',
+            'tabela_tiss_proced' => 'nullable|string|max:255',
+            'tabela_tiss_taxa' => 'nullable|string|max:255',
+            'mascara_guia' => 'nullable|string|max:255',
+            'mascara_guia_principal' => 'nullable|string|max:255',
+
+            'documentos_executantes' => 'nullable|string',
+            'documentos_solicitantes' => 'nullable|string',
+            'padrao_posicao_profissional' => 'nullable|string|max:255',
+
+            'numeracao_automatica_guia' => 'nullable|boolean',
+            'numeracao_guia_inicio' => 'nullable|integer|min:0',
+            'numeracao_guia_fim' => 'nullable|integer|min:0',
+            'numeracao_guia_atual' => 'nullable|integer|min:0',
+
+            'numeracao_automatica_consulta' => 'nullable|boolean',
+            'numeracao_consulta_inicio' => 'nullable|integer|min:0',
+            'numeracao_consulta_fim' => 'nullable|integer|min:0',
+            'numeracao_consulta_atual' => 'nullable|integer|min:0',
+
+            'numeracao_automatica_exame' => 'nullable|boolean',
+            'numeracao_exame_inicio' => 'nullable|integer|min:0',
+            'numeracao_exame_fim' => 'nullable|integer|min:0',
+            'numeracao_exame_atual' => 'nullable|integer|min:0',
+
+            'numeracao_automatica_peq_atendimento' => 'nullable|boolean',
+            'numeracao_peq_atendimento_inicio' => 'nullable|integer|min:0',
+            'numeracao_peq_atendimento_fim' => 'nullable|integer|min:0',
+            'numeracao_peq_atendimento_atual' => 'nullable|integer|min:0',
+
+            'coparticipacao_consulta' => 'nullable|numeric|min:0',
+            'coparticipacao_exame' => 'nullable|numeric|min:0',
+            'coparticipacao_internacao' => 'nullable|numeric|min:0',
+            'coparticipacao_peq_atendimento' => 'nullable|numeric|min:0',
         ];
     }
+
 
     public function messages()
     {
