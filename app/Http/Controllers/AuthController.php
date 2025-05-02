@@ -61,7 +61,7 @@ class AuthController extends Controller
             }
 
             // Carrega as relações desejadas
-            $user->load(['medico', 'convenios']);
+            //$user->load(['medico', 'convenios']);
 
             return response()->json($user, 200);
         } catch (\Exception $e) {
