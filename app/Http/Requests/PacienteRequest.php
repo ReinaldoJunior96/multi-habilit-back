@@ -41,6 +41,7 @@ class PacienteRequest extends FormRequest
             // Responsável
             'responsavel_nome' => 'nullable|string',
             'responsavel_rg' => 'nullable|string',
+            'responsavel_cpf' => 'nullable|string',
             'responsavel_telefone' => 'nullable|string',
             'responsavel_parentesco' => 'nullable|string',
             'responsavel_ocupacao' => 'nullable|string',

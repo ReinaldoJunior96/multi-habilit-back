@@ -54,7 +54,7 @@ class ConvenioController extends Controller
     {
         try {
             $convenio = Convenio::create($request->validated());
-            dd($convenio);
+            //dd($convenio);
             Log::info('Convenio criado com sucesso', [
                 'convenio_id' => $convenio->id,
                 'usuario_logado' => $this->getLoggedUserId()

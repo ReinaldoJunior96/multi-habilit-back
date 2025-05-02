@@ -26,7 +26,7 @@ class UsuarioService
     public function getAllUsuarios()
     {
         try {
-            $usuarios = $this->usuario->with(['medico', 'paciente'])->get();
+            $usuarios = $this->usuario->all();
             Log::info("Usuário [{$this->getLoggedUserId()}] buscou todos os usuários com sucesso.");
             return response()->json($usuarios, 200);
         } catch (\Exception $e) {
@@ -43,7 +43,7 @@ class UsuarioService
     public function getUsuarioById($id)
     {
         try {
-            $usuario = $this->usuario->with(['medico', 'paciente', 'convenios'])->findOrFail($id);
+            $usuario = $this->usuario->findOrFail($id);
             Log::info("Usuário [{$this->getLoggedUserId()}] buscou o usuário [ID: {$id}] com sucesso.");
             return response()->json($usuario, 200);
         } catch (ModelNotFoundException $e) {
