@@ -4,44 +4,59 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
+    /**
+     * Realiza o login do usuário e retorna um token JWT.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Credenciais inválidas'], 401);
+            if (!$token = JWTAuth::attempt($credentials)) {
+                Log::warning('Tentativa de login com credenciais inválidas.', ['email' => $credentials['email']]);
+                return response()->json(['message' => 'Credenciais inválidas.'], 401);
             }
-        } catch (JWTException $e) {
-            Log::error('Erro ao gerar o token JWT: ' . $e->getMessage());
-            return response()->json(['error' => 'Não foi possível criar o token'], 500);
-        }
 
-        return response()->json(['token' => $token], 200);
+            Log::info('Login realizado com sucesso.', ['email' => $credentials['email']]);
+            return response()->json(['token' => $token], 200);
+        } catch (JWTException $e) {
+            Log::error('Erro ao gerar o token JWT.', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['message' => 'Erro ao gerar o token de autenticação.'], 500);
+        }
     }
 
     /**
-     * Realiza o logout e invalida o token.
+     * Realiza o logout e invalida o token JWT.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function logout()
     {
         try {
-            // Invalida o token atual
             JWTAuth::invalidate(JWTAuth::getToken());
 
-            return response()->json(['message' => 'Logout realizado com sucesso'], 200);
+            Log::info('Logout realizado com sucesso.', ['usuario_logado' => auth()->user()->id ?? 'desconhecido']);
+            return response()->json(['message' => 'Logout realizado com sucesso.'], 200);
         } catch (JWTException $e) {
-            Log::error('Erro ao invalidar o token JWT: ' . $e->getMessage());
-            return response()->json(['error' => 'Não foi possível invalidar o token'], 500);
+            Log::error('Erro ao invalidar o token JWT.', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['message' => 'Erro ao realizar logout.'], 500);
         }
     }
 
@@ -53,33 +68,44 @@ class AuthController extends Controller
     public function me()
     {
         try {
-            // Obtém o usuário autenticado
             $user = auth()->guard('api')->user();
-            // dd($user);
+
             if (!$user) {
-                return response()->json(['error' => 'Usuário não autenticado'], 401);
+                Log::warning('Tentativa de acesso sem autenticação.');
+                return response()->json(['message' => 'Usuário não autenticado.'], 401);
             }
 
-            // Carrega as relações desejadas
-            //$user->load(['medico', 'convenios']);
-
+            Log::info('Informações do usuário autenticado retornadas com sucesso.', ['usuario_id' => $user->id]);
             return response()->json($user, 200);
         } catch (\Exception $e) {
-            Log::error('Erro ao obter informações do usuário autenticado: ' . $e->getMessage());
-            return response()->json(['error' => 'Erro ao obter informações do usuário'], 500);
+            Log::error('Erro ao obter informações do usuário autenticado.', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['message' => 'Erro ao obter informações do usuário.'], 500);
         }
     }
 
-
-
+    /**
+     * Atualiza o token JWT do usuário autenticado.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function refresh()
     {
         try {
             $newToken = JWTAuth::refresh(JWTAuth::getToken());
+
+            Log::info('Token JWT atualizado com sucesso.', ['usuario_logado' => auth()->user()->id ?? 'desconhecido']);
             return response()->json(['token' => $newToken], 200);
         } catch (JWTException $e) {
-            Log::error('Erro ao atualizar o token JWT: ' . $e->getMessage());
-            return response()->json(['error' => 'Não foi possível atualizar o token'], 500);
+            Log::error('Erro ao atualizar o token JWT.', [
+                'exception_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['message' => 'Erro ao atualizar o token de autenticação.'], 500);
         }
     }
 }
