@@ -95,7 +95,6 @@ class PacienteController extends Controller
         }
     }
 
-
     public function update(PacienteRequest $request, $id)
     {
         try {
