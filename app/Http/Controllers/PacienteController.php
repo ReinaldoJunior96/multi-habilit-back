@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Controller responsável por gerenciar as operações relacionadas aos pacientes.
+ */
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PacienteRequest;
@@ -12,15 +16,26 @@ use Exception;
 
 class PacienteController extends Controller
 {
+    /**
+     * Obtém o ID do usuário logado.
+     *
+     * @return int|string
+     */
     private function getLoggedUserId()
     {
         return auth('api')->check() ? auth('api')->user()->id : 'usuário não autenticado';
     }
 
+    /**
+     * Lista todos os pacientes.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         try {
             $pacientes = Paciente::with(['filiacao'])->get();
+            Log::info('Pacientes listados com sucesso.', ['usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($pacientes, 200);
         } catch (Exception $e) {
             Log::error('Erro ao buscar pacientes', [
@@ -33,10 +48,17 @@ class PacienteController extends Controller
         }
     }
 
+    /**
+     * Exibe um paciente específico.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($id)
     {
         try {
             $paciente = Paciente::findOrFail($id);
+            Log::info('Paciente encontrado com sucesso.', ['id' => $id, 'usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($paciente, 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Paciente não encontrado', [
@@ -57,6 +79,12 @@ class PacienteController extends Controller
         }
     }
 
+    /**
+     * Cria um novo paciente.
+     *
+     * @param PacienteRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(PacienteRequest $request)
     {
         try {
@@ -71,6 +99,7 @@ class PacienteController extends Controller
                 $paciente->filiacao()->create($filiacaoData);
             }
 
+            Log::info('Paciente criado com sucesso.', ['id' => $paciente->id, 'usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($paciente->load('filiacao'), 201);
         } catch (ValidationException $e) {
             Log::error('Erro de validação ao criar paciente', [
@@ -95,12 +124,21 @@ class PacienteController extends Controller
         }
     }
 
+    /**
+     * Atualiza um paciente existente.
+     *
+     * @param PacienteRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(PacienteRequest $request, $id)
     {
         try {
             $validatedData = $request->validated();
             $paciente = Paciente::findOrFail($id);
             $paciente->update($validatedData);
+
+            Log::info('Paciente atualizado com sucesso.', ['id' => $id, 'usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($paciente, 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Paciente não encontrado para atualização', [
@@ -133,13 +171,20 @@ class PacienteController extends Controller
         }
     }
 
+    /**
+     * Remove um paciente.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         try {
             $paciente = Paciente::findOrFail($id);
             $paciente->delete();
 
-            return response()->json(['message' => 'Paciente removido com sucesso.']);
+            Log::info('Paciente removido com sucesso.', ['id' => $id, 'usuario_logado' => $this->getLoggedUserId()]);
+            return response()->json(['message' => 'Paciente removido com sucesso.'], 200);
         } catch (ModelNotFoundException $e) {
             Log::error('Paciente não encontrado para exclusão', [
                 'exception_message' => $e->getMessage(),
@@ -167,6 +212,12 @@ class PacienteController extends Controller
         }
     }
 
+    /**
+     * Busca um paciente pelo CPF.
+     *
+     * @param string $cpf
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function searchByCpf($cpf)
     {
         try {
@@ -180,6 +231,7 @@ class PacienteController extends Controller
                 return response()->json(['message' => 'Paciente não encontrado.'], 404);
             }
 
+            Log::info('Paciente encontrado por CPF com sucesso.', ['cpf' => $cpf, 'usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($paciente, 200);
         } catch (Exception $e) {
             Log::error('Erro ao buscar paciente por CPF', [

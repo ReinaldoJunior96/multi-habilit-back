@@ -1,152 +1,164 @@
 <?php
 
-use App\Http\Controllers\AgendamentoController;
-use App\Http\Controllers\AtendenteController;
-use App\Http\Controllers\AtendimentoController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ConvenioController;
-use App\Http\Controllers\EnderecoController;
-use App\Http\Controllers\MedicoController;
-use App\Http\Controllers\PacienteController;
-use App\Http\Middleware\EnsureApiIsAuthenticated as EnsureApiIsAuthenticatedAlias;
-use Illuminate\Http\Request;
+/**
+ * Arquivo de rotas da API.
+ *
+ * Este arquivo contém todas as definições de rotas da API, organizadas e documentadas
+ * seguindo as melhores práticas de Clean Code.
+ */
+
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\ProcedimentoController;
-use App\Http\Controllers\ConvenioProcedimentoController;
-use App\Http\Controllers\HorarioController;
-use App\Http\Controllers\CommandController;
-use App\Http\Controllers\DeployController;
-use App\Http\Controllers\FinanceiroController;
+use App\Http\Controllers\{
+    AgendamentoController,
+    AtendenteController,
+    AtendimentoController,
+    AuthController,
+    ConvenioController,
+    EnderecoController,
+    MedicoController,
+    PacienteController,
+    UsuarioController,
+    ProcedimentoController,
+    ConvenioProcedimentoController,
+    HorarioController,
+    CommandController,
+    DeployController,
+    FinanceiroController,
+    FichaMedicaController,
+    FiliacaoPacienteController
+};
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\FichaMedicaController;
-use App\Http\Controllers\FiliacaoPacienteController;
+use App\Http\Middleware\EnsureApiIsAuthenticated as EnsureApiIsAuthenticatedAlias;
+use App\Jobs\ProcessarAgendamentosRecorrentes;
 
+/**
+ * Rotas públicas
+ */
 Route::post('deploy', [DeployController::class, 'deploy']);
 Route::post('login', [AuthController::class, 'login']);
 
+/**
+ * Rotas protegidas por autenticação
+ */
 Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+    /**
+     * Rotas de autenticação
+     */
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('refresh', [AuthController::class, 'refresh']); // Nova rota para refresh token
+    Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me']);
-});
 
-Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::post('usuarios', [UsuarioController::class, 'store']);
-    Route::get('usuarios', [UsuarioController::class, 'index']);
-    Route::get('usuarios/{id}', [UsuarioController::class, 'show']);
-    Route::delete('usuarios/{id}', [UsuarioController::class, 'destroy']);
-    Route::put('usuarios/edit/{id}', [UsuarioController::class, 'updateUsuario']);
-});
+    /**
+     * Rotas de usuários
+     */
+    Route::prefix('usuarios')->group(function () {
+        Route::post('/', [UsuarioController::class, 'store']);
+        Route::get('/', [UsuarioController::class, 'index']);
+        Route::get('/{id}', [UsuarioController::class, 'show']);
+        Route::delete('/{id}', [UsuarioController::class, 'destroy']);
+        Route::put('/edit/{id}', [UsuarioController::class, 'updateUsuario']);
+    });
 
-Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::get('medicos', [MedicoController::class, 'index']);
-    Route::get('medicos/{id}', [MedicoController::class, 'show']);
-    Route::post('medicos', [MedicoController::class, 'store']);
-    Route::put('medicos/{id}', [MedicoController::class, 'update']);
-    Route::delete('medicos/{id}', [MedicoController::class, 'destroy']);
-});
+    /**
+     * Rotas de médicos
+     */
+    Route::apiResource('medicos', MedicoController::class);
 
-Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::get('enderecos', [EnderecoController::class, 'index']);
-    Route::get('enderecos/{id}', [EnderecoController::class, 'show']);
-    Route::post('enderecos', [EnderecoController::class, 'store']);
-    Route::put('enderecos/{id}', [EnderecoController::class, 'update']);
-    Route::delete('enderecos/{id}', [EnderecoController::class, 'destroy']);
-});
+    /**
+     * Rotas de endereços
+     */
+    Route::apiResource('enderecos', EnderecoController::class);
 
+    /**
+     * Rotas de agendamentos
+     */
+    Route::prefix('agendamentos')->group(function () {
+        Route::get('/', [AgendamentoController::class, 'index']);
+        Route::get('/openai', [AgendamentoController::class, 'agendamentosSimplificado']);
+        Route::get('/{id}', [AgendamentoController::class, 'show']);
+        Route::post('/', [AgendamentoController::class, 'store']);
+        Route::put('/{id}', [AgendamentoController::class, 'update']);
+        Route::delete('/{id}', [AgendamentoController::class, 'destroy']);
+    });
 
-Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::get('agendamentos', [AgendamentoController::class, 'index']);
-    Route::get('agendamentos/openai', [AgendamentoController::class, 'agendamentosSimplificado']);
-    Route::get('agendamentos/{id}', [AgendamentoController::class, 'show']);
-    Route::post('agendamentos', [AgendamentoController::class, 'store']);
-    Route::put('agendamentos/{id}', [AgendamentoController::class, 'update']);
-    Route::delete('agendamentos/{id}', [AgendamentoController::class, 'destroy']);
-});
-
-
-Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+    /**
+     * Rotas de convênios
+     */
     Route::apiResource('convenios', ConvenioController::class);
+    Route::get('/convenios/{id}/procedimentos', [ConvenioController::class, 'buscarPorConvenio']);
+    /**
+     * Rotas de pacientes
+     */
+    Route::prefix('pacientes')->group(function () {
+        Route::get('/', [PacienteController::class, 'index']);
+        Route::get('/{id}', [PacienteController::class, 'show']);
+        Route::post('/', [PacienteController::class, 'store']);
+        Route::put('/{id}', [PacienteController::class, 'update']);
+        Route::delete('/{id}', [PacienteController::class, 'destroy']);
+        Route::get('/cpf/{cpf}', [PacienteController::class, 'searchByCpf']);
+    });
 
-    // Route::get('convenios/{id}/procedimentos', [ConvenioController::class, 'buscarPorConvenio']);
-});
-
-
-Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-    Route::get('pacientes', [PacienteController::class, 'index']);
-    Route::get('pacientes/{id}', [PacienteController::class, 'show']);
-    Route::post('pacientes', [PacienteController::class, 'store']);
-    Route::put('pacientes/{id}', [PacienteController::class, 'update']);
-    Route::delete('pacientes/{id}', [PacienteController::class, 'destroy']);
-    Route::get('/pacientes/cpf/{cpf}', [PacienteController::class, 'searchByCpf']);
-});
-
-
-
-Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
+    /**
+     * Rotas de procedimentos
+     */
     Route::apiResource('procedimentos', ProcedimentoController::class);
-    //Route::post('convenio-procedimentos', [ConvenioProcedimentoController::class, 'store']);
+
+    /**
+     * Rotas de horários
+     */
+    Route::prefix('horarios')->group(function () {
+        Route::post('/', [HorarioController::class, 'store']);
+        Route::delete('/{id}', [HorarioController::class, 'destroy']);
+        Route::post('/adicionar-feriado', [HorarioController::class, 'addFeriado']);
+        Route::get('/feriados', [HorarioController::class, 'listarDeletados']);
+        Route::get('/medico/dia/{diaSemana}/{id}', [HorarioController::class, 'buscarHorariosDisponiveis']);
+    });
+
+    /**
+     * Rotas de atendimentos
+     */
+    Route::prefix('atendimentos')->group(function () {
+        Route::get('/', [AtendimentoController::class, 'index']);
+        Route::post('/', [AtendimentoController::class, 'store']);
+        Route::get('/{id}', [AtendimentoController::class, 'show']);
+        Route::put('/{id}', [AtendimentoController::class, 'update']);
+        Route::delete('/{id}', [AtendimentoController::class, 'destroy']);
+    });
+
+    /**
+     * Rotas financeiras
+     */
+    Route::prefix('financeiro')->group(function () {
+        Route::get('/quantidade/atendimento/convenio/{convenio}', [FinanceiroController::class, 'quantidadeDeAtendimentoPorConvenio']);
+        Route::get('/faturamento/convenio/{convenio}', [FinanceiroController::class, 'faturamentoPorConvenio']);
+        Route::get('/quantidade/atendimento/terapeuta/{terapeuta}', [FinanceiroController::class, 'quantidadeAtendimentoPorMedico']);
+        Route::get('/faturamento/terapeuta/{terapeuta}', [FinanceiroController::class, 'faturamentoPorMedico']);
+    });
+
+    /**
+     * Rotas de fichas médicas
+     */
+    Route::apiResource('fichas-medicas', FichaMedicaController::class);
+
+    /**
+     * Rotas de filiação de pacientes
+     */
+    Route::apiResource('filiacao-paciente', FiliacaoPacienteController::class);
 });
 
-Route::prefix('horarios')->group(function () {
-    Route::post('/', [HorarioController::class, 'store']);
-    Route::delete('/{id}', [HorarioController::class, 'destroy']);
-    Route::post('/adicionar-feriado', [HorarioController::class, 'addFeriado']);
-    Route::get('/feriados', [HorarioController::class, 'listarDeletados']);
-    Route::get('/medico/dia/{diaSemana}/{id}', [HorarioController::class, 'buscarHorariosDisponiveis']);
-});
-
-
+/**
+ * Rotas auxiliares
+ */
 Route::get('/commands/fresh-and-seed-users', [CommandController::class, 'freshAndSeedUsers']);
-
-// Executa todas as seeders
 Route::get('/commands/fresh-and-seed-all', [CommandController::class, 'freshAndSeedAll']);
-
-
 Route::post('/chamada', [App\Http\Controllers\FilaChamadaController::class, 'chamarPaciente']);
-//Route::post('atendeimento')
-
-
-Route::prefix('atendimentos')->group(function () {
-    Route::get('/', [AtendimentoController::class, 'index']);
-    Route::post('/', [AtendimentoController::class, 'store']);
-    Route::get('/{id}', [AtendimentoController::class, 'show']);
-    Route::put('/{id}', [AtendimentoController::class, 'update']);
-    Route::delete('/{id}', [AtendimentoController::class, 'destroy']);
-});
-
-
-Route::prefix('financeiro')->group(function () {
-    Route::get('/quantidade/atendimento/convenio/{convenio}', [FinanceiroController::class, 'quantidadeDeAtendimentoPorConvenio']);
-    Route::get('/faturamento/convenio/{convenio}', [FinanceiroController::class, 'faturamentoPorConvenio']);
-
-    Route::get('/quantidade/atendimento/terapeuta/{terapeuta}', [FinanceiroController::class, 'quantidadeAtendimentoPorMedico']);
-    Route::get('/faturamento/terapeuta/{terapeuta}', [FinanceiroController::class, 'faturamentoPorMedico']);
-});
-
-
 Route::get('/executar-job', function () {
-    dispatch(new App\Jobs\ProcessarAgendamentosRecorrentes());
-
+    dispatch(new ProcessarAgendamentosRecorrentes());
     return response()->json(['message' => 'Job enviado para execução!'], 200);
 });
-
-
 Route::get('/guia-pdf', function () {
     $dados = json_decode(file_get_contents(storage_path('app/public/fake-guia-data.json')), true);
     $pdf = Pdf::loadView('pdf.guia', ['guia' => $dados]);
     return $pdf->stream('guia.pdf');
 });
-
-
-Route::apiResource('fichas-medicas', FichaMedicaController::class);
-
-
-Route::apiResource('filiacao-paciente', FiliacaoPacienteController::class);
-
-// Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
-//     Route::post('/convenios/pacientes', [ConvenioPacienteController::class, 'store']);
-//     Route::delete('/convenios/pacientes', [ConvenioPacienteController::class, 'remover']);
-// });

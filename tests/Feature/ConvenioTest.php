@@ -1,44 +1,72 @@
 <?php
 
 use App\Models\Convenio;
+use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\{get, post, put, delete};
+use function Pest\Laravel\{get, post, put, delete, actingAs};
 
 uses(RefreshDatabase::class);
 
-it('cria um convenio com sucesso', function () {
+// Configuração inicial para autenticação
+beforeEach(function () {
+    /** @var Usuario $usuario */
+    $usuario = Usuario::factory()->create();
+    actingAs($usuario, 'api');
+});
+
+// Teste para listar todos os convênios
+it('lista todos os convênios', function () {
+    Convenio::factory()->count(3)->create();
+
+    get('/api/convenios')
+        ->assertStatus(200)
+        ->assertJsonCount(3);
+});
+
+// Teste para criar um novo convênio
+it('cria um convênio com sucesso', function () {
     $data = Convenio::factory()->make()->toArray();
 
-    $convenio = Convenio::create($data);
-
-    expect($convenio)->toBeInstanceOf(Convenio::class)
-        ->and($convenio->id)->not->toBeNull();
+    post('/api/convenios', $data)
+        ->assertStatus(201)
+        ->assertJsonFragment(['descricao' => $data['descricao']]);
 });
 
-it('lista convenios existentes', function () {
-    $convenios = Convenio::factory()->count(3)->create();
-
-    $this->assertCount(3, Convenio::all());
-});
-
-it('atualiza um convenio com sucesso', function () {
-    $convenio = Convenio::factory()->create([
-        'descricao' => 'Convenio Antigo',
-    ]);
-
-    $convenio->update([
-        'descricao' => 'Convenio Atualizado',
-    ]);
-
-    $this->assertEquals('Convenio Atualizado', $convenio->fresh()->descricao);
-});
-
-it('deleta um convenio com sucesso', function () {
+// Teste para exibir um convênio específico
+it('exibe um convênio específico', function () {
     $convenio = Convenio::factory()->create();
 
-    $convenio->delete();
+    get("/api/convenios/{$convenio->id}")
+        ->assertStatus(200)
+        ->assertJsonFragment(['id' => $convenio->id]);
+});
 
-    $this->assertSoftDeleted('convenios', [
-        'id' => $convenio->id,
+// Teste para atualizar um convênio existente
+it('atualiza um convênio com sucesso', function () {
+    $convenio = Convenio::factory()->create([
+        'descricao' => 'Descrição Antiga',
     ]);
+
+    $novaDescricao = 'Descrição Atualizada';
+    put("/api/convenios/{$convenio->id}", ['descricao' => $novaDescricao])
+        ->assertStatus(200)
+        ->assertJsonFragment(['descricao' => $novaDescricao]);
+});
+
+// Teste para remover um convênio
+it('remove um convênio com sucesso', function () {
+    $convenio = Convenio::factory()->create();
+
+    delete("/api/convenios/{$convenio->id}")
+        ->assertStatus(200)
+        ->assertJsonFragment(['message' => 'Convênio removido com sucesso.']);
+});
+
+// Teste para listar procedimentos de um convênio
+it('lista procedimentos de um convênio', function () {
+    $convenio = Convenio::factory()->create();
+    $procedimentos = \App\Models\Procedimento::factory()->count(2)->create(['id_convenio' => $convenio->id]);
+    get("/api/convenios/{$convenio->id}/procedimentos")
+        ->assertStatus(200)
+        ->assertJsonCount(2);
 });

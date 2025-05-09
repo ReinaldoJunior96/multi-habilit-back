@@ -46,9 +46,14 @@ class AuthController extends Controller
     public function logout()
     {
         try {
+            $user = auth()->guard('api')->user();
+            Log::info('Tentativa de logout.', ['usuario_logado' => $user->id ?? 'desconhecido']);
+
             JWTAuth::invalidate(JWTAuth::getToken());
 
-            Log::info('Logout realizado com sucesso.', ['usuario_logado' => auth()->user()->id ?? 'desconhecido']);
+            auth()->guard('api')->logout();
+
+            Log::info('Logout realizado com sucesso.', ['usuario_logado' => $user->id ?? 'desconhecido']);
             return response()->json(['message' => 'Logout realizado com sucesso.'], 200);
         } catch (JWTException $e) {
             Log::error('Erro ao invalidar o token JWT.', [
@@ -97,7 +102,7 @@ class AuthController extends Controller
         try {
             $newToken = JWTAuth::refresh(JWTAuth::getToken());
 
-            Log::info('Token JWT atualizado com sucesso.', ['usuario_logado' => auth()->user()->id ?? 'desconhecido']);
+            Log::info('Token JWT atualizado com sucesso.', ['usuario_logado' => auth()->guard('api')->user()->id ?? 'desconhecido']);
             return response()->json(['token' => $newToken], 200);
         } catch (JWTException $e) {
             Log::error('Erro ao atualizar o token JWT.', [

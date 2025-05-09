@@ -4,19 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProcedimentoRequest;
 use App\Models\Procedimento;
-use App\Services\ProcedimentoService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
+/**
+ * Controller responsável por gerenciar os Procedimentos.
+ *
+ * Métodos:
+ * - index: Lista todos os procedimentos.
+ * - store: Cria um novo procedimento.
+ * - show: Exibe um procedimento específico.
+ * - update: Atualiza um procedimento existente.
+ * - destroy: Remove um procedimento.
+ */
 class ProcedimentoController extends Controller
 {
-    protected $procedimentoService;
-
-    public function __construct(ProcedimentoService $procedimentoService)
-    {
-        $this->procedimentoService = $procedimentoService;
-    }
-
     /**
      * Recupera o ID do usuário logado.
      *
@@ -29,6 +32,8 @@ class ProcedimentoController extends Controller
 
     /**
      * Lista todos os procedimentos.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -53,6 +58,9 @@ class ProcedimentoController extends Controller
 
     /**
      * Cria um novo procedimento.
+     *
+     * @param ProcedimentoRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(ProcedimentoRequest $request)
     {
@@ -77,7 +85,10 @@ class ProcedimentoController extends Controller
     }
 
     /**
-     * Mostra um procedimento específico.
+     * Exibe um procedimento específico.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -113,12 +124,15 @@ class ProcedimentoController extends Controller
 
     /**
      * Atualiza um procedimento existente.
+     *
+     * @param ProcedimentoRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(ProcedimentoRequest $request, $id)
     {
         try {
             $procedimento = Procedimento::findOrFail($id);
-
             $procedimento->update($request->validated());
 
             Log::info('Procedimento atualizado com sucesso', [
@@ -149,7 +163,10 @@ class ProcedimentoController extends Controller
     }
 
     /**
-     * Deleta um procedimento.
+     * Remove um procedimento.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {

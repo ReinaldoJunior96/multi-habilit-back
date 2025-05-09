@@ -36,12 +36,12 @@ class ConvenioRequest extends FormRequest
             'materiais' => 'nullable|string',
             'valor_filme' => 'nullable|numeric|min:0',
 
-            'dias_retorno_eletivo' => 'required|integer|min:0',
-            'dias_retorno_emergencia' => 'required|integer|min:0',
+            'dias_retorno_eletivo' => 'nullable|integer|min:0',
+            'dias_retorno_emergencia' => 'nullable|integer|min:0',
             'vencimento_contrato' => 'nullable|date',
 
             'tag_impressao_de_saia' => 'nullable|string|max:255',
-            'plano_de_contas' => 'required|string|max:255',
+            'plano_de_contas' => 'nullable|string|max:255',
             'alerta_ficha_atendimento' => 'nullable|string|max:255',
 
             'apresenta_valor_do_procedimento' => 'nullable|boolean',

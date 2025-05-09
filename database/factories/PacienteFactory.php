@@ -18,7 +18,7 @@ class PacienteFactory extends Factory
             'nascimento' => $this->faker->date(),
             'sexo' => $this->faker->randomElement(['Masculino', 'Feminino', 'Outro']),
             'estado_civil' => $this->faker->randomElement(['Solteiro', 'Casado', 'Divorciado', 'Viúvo']),
-            'preferencial' => $this->faker->randomElement(['Sim', 'Não']),
+            'preferencial' => $this->faker->boolean(),
             'inscricao_municipal' => $this->faker->numerify('###########'),
             'telefone' => $this->faker->phoneNumber,
             'identidade_rg' => $this->faker->numerify('##.###.###-#'),
