@@ -61,3 +61,15 @@ it('deve deletar um procedimento', function () {
         ->assertStatus(200)
         ->assertJsonFragment(['message' => 'Procedimento deletado com sucesso.']);
 });
+
+it('deve deletar o procedimento ao deletar o convênio associado', function () {
+    $this->actingAs($this->user, 'api');
+
+    $procedimento = Procedimento::factory()->create(['id_convenio' => $this->convenio->id]);
+
+    delete("/api/convenios/{$this->convenio->id}")
+        ->assertStatus(200)
+        ->assertJsonFragment(['message' => 'Convênio removido com sucesso.']);
+
+    $this->assertDatabaseMissing('procedimentos', ['id' => $procedimento->id]);
+});

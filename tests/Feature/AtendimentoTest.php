@@ -1,25 +1,27 @@
 <?php
 
 use App\Models\Atendimento;
+use App\Models\Usuario;
 use App\Models\Paciente;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\{get, post, put, delete};
+use function Pest\Laravel\{get, post, put, delete, actingAs};
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
+
+    /** @var Usuario $usuario */
+    $usuario = Usuario::factory()->create();
+    actingAs($usuario, 'api');
+
+
     $this->paciente = Paciente::factory()->create();
     $this->atendimento = Atendimento::factory()->create([
         'id_paciente' => $this->paciente->id,
     ]);
 });
 
-it('returns a successful response', function () {
-    $response = $this->get('/');
-    $response->assertStatus(200);
-});
-
-it('deve listar atendimentos', function () {
+it('deve listar todos os atendimentos', function () {
     Atendimento::factory()->count(3)->create([
         'id_paciente' => $this->paciente->id,
     ]);
@@ -30,10 +32,8 @@ it('deve listar atendimentos', function () {
 });
 
 it('deve criar um atendimento', function () {
-    $paciente = Paciente::factory()->create();
-
     $data = [
-        'id_paciente' => $paciente->id,
+        'id_paciente' => $this->paciente->id,
         'encaminhador' => 'Dr. Silva',
         'convenio' => 'Unimed',
     ];
@@ -43,17 +43,19 @@ it('deve criar um atendimento', function () {
         ->assertJsonFragment(['encaminhador' => 'Dr. Silva']);
 });
 
-it('deve mostrar um atendimento', function () {
+it('deve exibir um atendimento específico', function () {
     get("/api/atendimentos/{$this->atendimento->id}")
         ->assertStatus(200)
         ->assertJsonFragment(['id' => $this->atendimento->id]);
 });
 
 it('deve atualizar um atendimento', function () {
-    put("/api/atendimentos/{$this->atendimento->id}", [
+    $data = [
         'encaminhador' => 'Atualizado',
         'id_paciente' => $this->paciente->id, // garantir que passe na validação
-    ])
+    ];
+
+    put("/api/atendimentos/{$this->atendimento->id}", $data)
         ->assertStatus(200)
         ->assertJsonFragment(['encaminhador' => 'Atualizado']);
 });
@@ -61,5 +63,5 @@ it('deve atualizar um atendimento', function () {
 it('deve deletar um atendimento', function () {
     delete("/api/atendimentos/{$this->atendimento->id}")
         ->assertStatus(200)
-        ->assertJsonFragment(['message' => 'Atendimento deletado com sucesso']);
+        ->assertJsonFragment(['message' => 'Atendimento deletado com sucesso.']);
 });

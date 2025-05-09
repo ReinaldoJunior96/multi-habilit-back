@@ -98,10 +98,18 @@ class Convenio extends Model
         'coparticipacao_peq_atendimento',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($convenio) {
+            $convenio->procedimentos()->delete();
+        });
+    }
 
     public function procedimentos()
     {
-        return $this->hasMany(Procedimento::class, 'convenio_id', 'id');
+        return $this->hasMany(Procedimento::class, 'id_convenio', 'id');
     }
 
     public function endereco()

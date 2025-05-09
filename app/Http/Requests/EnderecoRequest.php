@@ -15,7 +15,7 @@ class EnderecoRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('id'); // pega o id do endereço na URL, se existir
+        $id = $this->route('id') ?? $this->route('endereco'); // Garante que o ID correto seja capturado
 
         return [
             'cep' => 'nullable|string',

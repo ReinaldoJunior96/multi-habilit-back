@@ -48,7 +48,8 @@ it('cria um endereço', function () {
 it('atualiza um endereço', function () {
     put("/api/enderecos/{$this->endereco->id}", [
         'cep' => '99999999',
-        'id_paciente' => $this->paciente->id, // obrigatório pela validação
+        'id_paciente' => $this->paciente->id,
+        'id_convenio' => null,
     ])
         ->assertStatus(200)
         ->assertJsonFragment(['cep' => '99999999']);

@@ -10,7 +10,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AgendamentoController,
-    AtendenteController,
     AtendimentoController,
     AuthController,
     ConvenioController,
@@ -19,7 +18,6 @@ use App\Http\Controllers\{
     PacienteController,
     UsuarioController,
     ProcedimentoController,
-    ConvenioProcedimentoController,
     HorarioController,
     CommandController,
     DeployController,
