@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
             //HorarioSeeder::class,
             PacientesTableSeeder::class,         // Pacientes antes dos convênios
             //EnderecosTableSeeder::class,
-            ConveniosTableSeeder::class,
-            ProcedimentoSeeder::class,
+            //ConveniosTableSeeder::class,
+            //ProcedimentoSeeder::class,
             //ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
             //AgendamentosTableSeeder::class,      // Agendamentos dependem de convênios
             //AtendimentoSeeder::class,

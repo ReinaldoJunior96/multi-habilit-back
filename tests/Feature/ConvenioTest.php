@@ -44,13 +44,13 @@ it('exibe um convênio específico', function () {
 // Teste para atualizar um convênio existente
 it('atualiza um convênio com sucesso', function () {
     $convenio = Convenio::factory()->create([
-        'descricao' => 'Descrição Antiga',
+        'codigo' => '123123adb',
     ]);
 
-    $novaDescricao = 'Descrição Atualizada';
-    put("/api/convenios/{$convenio->id}", ['descricao' => $novaDescricao])
+    $novoCodigo = '123123aaaaaaaaaaaa';
+    put("/api/convenios/{$convenio->id}", ['codigo' => $novoCodigo])
         ->assertStatus(200)
-        ->assertJsonFragment(['descricao' => $novaDescricao]);
+        ->assertJsonFragment(['codigo' => $novoCodigo]);
 });
 
 // Teste para remover um convênio

@@ -17,11 +17,11 @@ class ConvenioRequest extends FormRequest
         $convenioId = $this->route('id'); // Pega o ID da rota, usado para ignorar o único na edição.
 
         return [
-            'codigo' => ['nullable', 'string', 'max:255', 'unique:convenios,codigo,' . $convenioId],
+            'codigo' => ['nullable', 'string', 'max:255'],
             'modo_recebimento' => 'nullable|string|max:255',
             'descricao' => 'nullable|string|max:255',
             'razao_social' => 'nullable|string|max:255',
-            'cnpj' => ['nullable', 'string', 'size:14', 'unique:convenios,cnpj,' . $convenioId],
+            'cnpj' => ['nullable', 'string', 'size:14'],
             'inscricao_estadual' => 'nullable|string|max:255',
             'inscricao_municipal' => 'nullable|string|max:255',
             'telefone' => 'nullable|string|max:20',
