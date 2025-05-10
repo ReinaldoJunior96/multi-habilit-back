@@ -18,12 +18,7 @@ class ConveniosTableSeeder extends Seeder
         // Cria 20 pacientes
         $pacientes = Paciente::factory()->count(20)->create();
 
-        // Cria 10 convênios e associa pacientes a eles
-        Convenio::factory()->count(10)->create()->each(function ($convenio) use ($pacientes) {
-            // Associa entre 3 e 7 pacientes ao convênio
-            $convenio->pacientes()->attach(
-                $pacientes->random(rand(3, 7))->pluck('id')->toArray()
-            );
-        });
+        // Cria 10 convênios
+        Convenio::factory()->count(10)->create();
     }
 }
