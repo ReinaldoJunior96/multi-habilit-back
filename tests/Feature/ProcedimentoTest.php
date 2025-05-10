@@ -11,6 +11,7 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     $this->user = User::factory()->create(); // cria usuário fake
     $this->convenio = Convenio::factory()->create();
+
     $this->procedimento = Procedimento::factory()->create([
         'id_convenio' => $this->convenio->id,
     ]);
@@ -72,4 +73,18 @@ it('deve deletar o procedimento ao deletar o convênio associado', function () {
         ->assertJsonFragment(['message' => 'Convênio removido com sucesso.']);
 
     $this->assertDatabaseMissing('procedimentos', ['id' => $procedimento->id]);
+});
+
+it('deve verificar o relacionamento de procedimento com especialidade', function () {
+    $this->actingAs($this->user, 'api');
+
+    $especialidade = \App\Models\Especialidade::factory()->create();
+
+
+    $this->procedimento->update(['id_especialidade' => $especialidade->id]);
+
+    get("/api/procedimentos/{$this->procedimento->id}")
+        ->assertStatus(200)
+        ->assertJsonFragment(['id' => $this->procedimento->id])
+        ->assertJsonFragment(['id_especialidade' => $especialidade->id]);
 });

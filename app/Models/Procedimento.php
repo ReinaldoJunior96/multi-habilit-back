@@ -13,6 +13,7 @@ class Procedimento extends Model
 
     protected $fillable = [
         'id_convenio',
+        'id_especialidade',
         'tabela',
         'codigo',
         'procedimento',
@@ -37,5 +38,13 @@ class Procedimento extends Model
     public function convenio()
     {
         return $this->belongsTo(Convenio::class, 'id_convenio');
+    }
+
+    /**
+     * Relacionamento: um procedimento pertence a uma especialidade.
+     */
+    public function especialidade()
+    {
+        return $this->belongsTo(Especialidade::class, 'id_especialidade');
     }
 }

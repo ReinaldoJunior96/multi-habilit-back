@@ -28,6 +28,7 @@ class ProcedimentoRequest extends FormRequest
     {
         return [
             'id_convenio' => 'required|exists:convenios,id',
+            'id_especialidade' => 'nullable|exists:especialidades,id',
             'tabela' => 'nullable|string|max:255',
             'codigo' => 'nullable|string|max:255',
             'procedimento' => 'nullable|string|max:255',
@@ -57,6 +58,9 @@ class ProcedimentoRequest extends FormRequest
         return [
             'id_convenio.required' => 'O campo convênio é obrigatório.',
             'id_convenio.exists' => 'O convênio selecionado não existe.',
+
+
+            'id_especialidade.exists' => 'A especialidade selecionado não existe.',
 
             'tabela.string' => 'O campo tabela deve ser um texto.',
             'tabela.max' => 'O campo tabela não pode ter mais que 255 caracteres.',

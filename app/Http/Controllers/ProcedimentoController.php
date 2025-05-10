@@ -93,7 +93,7 @@ class ProcedimentoController extends Controller
     public function show($id)
     {
         try {
-            $procedimento = Procedimento::findOrFail($id);
+            $procedimento = Procedimento::with('especialidade')->findOrFail($id);
 
             Log::info('Procedimento recuperado com sucesso', [
                 'procedimento_id' => $id,

@@ -23,7 +23,8 @@ use App\Http\Controllers\{
     DeployController,
     FinanceiroController,
     FichaMedicaController,
-    FiliacaoPacienteController
+    FiliacaoPacienteController,
+    EspecialidadeController
 };
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -143,6 +144,11 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
      * Rotas de filiação de pacientes
      */
     Route::apiResource('filiacao-paciente', FiliacaoPacienteController::class);
+
+    /**
+     * Rotas de especialidades
+     */
+    Route::apiResource('especialidades', EspecialidadeController::class);
 });
 
 /**
