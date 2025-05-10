@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             //ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
             //AgendamentosTableSeeder::class,      // Agendamentos dependem de convênios
             //AtendimentoSeeder::class,
-            EspecialidadeTableSeeder::class
+            EspecialidadeTableSeeder::class,
+            OrcamentoTableSeeder::class,
         ]);
     }
 }
