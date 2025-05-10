@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Especialidade;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,10 +19,11 @@ class DatabaseSeeder extends Seeder
             PacientesTableSeeder::class,         // Pacientes antes dos convênios
             //EnderecosTableSeeder::class,
             ConveniosTableSeeder::class,
-            //ProcedimentoSeeder::class,
+            ProcedimentoSeeder::class,
             //ConvenioProcedimentoSeeder::class,         // Convênios antes dos agendamentos
             //AgendamentosTableSeeder::class,      // Agendamentos dependem de convênios
             //AtendimentoSeeder::class,
+            EspecialidadeTableSeeder::class
         ]);
     }
 }
