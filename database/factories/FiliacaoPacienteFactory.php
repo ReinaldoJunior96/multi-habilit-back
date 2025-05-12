@@ -13,7 +13,7 @@ class FiliacaoPacienteFactory extends Factory
     public function definition(): array
     {
         return [
-            'paciente_id' => Paciente::factory(),
+            'id_paciente' => Paciente::factory(),
 
             // Pai
             'cpf_pai' => $this->faker->numerify('###########'),

@@ -20,7 +20,7 @@ it('lista os agendamentos', function () {
     get('/api/agendamentos')
         ->assertStatus(200)
         ->assertJsonStructure([
-            '*' => ['id', 'atendente', 'paciente', 'medico_id', 'data_agendada', 'status']
+            '*' => ['id', 'id_atendente', 'id_paciente', 'id_medico', 'id_medico_substituto', 'id_procedimento',  'unidade', 'data_agendada', 'status']
         ]);
 });
 
@@ -36,7 +36,7 @@ it('cria um agendamento', function () {
 
     post('/api/agendamentos', $data)
         ->assertStatus(201)
-        ->assertJsonFragment(['atendente' => $data['atendente']]);
+        ->assertJsonFragment(['id_atendente' => $data['id_atendente']]);
 });
 
 
@@ -44,10 +44,10 @@ it('atualiza um agendamento', function () {
     put("/api/agendamentos/{$this->agendamento->id}", [
         'unidade' => 'Unidade Atualizada',
         'status' => 1,
-        'atendente' => $this->agendamento->atendente,
-        'paciente' => $this->agendamento->paciente,
-        'medico_id' => $this->agendamento->medico_id,
-        'convenio' => $this->agendamento->convenio,
+        'id_atendente' => $this->agendamento->id_atendente,
+        'id_paciente' => $this->agendamento->id_paciente,
+        'id_medico' => $this->agendamento->id_medico,
+        'id_convenio' => $this->agendamento->id_convenio,
         'data_agendada' => now()->addDays(5)->format('Y-m-d H:i:s'),
     ])
         ->assertStatus(200)

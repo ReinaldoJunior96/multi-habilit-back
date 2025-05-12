@@ -14,7 +14,7 @@ class FiliacaoPacienteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'paciente_id' => 'required|exists:pacientes,id',
+            'id_paciente' => 'required|exists:pacientes,id',
 
             // Pai
             'cpf_pai' => 'nullable|string|max:14',

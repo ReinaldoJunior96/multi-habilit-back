@@ -12,7 +12,7 @@ class FiliacaoPaciente extends Model
     protected $table = 'filiacao_paciente';
 
     protected $fillable = [
-        'paciente_id',
+        'id_paciente',
 
         // Pai
         'cpf_pai',

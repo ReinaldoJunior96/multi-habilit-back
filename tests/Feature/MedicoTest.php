@@ -30,7 +30,7 @@ it('deve criar um novo médico', function () {
 
     post('/api/medicos', $data)
         ->assertStatus(201)
-        ->assertJsonFragment(['nome' => $data['nome']]);
+        ->assertJsonFragment(['regime_trabalhista' => $data['regime_trabalhista']]);
 });
 
 it('deve exibir um médico específico', function () {
@@ -44,11 +44,11 @@ it('deve exibir um médico específico', function () {
 it('deve atualizar um médico existente', function () {
     $this->actingAs($this->user, 'api');
 
-    $data = ['nome' => 'Médico Atualizado'];
+    $data = ['id_usuario' => $this->user->id, 'carga_horaria' => 20, 'regime_trabalhista' => 0];
 
     put("/api/medicos/{$this->medico->id}", $data)
         ->assertStatus(200)
-        ->assertJsonFragment(['nome' => 'Médico Atualizado']);
+        ->assertJsonFragment(['id_usuario' => $this->user->id, 'carga_horaria' => 20, 'regime_trabalhista' => 0]);
 });
 
 it('deve deletar um médico', function () {

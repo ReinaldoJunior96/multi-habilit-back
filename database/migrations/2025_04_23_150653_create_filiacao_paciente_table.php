@@ -10,8 +10,7 @@ class CreateFiliacaoPacienteTable extends Migration
     {
         Schema::create('filiacao_paciente', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('paciente_id')->constrained()->onDelete('cascade');
-
+            $table->foreignId('id_paciente')->nullable()->constrained('pacientes')->unique()->onDelete('cascade');
             // Dados do Pai
             $table->string('cpf_pai')->nullable();
             $table->string('ocupacao_pai')->nullable();
