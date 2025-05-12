@@ -13,7 +13,7 @@ class FichaMedicaFactory extends Factory
     public function definition()
     {
         return [
-            'paciente_id' => Paciente::factory(), // Cria um paciente se não houver
+            'id_paciente' => Paciente::factory(), // Cria um paciente se não houver
             'ficha' => [
                 'altura' => $this->faker->randomFloat(2, 1.5, 2),
                 'peso' => $this->faker->randomFloat(1, 40, 120),

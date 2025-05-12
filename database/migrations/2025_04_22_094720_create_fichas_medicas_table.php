@@ -10,7 +10,7 @@ class CreateFichasMedicasTable extends Migration
     {
         Schema::create('fichas_medicas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('paciente_id')->constrained('pacientes')->onDelete('cascade');
+            $table->foreignId('id_paciente')->constrained('pacientes')->onDelete('cascade');
             $table->json('ficha');
             $table->timestamps();
         });

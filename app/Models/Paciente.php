@@ -55,18 +55,18 @@ class Paciente extends Model
     }
 
     // Relacionamento com convênios
-    public function convenios()
-    {
-        return $this->belongsToMany(Convenio::class, 'convenio_paciente');
-    }
+    // public function convenios()
+    // {
+    //     return $this->belongsToMany(Convenio::class, 'convenio_paciente');
+    // }
 
     public function filiacao()
     {
-        return $this->hasOne(FiliacaoPaciente::class);
+        return $this->hasOne(FiliacaoPaciente::class, 'id_paciente', 'id');
     }
 
     public function fichasMedicas()
     {
-        return $this->hasMany(FichaMedica::class);
+        return $this->hasMany(FichaMedica::class, 'id_paciente', 'id');
     }
 }

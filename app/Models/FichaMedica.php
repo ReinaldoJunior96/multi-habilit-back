@@ -12,7 +12,7 @@ class FichaMedica extends Model
     protected $table = 'fichas_medicas';
 
     protected $fillable = [
-        'paciente_id',
+        'id_paciente',
         'ficha',
     ];
 

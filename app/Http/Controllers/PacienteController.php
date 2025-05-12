@@ -35,6 +35,7 @@ class PacienteController extends Controller
     {
         try {
             $pacientes = Paciente::with(['filiacao'])->get();
+
             Log::info('Pacientes listados com sucesso.', ['usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($pacientes, 200);
         } catch (Exception $e) {
@@ -221,8 +222,8 @@ class PacienteController extends Controller
     public function searchByCpf($cpf)
     {
         try {
-            $paciente = Paciente::where('cpf', $cpf)->with(['filiacao', 'endereco', 'FichasMedicas'])->first();
 
+            $paciente = Paciente::where('cpf', "=", $cpf)->with(['filiacao', 'endereco', 'fichasMedicas'])->first();
             if (!$paciente) {
                 Log::warning('Paciente não encontrado por CPF', [
                     'cpf_buscado' => $cpf,

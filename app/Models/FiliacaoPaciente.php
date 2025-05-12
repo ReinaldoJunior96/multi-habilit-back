@@ -39,6 +39,6 @@ class FiliacaoPaciente extends Model
 
     public function paciente()
     {
-        return $this->belongsTo(Paciente::class);
+        return $this->belongsTo(Paciente::class, 'id_paciente');
     }
 }
