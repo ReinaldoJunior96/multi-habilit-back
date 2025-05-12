@@ -14,13 +14,13 @@ class CreateAgendamentosTable extends Migration
     public function up()
     {
         Schema::create('agendamentos', function (Blueprint $table) {
-            $table->id(); // Primary key com auto-incremento
-            $table->unsignedBigInteger('atendente');
-            $table->unsignedBigInteger('paciente');
-            $table->unsignedBigInteger('medico_id');
-            $table->unsignedBigInteger('medico_substituto')->nullable();
-            $table->unsignedBigInteger('convenio');
-            $table->unsignedBigInteger('procedimento')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('id_atendente');
+            $table->unsignedBigInteger('id_paciente');
+            $table->unsignedBigInteger('id_medico');
+            $table->unsignedBigInteger('id_medico_substituto')->nullable();
+            $table->unsignedBigInteger('id_convenio');
+            $table->unsignedBigInteger('id_procedimento')->nullable();
             $table->dateTime('data_agendada');
             $table->string('unidade')->nullable();
             $table->tinyInteger('status')->default(0);

@@ -14,11 +14,11 @@ class AddForeignKeysToAgendamentosTable extends Migration
     public function up()
     {
         Schema::table('agendamentos', function (Blueprint $table) {
-            $table->foreign('atendente')->references('id')->on('usuarios')->onDelete('cascade');
-            $table->foreign('paciente')->references('id')->on('pacientes')->onDelete('cascade');
-            $table->foreign('medico_id')->references('id')->on('medicos')->onDelete('cascade');
-            $table->foreign('medico_substituto')->references('id')->on('medicos')->onDelete('cascade');
-            $table->foreign('convenio')->references('id')->on('convenios')->onDelete('cascade');
+            $table->foreign('id_atendente')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->foreign('id_paciente')->references('id')->on('pacientes')->onDelete('cascade');
+            $table->foreign('id_medico')->references('id')->on('medicos')->onDelete('cascade');
+            $table->foreign('id_medico_substituto')->references('id')->on('medicos')->onDelete('cascade');
+            $table->foreign('id_convenio')->references('id')->on('convenios')->onDelete('cascade');
         });
     }
 

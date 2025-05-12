@@ -12,40 +12,49 @@ class Agendamento extends Model
 
     // Defina os campos que podem ser preenchidos em massa
     protected $fillable = [
-        'atendente',
-        'paciente',
-        'medico_id',
+        'id_atendente',
+        'id_paciente',
+        'id_medico',
+        'id_medico_substituto',
+        'id_convenio',
+        'id_procedimento',
         'data_agendada',
-        'status',
-        'convenio',
-        'procedimento',
-        'numero_guia',
-        'recorrencia',
         'unidade',
-        'tipo_agendamento'
+        'status'
     ];
 
     // Relacionamento com Atendente
     public function atendente()
     {
-        return $this->belongsTo(Usuario::class, 'atendente', 'id');
+        return $this->belongsTo(Usuario::class, 'id_atendente', 'id');
     }
 
     // Relacionamento com Paciente (usuário)
     public function paciente()
     {
-        return $this->belongsTo(Paciente::class, 'paciente', 'id');
+        return $this->belongsTo(Paciente::class, 'id_paciente', 'id');
     }
 
     // Relacionamento com Médico
     public function medico()
     {
-        return $this->belongsTo(Medico::class, 'medico_id', 'id');
+        return $this->belongsTo(Medico::class, 'id_medico', 'id');
+    }
+
+    // Relacionamento com Médico Substituto
+    public function medicoSubstituto()
+    {
+        return $this->belongsTo(Medico::class, 'id_medico_substituto', 'id');
     }
 
     public function convenio()
     {
-        return $this->belongsTo(Convenio::class, 'convenio', 'id');
+        return $this->belongsTo(Convenio::class, 'id_convenio', 'id');
+    }
+
+    public function procedimento()
+    {
+        return $this->belongsTo(Procedimento::class, 'id_procedimento', 'id');
     }
 
     /**
@@ -54,10 +63,5 @@ class Agendamento extends Model
     public function atendimentos()
     {
         return $this->hasMany(Atendimento::class, 'agendamento_id', 'id');
-    }
-
-    public function procedimento()
-    {
-        return $this->belongsTo(Procedimento::class, 'procedimento', 'id');
     }
 }

@@ -18,7 +18,14 @@ class AgendamentoController extends Controller
     public function index()
     {
         try {
-            return response()->json(Agendamento::all(), 200);
+            $agendamentos = Agendamento::all();
+
+            Log::info('Agendamentos listados com sucesso', [
+                'usuario_logado' => $this->getLoggedUserId(),
+                'quantidade' => $agendamentos->count()
+            ]);
+
+            return response()->json($agendamentos, 200);
         } catch (Exception $e) {
             Log::error('Erro ao listar agendamentos', [
                 'exception_message' => $e->getMessage(),
@@ -32,6 +39,11 @@ class AgendamentoController extends Controller
     {
         try {
             $agendamento = Agendamento::findOrFail($id);
+
+            Log::info("Agendamento {$id} encontrado com sucesso", [
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
+
             return response()->json($agendamento, 200);
         } catch (ModelNotFoundException $e) {
             Log::warning("Agendamento {$id} não encontrado", [
@@ -52,7 +64,7 @@ class AgendamentoController extends Controller
         try {
             $agendamento = Agendamento::create($request->validated());
 
-            Log::info("Agendamento criado", [
+            Log::info("Agendamento criado com sucesso", [
                 'id' => $agendamento->id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
@@ -73,7 +85,7 @@ class AgendamentoController extends Controller
             $agendamento = Agendamento::findOrFail($id);
             $agendamento->update($request->validated());
 
-            Log::info("Agendamento atualizado", [
+            Log::info("Agendamento atualizado com sucesso", [
                 'id' => $agendamento->id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
@@ -95,6 +107,11 @@ class AgendamentoController extends Controller
         try {
             $agendamento = Agendamento::findOrFail($id);
             $agendamento->delete();
+
+            Log::info("Agendamento deletado com sucesso", [
+                'id' => $id,
+                'usuario_logado' => $this->getLoggedUserId()
+            ]);
 
             return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
         } catch (ModelNotFoundException $e) {

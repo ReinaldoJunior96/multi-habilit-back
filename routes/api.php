@@ -75,7 +75,6 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
      */
     Route::prefix('agendamentos')->group(function () {
         Route::get('/', [AgendamentoController::class, 'index']);
-        Route::get('/openai', [AgendamentoController::class, 'agendamentosSimplificado']);
         Route::get('/{id}', [AgendamentoController::class, 'show']);
         Route::post('/', [AgendamentoController::class, 'store']);
         Route::put('/{id}', [AgendamentoController::class, 'update']);

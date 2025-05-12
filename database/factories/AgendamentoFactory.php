@@ -16,14 +16,12 @@ class AgendamentoFactory extends Factory
     public function definition(): array
     {
         return [
-            'atendente' => Usuario::factory(),
-            'paciente' => Paciente::factory(),
-            'medico_id' => Medico::factory(),
-            'medico_substituto' => Medico::factory(),
-            'convenio' => Convenio::factory(),
-            'procedimento' => null,
+            'id_atendente' => Usuario::factory(),
+            'id_paciente' => Paciente::factory(),
+            'id_medico' => Medico::factory(),
+            'id_medico_substituto' => Medico::factory(),
+            'id_convenio' => Convenio::factory(),
             'data_agendada' => $this->faker->dateTimeBetween('now', '+1 month'),
-            'unidade' => $this->faker->randomElement(['Unidade 1', 'Unidade 2']),
             'status' => $this->faker->randomElement([0, 1]),
         ];
     }

@@ -29,6 +29,7 @@ class AgendamentosTableSeeder extends Seeder
         // Médico específico
         $usuario = Usuario::where('email', 'medico@medico.com')->first();
         $medicoEspecifico = Medico::where('id_usuario', $usuario->id)->first();
+        $medicoSubstituto = Medico::where('id_usuario', $usuario->id)->last();
         $mesAtual = Carbon::now()->month;
         $anoAtual = Carbon::now()->year;
 
@@ -54,14 +55,13 @@ class AgendamentosTableSeeder extends Seeder
                 $dataAgendada = Carbon::create($anoAtual, $mesAtual, $dia, $hora, $minuto);
 
                 Agendamento::create([
-                    'atendente' => $atendente->id,
-                    'paciente' => $paciente->id,
-                    'medico_id' => $medicoEspecifico->id,
+                    'id_atendente' => $atendente->id,
+                    'id_paciente' => $paciente->id,
+                    'id_medico' => $medicoEspecifico->id,
+                    'id_convenio' => $convenio->id,
+                    'id_medico_substituto' => $medicoEspecifico->id,
                     'data_agendada' => $dataAgendada,
                     'status' => rand(3, 4),
-                    'convenio' => $convenio->id,
-                    'procedimento' => $procedimento->id, // Agora garantimos que pertence ao convênio
-                    'numero_guia' => 'GUID-' . strtoupper(bin2hex(random_bytes(3))),
                 ]);
             }
         }
