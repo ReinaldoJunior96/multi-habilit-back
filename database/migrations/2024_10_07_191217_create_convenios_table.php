@@ -27,7 +27,7 @@ class CreateConveniosTable extends Migration
             $table->string('site')->nullable(); // Site
             $table->string('email')->nullable(); // Email
             $table->text('observacao')->nullable(); // Observação
-            $table->string('procedimentos')->nullable(); // Procedimentos (array JSON)
+            //$table->json('procedimentos')->nullable(); // Procedimentos (array JSON)
             $table->string('medicamentos')->nullable(); // Medicamentos (array JSON)
             $table->string('taxas')->nullable(); // Taxas (array JSON)
             $table->string('materiais')->nullable(); // Materiais (array JSON)

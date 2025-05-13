@@ -17,7 +17,7 @@ class ProcedimentoFactory extends Factory
             'id_convenio' => Convenio::factory(),
             'id_especialidade' => Especialidade::factory(),
             'tabela' => $this->faker->word,
-            'codigo' => $this->faker->numerify('COD-###'), // Removido o unique()
+            'codigo' => $this->faker->numerify('COD-###'),
             'procedimento' => $this->faker->sentence(3),
             'procedimento_padrao' => $this->faker->sentence(3),
             'grupo' => $this->faker->word,

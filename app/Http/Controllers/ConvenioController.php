@@ -33,7 +33,7 @@ class ConvenioController extends Controller
     public function index()
     {
         try {
-            $convenios = Convenio::all();
+            $convenios = Convenio::with('procedimentos.especialidade')->get();
             Log::info('Convênios listados com sucesso.', ['usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($convenios, 200);
         } catch (Exception $e) {
@@ -79,7 +79,7 @@ class ConvenioController extends Controller
     public function show($id)
     {
         try {
-            $convenio = Convenio::findOrFail($id);
+            $convenio = Convenio::with('procedimentos')->findOrFail($id);
             Log::info('Convênio recuperado com sucesso.', ['convenio_id' => $id, 'usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($convenio, 200);
         } catch (ModelNotFoundException $e) {
@@ -149,6 +149,7 @@ class ConvenioController extends Controller
     {
         try {
             $convenio = Convenio::findOrFail($id);
+
             $convenio->delete();
             Log::info('Convênio removido com sucesso.', ['convenio_id' => $id, 'usuario_logado' => $this->getLoggedUserId()]);
             return response()->json(['message' => 'Convênio removido com sucesso.'], 200);
@@ -162,6 +163,7 @@ class ConvenioController extends Controller
             ]);
             return response()->json(['message' => 'Convênio não encontrado.'], 404);
         } catch (Exception $e) {
+
             Log::error('Erro ao remover convênio.', [
                 'exception_message' => $e->getMessage(),
                 'file' => $e->getFile(),

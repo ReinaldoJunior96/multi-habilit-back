@@ -4,17 +4,29 @@ namespace Database\Factories;
 
 use App\Models\Convenio;
 use App\Models\Paciente;
+use App\Models\Procedimento;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ConvenioFactory extends Factory
 {
     protected $model = Convenio::class;
 
+    // public function configure()
+    // {
+    //     return $this->afterCreating(function (Convenio $convenio) {
+    //         $procedimentos = Procedimento::factory()->count(3)->create([
+    //             'id_convenio' => $convenio->id,
+    //         ]);
+    //         $convenio->procedimentos = $procedimentos->pluck('id')->values();
+    //         $convenio->save();
+    //     });
+    // }
+
     public function definition(): array
     {
         return [
             'codigo' => $this->faker->unique()->numerify('CONV-###'),
-            'modo_recebimento' => $this->faker->randomElement(['Manual', 'Automático']),
+            'modo_recebimento' => $this->faker->randomElement(['Convenio']),
             'descricao' => $this->faker->sentence(3),
             'razao_social' => $this->faker->company,
             'cnpj' => $this->faker->numerify('##############'),
@@ -25,7 +37,7 @@ class ConvenioFactory extends Factory
             'site' => $this->faker->url,
             'email' => $this->faker->unique()->safeEmail,
             'observacao' => $this->faker->text(100),
-            'procedimentos' => json_encode([$this->faker->word]),
+            // 'procedimentos' => json_encode([]), // Será preenchido após a criação
             'medicamentos' => json_encode([$this->faker->word]),
             'taxas' => json_encode([$this->faker->word]),
             'materiais' => json_encode([$this->faker->word]),
