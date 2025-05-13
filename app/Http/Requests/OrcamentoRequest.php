@@ -27,6 +27,7 @@ class OrcamentoRequest extends FormRequest
             'numero_sessoes' => 'nullable|integer|min:1',
             'valor_unitario' => 'nullable|numeric|min:0',
             'desconto' => 'nullable|numeric|min:0|max:100',
+            'status' => 'nullable|string',
             'observacoes' => 'nullable|string',
         ];
     }
@@ -56,6 +57,7 @@ class OrcamentoRequest extends FormRequest
             'desconto.max' => 'O campo desconto deve ser no máximo 100%.',
 
             'observacoes.string' => 'O campo observações deve ser um texto.',
+            'status.string' => 'O campo observações deve ser um texto.',
         ];
     }
 }

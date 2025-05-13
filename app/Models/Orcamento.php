@@ -11,5 +11,5 @@ class Orcamento extends Model
 
     protected $table = 'orcamento';
 
-    protected $fillable = ['nome_paciente', 'tipo_servico', 'numero_sessoes', 'valor_unitario', 'desconto', 'observacoes'];
+    protected $fillable = ['nome_paciente', 'tipo_servico', 'numero_sessoes', 'valor_unitario', 'desconto', 'observacoes', 'status'];
 }

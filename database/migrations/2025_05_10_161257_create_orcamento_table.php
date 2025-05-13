@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('valor_unitario', 10, 2)->nullable();
             $table->decimal('desconto', 5, 2)->nullable(); // Desconto em porcentagem
             $table->text('observacoes')->nullable();
+            $table->string('status')->nullable()->default('Pendente');
             $table->timestamps();
         });
     }
