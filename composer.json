@@ -11,6 +11,7 @@
         "laravel/framework": "^11.9",
         "laravel/reverb": "^1.4",
         "laravel/sanctum": "^4.0",
+        "laravel/telescope": "^5.7",
         "laravel/tinker": "^2.9",
         "mews/purifier": "^3.4",
         "tymon/jwt-auth": "^2.1"
@@ -19,7 +20,6 @@
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
-        "laravel/telescope": "^5.2",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
         "pestphp/pest": "^3.7",
