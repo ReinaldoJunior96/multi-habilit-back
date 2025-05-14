@@ -30,7 +30,6 @@ class ConvenioRequest extends FormRequest
             'email' => 'nullable|email|max:255',
             'observacao' => 'nullable|string',
 
-            'procedimentos' => 'nullable|string',
             'medicamentos' => 'nullable|string',
             'taxas' => 'nullable|string',
             'materiais' => 'nullable|string',
@@ -136,7 +135,6 @@ class ConvenioRequest extends FormRequest
             'site.string' => 'O campo site deve ser um texto.',
             'email.email' => 'O campo email deve ser um endereço de email válido.',
             'observacao.string' => 'O campo observação deve ser um texto.',
-            'procedimentos.string' => 'O campo procedimentos deve ser um texto.',
             'medicamentos.string' => 'O campo medicamentos deve ser um texto.',
             'taxas.string' => 'O campo taxas deve ser um texto.',
             'materiais.string' => 'O campo materiais deve ser um texto.',
