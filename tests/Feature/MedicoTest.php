@@ -1,4 +1,3 @@
-
 <?php
 
 use App\Models\Medico;
@@ -30,7 +29,28 @@ it('deve criar um novo médico', function () {
 
     post('/api/medicos', $data)
         ->assertStatus(201)
-        ->assertJsonFragment(['regime_trabalhista' => $data['regime_trabalhista']]);
+        ->assertJsonFragment([
+            'nome_completo' => $data['nome_completo'],
+            'email' => $data['email'],
+            'cpf' => $data['cpf'],
+            'regime_trabalhista' => $data['regime_trabalhista'],
+        ]);
+});
+
+it('não deve criar médico sem campos obrigatórios', function () {
+    $this->actingAs($this->user, 'api');
+    $response = post('/api/medicos', []);
+    $response->assertStatus(422)
+        ->assertJsonValidationErrors([
+            'nome_completo',
+            'email',
+            'cpf',
+            'tipo',
+        ])
+        ->assertJsonPath('errors.nome_completo.0', 'O nome completo é obrigatório.')
+        ->assertJsonPath('errors.email.0', 'O e-mail é obrigatório.')
+        ->assertJsonPath('errors.cpf.0', 'O CPF é obrigatório.')
+        ->assertJsonPath('errors.tipo.0', 'O tipo é obrigatório.');
 });
 
 it('deve exibir um médico específico', function () {
@@ -38,17 +58,54 @@ it('deve exibir um médico específico', function () {
 
     get("/api/medicos/{$this->medico->id}")
         ->assertStatus(200)
-        ->assertJsonFragment(['id' => $this->medico->id]);
+        ->assertJsonFragment([
+            'id' => $this->medico->id,
+            'nome_completo' => $this->medico->nome_completo,
+        ]);
 });
 
 it('deve atualizar um médico existente', function () {
     $this->actingAs($this->user, 'api');
 
-    $data = ['id_usuario' => $this->user->id, 'carga_horaria' => 20, 'regime_trabalhista' => 0];
+    $data = [
+        'nome_completo' => 'Nome Atualizado',
+        'email' => 'atualizado@example.com',
+        'data_nascimento' => '1990-01-01',
+        'sexo' => 'Masculino',
+        'cpf' => '12345678901',
+        'telefone' => '11999999999',
+        'tipo' => 'terapeuta',
+        'regime_trabalhista' => 1,
+        'carga_horaria' => 30,
+        'cnpj' => '12345678000123',
+    ];
 
     put("/api/medicos/{$this->medico->id}", $data)
         ->assertStatus(200)
-        ->assertJsonFragment(['id_usuario' => $this->user->id, 'carga_horaria' => 20, 'regime_trabalhista' => 0]);
+        ->assertJsonFragment([
+            'nome_completo' => 'Nome Atualizado',
+            'email' => 'atualizado@example.com',
+            'cpf' => '12345678901',
+            'regime_trabalhista' => 1,
+        ]);
+});
+
+it('não deve atualizar médico com dados inválidos', function () {
+    $this->actingAs($this->user, 'api');
+    $data = [
+        'nome_completo' => '',
+        'email' => 'email-invalido',
+        'cpf' => '',
+        'tipo' => '',
+    ];
+    $response = put("/api/medicos/{$this->medico->id}", $data);
+    $response->assertStatus(422)
+        ->assertJsonValidationErrors([
+            'nome_completo',
+            'email',
+            'cpf',
+            'tipo',
+        ]);
 });
 
 it('deve deletar um médico', function () {
@@ -57,4 +114,5 @@ it('deve deletar um médico', function () {
     delete("/api/medicos/{$this->medico->id}")
         ->assertStatus(200)
         ->assertJsonFragment(['message' => 'Médico deletado com sucesso.']);
+    $this->assertDatabaseMissing('medicos', ['id' => $this->medico->id]);
 });

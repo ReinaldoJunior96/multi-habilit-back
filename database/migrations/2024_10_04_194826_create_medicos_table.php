@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('medicos', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('regime_trabalhista');
-            $table->integer('carga_horaria');
-            $table->string('cnpj', 14)->nullable();
-            $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade')->unique();
+            $table->string('nome_completo');
+            $table->string('email')->unique();
+            $table->date('data_nascimento')->nullable();
+            $table->string('sexo')->nullable();
+            $table->string('cpf')->unique();
+            $table->string('telefone')->nullable();
+            $table->string('tipo')->nullable();
+            $table->tinyInteger('regime_trabalhista'); // tinyInteger para uso com enum PHP
+            $table->integer('carga_horaria')->nullable();
+            $table->string('cnpj')->nullable();
             $table->timestamps();
         });
     }

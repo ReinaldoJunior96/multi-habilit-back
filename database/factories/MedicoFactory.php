@@ -18,10 +18,16 @@ class MedicoFactory extends Factory
     public function definition()
     {
         return [
-            'regime_trabalhista' => $this->faker->randomElement([0, 1]), // CLT ou PJ
+            'nome_completo' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'data_nascimento' => $this->faker->date('Y-m-d', '-20 years'),
+            'sexo' => $this->faker->randomElement(['Masculino', 'Feminino', 'Outro']),
+            'cpf' => $this->faker->unique()->numerify('###########'),
+            'telefone' => $this->faker->numerify('###########'),
+            'tipo' => 'terapeuta',
+            'regime_trabalhista' => $this->faker->randomElement([0, 1]),
             'carga_horaria' => $this->faker->numberBetween(20, 40),
-            'cnpj' => $this->faker->numerify('########0000##'), // CNPJ fictício
-            'id_usuario' => Usuario::factory(), // Cria um usuário automaticamente
+            'cnpj' => $this->faker->numerify('##############'),
         ];
     }
 }

@@ -25,13 +25,18 @@ class MedicoRequest extends FormRequest
      */
     public function rules()
     {
-        $medicoId = $this->route('id');
-        $usuarioId = $this->input('id_usuario');
+        $id = request()->route('medico') ?? request()->route('id');
         return [
-            'regime_trabalhista' => 'required|integer',
-            'carga_horaria' => 'required|integer|min:1|max:60',
+            'nome_completo' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:medicos,email' . ($id ? ',' . $id : ''),
+            'data_nascimento' => 'nullable|date',
+            'sexo' => 'nullable',
+            'cpf' => 'required|digits:11|unique:medicos,cpf' . ($id ? ',' . $id : ''),
+            'telefone' => 'nullable|string|max:20',
+            'tipo' => 'required|string',
+            'regime_trabalhista' => 'nullable',
+            'carga_horaria' => 'nullable|integer|min:1|max:60',
             'cnpj' => 'nullable|digits:14',
-            'id_usuario' => 'required'
         ];
     }
 
@@ -43,15 +48,22 @@ class MedicoRequest extends FormRequest
     public function messages()
     {
         return [
+            'nome_completo.required' => 'O nome completo é obrigatório.',
+            'nome_completo.string' => 'O nome completo deve ser uma string.',
+            'nome_completo.max' => 'O nome completo não pode exceder 255 caracteres.',
+            'email.required' => 'O e-mail é obrigatório.',
+            'email.email' => 'O e-mail deve ser válido.',
+            'email.max' => 'O e-mail não pode exceder 255 caracteres.',
+            'email.unique' => 'O e-mail já está em uso.',
+            'data_nascimento.date' => 'A data de nascimento deve ser uma data válida.',
+            'cpf.required' => 'O CPF é obrigatório.',
+            'cpf.unique' => 'O CPF já está em uso.',
+            'telefone.string' => 'O telefone deve ser uma string.',
+            'telefone.max' => 'O telefone não pode exceder 20 caracteres.',
+            'tipo.required' => 'O tipo é obrigatório.',
+            'tipo.string' => 'O tipo deve ser uma string.',
             'regime_trabalhista.required' => 'O regime trabalhista é obrigatório.',
-            'regime_trabalhista.integer' => 'O regime trabalhista deve ser um número inteiro.',
-            'carga_horaria.required' => 'A carga horária é obrigatória.',
             'carga_horaria.integer' => 'A carga horária deve ser um número inteiro.',
-            'carga_horaria.min' => 'A carga horária mínima permitida é 1 hora.',
-            'carga_horaria.max' => 'A carga horária máxima permitida é 60 horas.',
-            'cnpj.digits' => 'O CNPJ deve conter exatamente 14 números.',
-            'id_usuario.required' => 'O ID do usuário é obrigatório.',
-            'id_usuario.exists' => 'O ID do usuário informado não existe.',
         ];
     }
 
