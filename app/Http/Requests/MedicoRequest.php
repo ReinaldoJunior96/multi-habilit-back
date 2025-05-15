@@ -28,15 +28,15 @@ class MedicoRequest extends FormRequest
         $id = request()->route('medico') ?? request()->route('id');
         return [
             'nome_completo' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:medicos,email' . ($id ? ',' . $id : ''),
+            'email' => 'required|email|max:255|unique:medicos,email' . ($id ? ",{$id}" : ''),
             'data_nascimento' => 'nullable|date',
             'sexo' => 'nullable',
-            'cpf' => 'required|digits:11|unique:medicos,cpf' . ($id ? ',' . $id : ''),
+            'cpf' => 'nullable|unique:medicos,cpf' . ($id ? ",{$id}" : ''),
             'telefone' => 'nullable|string|max:20',
             'tipo' => 'required|string',
             'regime_trabalhista' => 'nullable',
             'carga_horaria' => 'nullable|integer|min:1|max:60',
-            'cnpj' => 'nullable|digits:14',
+            'cnpj' => 'nullable|unique:medicos,cnpj' . ($id ? ",{$id}" : ''),
         ];
     }
 
@@ -56,8 +56,8 @@ class MedicoRequest extends FormRequest
             'email.max' => 'O e-mail não pode exceder 255 caracteres.',
             'email.unique' => 'O e-mail já está em uso.',
             'data_nascimento.date' => 'A data de nascimento deve ser uma data válida.',
-            'cpf.required' => 'O CPF é obrigatório.',
             'cpf.unique' => 'O CPF já está em uso.',
+            'cnpj.unique' => 'O CNPJ já está em uso.',
             'telefone.string' => 'O telefone deve ser uma string.',
             'telefone.max' => 'O telefone não pode exceder 20 caracteres.',
             'tipo.required' => 'O tipo é obrigatório.',

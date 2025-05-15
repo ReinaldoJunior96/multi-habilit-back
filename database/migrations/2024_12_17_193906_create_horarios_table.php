@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
-            //$table->foreign('medico_id')->references('id')->on('medicos')->onDelete('cascade');
-            $table->foreignId('medico_id')->constrained('medicos')->onDelete('cascade');
+            $table->foreignId('id_medico')->constrained('medicos')->onDelete('cascade');
             $table->string('horario');
             $table->string('dia_semana');
             $table->boolean('disponivel')->default(true)->nullable();

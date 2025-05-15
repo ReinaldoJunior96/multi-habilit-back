@@ -27,7 +27,7 @@ it('deve criar um novo médico', function () {
 
     $data = Medico::factory()->make()->toArray();
 
-    post('/api/medicos', $data)
+    post('/api/medicos', $data,  ['Accept' => 'application/json'])
         ->assertStatus(201)
         ->assertJsonFragment([
             'nome_completo' => $data['nome_completo'],
@@ -39,17 +39,15 @@ it('deve criar um novo médico', function () {
 
 it('não deve criar médico sem campos obrigatórios', function () {
     $this->actingAs($this->user, 'api');
-    $response = post('/api/medicos', []);
+    $response = post('/api/medicos', [],  ['Accept' => 'application/json']);
     $response->assertStatus(422)
         ->assertJsonValidationErrors([
             'nome_completo',
             'email',
-            'cpf',
             'tipo',
         ])
         ->assertJsonPath('errors.nome_completo.0', 'O nome completo é obrigatório.')
         ->assertJsonPath('errors.email.0', 'O e-mail é obrigatório.')
-        ->assertJsonPath('errors.cpf.0', 'O CPF é obrigatório.')
         ->assertJsonPath('errors.tipo.0', 'O tipo é obrigatório.');
 });
 
@@ -103,9 +101,11 @@ it('não deve atualizar médico com dados inválidos', function () {
         ->assertJsonValidationErrors([
             'nome_completo',
             'email',
-            'cpf',
             'tipo',
-        ]);
+        ])
+        ->assertJsonPath('errors.nome_completo.0', 'O nome completo é obrigatório.')
+        ->assertJsonPath('errors.email.0', 'O e-mail deve ser válido.')
+        ->assertJsonPath('errors.tipo.0', 'O tipo é obrigatório.');
 });
 
 it('deve deletar um médico', function () {

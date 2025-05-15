@@ -11,20 +11,17 @@ class Horario extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cep',
-        'logradouro',
-        'complemento',
-        'bairro',
-        'municipio',
-        'numero',
-        'estado',
-        'uf',
-        'id_paciente',
+        'id_medico',
+        'horario',
+        'dia_semana',
+        'disponivel',
+        'data_hora_inicial',
+        'data_hora_final',
+        'observacao',
     ];
 
-    // Relacionamento com paciente (1:1 inverso)
-    public function paciente()
+    public function medico()
     {
-        return $this->belongsTo(Paciente::class, 'id_paciente');
+        return $this->belongsTo(Medico::class, 'id_medico');
     }
 }

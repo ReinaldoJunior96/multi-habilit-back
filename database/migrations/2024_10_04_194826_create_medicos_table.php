@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->date('data_nascimento')->nullable();
             $table->string('sexo')->nullable();
-            $table->string('cpf')->unique();
+            $table->string('cpf')->unique()->nullable();;
             $table->string('telefone')->nullable();
             $table->string('tipo')->nullable();
             $table->tinyInteger('regime_trabalhista'); // tinyInteger para uso com enum PHP
             $table->integer('carga_horaria')->nullable();
-            $table->string('cnpj')->nullable();
+            $table->string('cnpj')->unique()->nullable();;
             $table->timestamps();
         });
     }

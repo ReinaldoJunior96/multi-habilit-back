@@ -2,41 +2,45 @@
 
 namespace Database\Seeders;
 
-use App\Models\Horario;
-use App\Models\Medico;
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
 
 class HorarioSeeder extends Seeder
 {
     public function run(): void
     {
-        $medicos = Medico::all();
-
-        foreach ($medicos as $medico) {
-            // Criação de horários para o médico com base na data atual
-            $horarios = [
-                [
-                    'data_hora_inicial' => Carbon::now()->addDay()->setTime(8, 0),  // Amanhã às 08:00
-                    'data_hora_final' => Carbon::now()->addDay()->setTime(8, 50),   // Amanhã às 08:50
-                ],
-                [
-                    'data_hora_inicial' => Carbon::now()->addDay()->setTime(9, 0),  // Amanhã às 09:00
-                    'data_hora_final' => Carbon::now()->addDay()->setTime(9, 50),   // Amanhã às 09:50
-                ],
-                [
-                    'data_hora_inicial' => Carbon::now()->addDays(3)->setTime(14, 0), // Daqui 3 dias às 14:00
-                    'data_hora_final' => Carbon::now()->addDays(3)->setTime(14, 50),  // Daqui 3 dias às 14:50
-                ],
+        $diasSemana = [
+            'segunda-feira',
+            'terca-feira',
+            'quarta-feira',
+            'quinta-feira',
+            'sexta-feira',
+            'sabado',
+            'domingo'
+        ];
+        $horariosBase = [];
+        $horaInicial = 8;
+        for ($i = 0; $i < 5; $i++) {
+            $inicio = sprintf('%02d:00:00', $horaInicial + $i * 2);
+            $fim = date('H:i:s', strtotime($inicio . ' +50 minutes'));
+            $horariosBase[] = [
+                'horario' => $inicio,
+                'horario_final' => $fim
             ];
-
-            foreach ($horarios as $horario) {
-                Horario::create([
-                    'medico_id' => $medico->id,
-                    'data_hora_inicial' => $horario['data_hora_inicial'],
-                    'data_hora_final' => $horario['data_hora_final'],
-                    'disponivel' => true,
-                ]);
+        }
+        $medicos = \App\Models\Medico::all();
+        foreach ($medicos as $medico) {
+            foreach (array_slice($diasSemana, 0, 5) as $dia) { // só dias úteis
+                foreach ($horariosBase as $h) {
+                    \App\Models\Horario::create([
+                        'id_medico' => $medico->id,
+                        'horario' => $h['horario'],
+                        'dia_semana' => $dia,
+                        'disponivel' => true,
+                        'data_hora_inicial' => null,
+                        'data_hora_final' => null,
+                        'observacao' => null,
+                    ]);
+                }
             }
         }
     }

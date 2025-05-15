@@ -109,6 +109,8 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     Route::prefix('horarios')->group(function () {
         Route::post('/', [HorarioController::class, 'store']);
         Route::delete('/{id}', [HorarioController::class, 'destroy']);
+
+
         Route::post('/adicionar-feriado', [HorarioController::class, 'addFeriado']);
         Route::get('/feriados', [HorarioController::class, 'listarDeletados']);
         Route::get('/medico/dia/{diaSemana}/{id}', [HorarioController::class, 'buscarHorariosDisponiveis']);
