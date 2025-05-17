@@ -20,7 +20,7 @@ class MedicoController extends Controller
     public function index()
     {
         try {
-            $medicos = Medico::all();
+            $medicos = Medico::with('horarios')->get();
             Log::info('Médicos listados com sucesso', [
                 'total' => $medicos->count(),
                 'usuario_logado' => $this->getLoggedUserId()
@@ -71,7 +71,7 @@ class MedicoController extends Controller
     public function show($id)
     {
         try {
-            $medico = Medico::find($id);
+            $medico = Medico::with('horarios')->find($id);
             if (!$medico) {
                 Log::warning('Médico não encontrado', [
                     'id' => $id,
