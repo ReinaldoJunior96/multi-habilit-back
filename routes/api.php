@@ -107,6 +107,7 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
      * Rotas de horários
      */
     Route::prefix('horarios')->group(function () {
+        Route::get('/', [HorarioController::class, 'index']);
         Route::post('/', [HorarioController::class, 'store']);
         Route::delete('/{id}', [HorarioController::class, 'destroy']);
 

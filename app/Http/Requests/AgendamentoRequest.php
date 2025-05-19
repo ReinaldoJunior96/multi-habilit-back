@@ -16,7 +16,7 @@ class AgendamentoRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_atendente' => 'required|exists:usuarios,id',
+            'id_atendente' => 'nullable|exists:usuarios,id',
             'id_paciente' => 'required|exists:pacientes,id',
             'id_medico' => 'required|exists:medicos,id',
             'id_medico_substituto' => 'nullable|exists:medicos,id',
@@ -31,7 +31,6 @@ class AgendamentoRequest extends FormRequest
     public function messages()
     {
         return [
-            'id_atendente.required' => 'O campo atendente é obrigatório.',
             'id_atendente.exists' => 'O atendente informado não existe.',
             'id_paciente.required' => 'O campo paciente é obrigatório.',
             'id_paciente.exists' => 'O paciente informado não existe.',
