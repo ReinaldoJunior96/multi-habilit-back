@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\FichaMedica;
 use App\Models\Paciente;
+use App\Models\Convenio;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FichaMedicaFactory extends Factory
@@ -16,6 +17,7 @@ class FichaMedicaFactory extends Factory
             'id_paciente' => Paciente::factory(),
 
             'ficha' => [
+                'id_convenio' => Convenio::inRandomOrder()->first()?->id ?? Convenio::factory()->create()->id,
                 'registro_ans' => $this->faker->numerify('########'),
                 'numero_guia_principal' => $this->faker->uuid,
                 'data_autorizacao' => $this->faker->date(),

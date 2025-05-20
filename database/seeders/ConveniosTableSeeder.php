@@ -15,8 +15,6 @@ class ConveniosTableSeeder extends Seeder
      */
     public function run()
     {
-        // Cria 20 pacientes
-        $pacientes = Paciente::factory()->count(20)->create();
 
         // Cria 10 convênios
         Convenio::factory()->count(10)->create();
