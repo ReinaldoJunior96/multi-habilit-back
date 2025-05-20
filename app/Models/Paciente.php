@@ -60,6 +60,11 @@ class Paciente extends Model
     //     return $this->belongsToMany(Convenio::class, 'convenio_paciente');
     // }
 
+
+    public function fichaMedica()
+    {
+        return $this->hasMany(FichaMedica::class, 'id_paciente', 'id');
+    }
     public function filiacao()
     {
         return $this->hasOne(FiliacaoPaciente::class, 'id_paciente', 'id');

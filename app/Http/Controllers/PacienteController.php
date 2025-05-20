@@ -34,7 +34,7 @@ class PacienteController extends Controller
     public function index()
     {
         try {
-            $pacientes = Paciente::with(['filiacao'])->get();
+            $pacientes = Paciente::with(['filiacao', 'endereco', 'fichasMedicas'])->get();
 
             Log::info('Pacientes listados com sucesso.', ['usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($pacientes, 200);
@@ -58,7 +58,7 @@ class PacienteController extends Controller
     public function show($id)
     {
         try {
-            $paciente = Paciente::findOrFail($id);
+            $paciente = Paciente::with(['filiacao', 'endereco', 'fichasMedicas'])->findOrFail($id);
             Log::info('Paciente encontrado com sucesso.', ['id' => $id, 'usuario_logado' => $this->getLoggedUserId()]);
             return response()->json($paciente, 200);
         } catch (ModelNotFoundException $e) {
