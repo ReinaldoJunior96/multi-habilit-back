@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('cpf')->unique()->nullable();;
             $table->string('telefone')->nullable();
             $table->string('tipo')->nullable();
-            $table->tinyInteger('regime_trabalhista'); // tinyInteger para uso com enum PHP
+            $table->tinyInteger('regime_trabalhista');
             $table->integer('carga_horaria')->nullable();
-            $table->string('cnpj')->unique()->nullable();;
+            $table->string('cnpj')->unique()->nullable();
+            $table->string('especialidade')->nullable();
+            $table->string('regime_profissional')->nullable();
             $table->timestamps();
         });
     }

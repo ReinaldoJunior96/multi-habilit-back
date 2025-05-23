@@ -37,6 +37,8 @@ class MedicoRequest extends FormRequest
             'regime_trabalhista' => 'nullable',
             'carga_horaria' => 'nullable|integer|min:1|max:60',
             'cnpj' => 'nullable|unique:medicos,cnpj' . ($id ? ",{$id}" : ''),
+            'especialidade' => 'nullable|string',
+            'regime_profissional' => 'nullable|string',
         ];
     }
 
@@ -64,6 +66,8 @@ class MedicoRequest extends FormRequest
             'tipo.string' => 'O tipo deve ser uma string.',
             'regime_trabalhista.required' => 'O regime trabalhista é obrigatório.',
             'carga_horaria.integer' => 'A carga horária deve ser um número inteiro.',
+            'especialidade.string' => 'O telefone deve ser uma string.',
+            'regime_profissional.string' => 'O telefone deve ser uma string.',
         ];
     }
 

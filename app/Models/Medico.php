@@ -21,6 +21,8 @@ class Medico extends Model
         'regime_trabalhista',
         'carga_horaria',
         'cnpj',
+        'especialidade',
+        'regime_profissional',
     ];
     protected $casts = [
         'regime_trabalhista' => RegimeTrabalhista::class,
