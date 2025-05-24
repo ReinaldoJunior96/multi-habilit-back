@@ -49,29 +49,6 @@ class UsuarioRequest extends FormRequest
             'role' => 'nullable|in:admin-master,admin,atendente,medico,paciente,colaborador',
         ];
 
-        // Validação condicional para médicos
-        if ($this->input('role') === 'medico') {
-            $rules['medico'] = 'required|array';
-            $rules['medico.regime_trabalhista'] = 'required|max:50';
-            $rules['medico.carga_horaria'] = 'required|integer|min:1|max:168'; // Exemplo de carga horária semanal
-            $rules['medico.cnpj'] = 'nullable|size:14'; // CNPJ deve ter 14 dígitos
-        }
-
-        // Validação condicional para pacientes
-        if ($this->input('role') === 'paciente') {
-            $rules['paciente'] = 'required|array';
-            $rules['paciente.estado_civil'] = 'required|string|max:20';
-            $rules['paciente.nome_mae'] = 'required|string|max:200';
-            $rules['paciente.nome_pai'] = 'nullable|string|max:200';
-            $rules['paciente.preferencial'] = 'required|boolean';
-            $rules['paciente.cns'] = 'nullable|string|max:15';
-            $rules['paciente.nome_conjuge'] = 'nullable|string|max:255';
-            $rules['paciente.cor_raca'] = 'nullable|string|max:50';
-            $rules['paciente.profissao'] = 'nullable|string|max:255';
-            $rules['paciente.instrucao'] = 'nullable|string|max:255';
-            $rules['paciente.nacionalidade'] = 'nullable|string|max:100';
-            $rules['paciente.tipo_sanguineo'] = 'nullable|string|max:5';
-        }
 
         return $rules;
     }
