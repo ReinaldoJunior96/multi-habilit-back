@@ -47,6 +47,7 @@ class UsuarioRequest extends FormRequest
             'telefone' => 'nullable|string|max:20',
             'celular' => 'nullable|string|max:20',
             'role' => 'nullable|in:admin-master,admin,atendente,medico,paciente,colaborador',
+            'unidade' => 'nullable|string',
         ];
 
 
