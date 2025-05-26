@@ -25,7 +25,8 @@ use App\Http\Controllers\{
     FichaMedicaController,
     FiliacaoPacienteController,
     EspecialidadeController,
-    OrcamentoController
+    OrcamentoController,
+    UnidadeController
 };
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -137,6 +138,9 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
         Route::get('/quantidade/atendimento/terapeuta/{terapeuta}', [FinanceiroController::class, 'quantidadeAtendimentoPorMedico']);
         Route::get('/faturamento/terapeuta/{terapeuta}', [FinanceiroController::class, 'faturamentoPorMedico']);
     });
+
+
+    Route::apiResource('unidades', UnidadeController::class);
 
     /**
      * Rotas de fichas médicas

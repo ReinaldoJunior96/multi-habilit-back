@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             //AtendimentoSeeder::class,
             EspecialidadeTableSeeder::class,
             OrcamentoTableSeeder::class,
+            UnidadeSeeder::class
         ]);
     }
 }
