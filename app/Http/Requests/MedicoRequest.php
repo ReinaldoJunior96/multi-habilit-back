@@ -66,8 +66,8 @@ class MedicoRequest extends FormRequest
             'tipo.string' => 'O tipo deve ser uma string.',
             'regime_trabalhista.required' => 'O regime trabalhista é obrigatório.',
             'carga_horaria.integer' => 'A carga horária deve ser um número inteiro.',
-            'especialidade.string' => 'O telefone deve ser uma string.',
-            'regime_profissional.string' => 'O telefone deve ser uma string.',
+            'especialidade.string' => 'A especialidade deve ser uma string.',
+            'regime_profissional.string' => 'O regime profissional deve ser uma string.',
         ];
     }
 
