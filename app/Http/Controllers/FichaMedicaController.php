@@ -12,7 +12,7 @@ class FichaMedicaController extends Controller
     public function index()
     {
         try {
-            $fichas = FichaMedica::all();
+            $fichas = FichaMedica::with('paciente')->get();
 
             Log::info('Fichas médicas listadas com sucesso', [
                 'usuario_logado' => $this->getLoggedUserId(),
@@ -57,6 +57,8 @@ class FichaMedicaController extends Controller
     public function show(FichaMedica $fichas_medica)
     {
         try {
+            $fichas_medica->load('paciente');
+
             Log::info('Ficha médica encontrada com sucesso', [
                 'id' => $fichas_medica->id,
                 'usuario_logado' => $this->getLoggedUserId()

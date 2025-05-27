@@ -16,6 +16,11 @@ class FichaMedica extends Model
         'ficha',
     ];
 
+    protected $hidden = [
+        'id',
+        'id_paciente',
+    ];
+
     protected $casts = [
         'ficha' => 'array', // Faz o Laravel tratar o campo JSON como array automaticamente
     ];
@@ -23,6 +28,6 @@ class FichaMedica extends Model
     // Relação com paciente (assumindo que tem model Paciente)
     public function paciente()
     {
-        return $this->belongsTo(Paciente::class);
+        return $this->belongsTo(Paciente::class, 'id_paciente', 'id');
     }
 }
