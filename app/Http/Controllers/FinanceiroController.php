@@ -205,4 +205,27 @@ class FinanceiroController extends Controller
             'carga_horaria' => 'N/A'
         ];
     }
+
+
+    public function filtroFichasMedicas($convenio, $dataInicial, $dataFinal)
+    {
+        // Busca todas as fichas médicas do convênio informado e entre as datas
+        $fichas = \App\Models\FichaMedica::whereJsonContains('ficha->id_convenio', (int)$convenio)
+            ->whereDate('created_at', '>=', $dataInicial)
+            ->whereDate('created_at', '<=', $dataFinal)
+            ->with('paciente')
+            ->get();
+
+        // Adiciona os dados do convênio manualmente
+        $fichas = $fichas->map(function ($ficha) {
+            $idConvenio = $ficha->ficha['id_convenio'] ?? null;
+            $fichaArray = $ficha->toArray();
+            $fichaArray['convenio'] = $idConvenio
+                ? \App\Models\Convenio::find($idConvenio)
+                : null;
+            return $fichaArray;
+        });
+
+        return response()->json($fichas, 200);
+    }
 }

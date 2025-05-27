@@ -132,11 +132,12 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
     /**
      * Rotas financeiras
      */
-    Route::prefix('financeiro')->group(function () {
-        Route::get('/quantidade/atendimento/convenio/{convenio}', [FinanceiroController::class, 'quantidadeDeAtendimentoPorConvenio']);
-        Route::get('/faturamento/convenio/{convenio}', [FinanceiroController::class, 'faturamentoPorConvenio']);
-        Route::get('/quantidade/atendimento/terapeuta/{terapeuta}', [FinanceiroController::class, 'quantidadeAtendimentoPorMedico']);
-        Route::get('/faturamento/terapeuta/{terapeuta}', [FinanceiroController::class, 'faturamentoPorMedico']);
+    Route::prefix('faturamento')->group(function () {
+        // Route::get('/quantidade/atendimento/convenio/{convenio}', [FinanceiroController::class, 'quantidadeDeAtendimentoPorConvenio']);
+        // Route::get('/faturamento/convenio/{convenio}', [FinanceiroController::class, 'faturamentoPorConvenio']);
+        // Route::get('/quantidade/atendimento/terapeuta/{terapeuta}', [FinanceiroController::class, 'quantidadeAtendimentoPorMedico']);
+        // Route::get('/faturamento/terapeuta/{terapeuta}', [FinanceiroController::class, 'faturamentoPorMedico']);
+        Route::get('fichas/{convenio}/{dataInicial}/{dataFinal}', [FinanceiroController::class, 'filtroFichasMedicas']);
     });
 
 

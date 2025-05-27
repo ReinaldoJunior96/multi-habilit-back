@@ -99,7 +99,8 @@ class FichaMedicaFactory extends Factory
                 'assinaturaResponsavelAutorizacao' => 'assinatura_base64',
                 'assinaturaBeneficiarioResponsavelFinal' => 'assinatura_base64',
                 'assinaturaContrato' => 'assinatura_base64',
-            ]
+            ],
+            'created_at' => now(), // permite sobrescrever no seeder
         ];
     }
 }
