@@ -26,7 +26,8 @@ use App\Http\Controllers\{
     FiliacaoPacienteController,
     EspecialidadeController,
     OrcamentoController,
-    UnidadeController
+    UnidadeController,
+    LoteController
 };
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -162,6 +163,11 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
      * Rotas de orçamentos
      */
     Route::apiResource('orcamentos', OrcamentoController::class);
+
+    /**
+     * Rotas de lotes
+     */
+    Route::apiResource('lotes', LoteController::class);
 });
 
 /**

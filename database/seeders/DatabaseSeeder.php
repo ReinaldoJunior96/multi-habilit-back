@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Especialidade;
 use Illuminate\Database\Seeder;
+use Database\Seeders\FichaMedicaSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,7 +26,9 @@ class DatabaseSeeder extends Seeder
             //AtendimentoSeeder::class,
             EspecialidadeTableSeeder::class,
             OrcamentoTableSeeder::class,
-            UnidadeSeeder::class
+            UnidadeSeeder::class,
+            FichaMedicaSeeder::class,            // Cria as fichas médicas
+            //LoteSeeder::class
         ]);
     }
 }

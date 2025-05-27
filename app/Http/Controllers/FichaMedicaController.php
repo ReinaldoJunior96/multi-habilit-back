@@ -12,8 +12,8 @@ class FichaMedicaController extends Controller
     public function index()
     {
         try {
-            $fichas = FichaMedica::with('paciente')->get();
 
+            $fichas = FichaMedica::with('paciente')->get();
             // Adiciona os dados do convênio manualmente
             $fichas = $fichas->map(function ($ficha) {
                 $idConvenio = $ficha->ficha['id_convenio'] ?? null;
