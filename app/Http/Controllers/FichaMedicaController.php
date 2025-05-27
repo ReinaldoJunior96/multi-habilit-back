@@ -14,6 +14,16 @@ class FichaMedicaController extends Controller
         try {
             $fichas = FichaMedica::with('paciente')->get();
 
+            // Adiciona os dados do convênio manualmente
+            $fichas = $fichas->map(function ($ficha) {
+                $idConvenio = $ficha->ficha['id_convenio'] ?? null;
+                $fichaArray = $ficha->toArray();
+                $fichaArray['convenio'] = $idConvenio
+                    ? \App\Models\Convenio::find($idConvenio)
+                    : null;
+                return $fichaArray;
+            });
+
             Log::info('Fichas médicas listadas com sucesso', [
                 'usuario_logado' => $this->getLoggedUserId(),
                 'quantidade' => $fichas->count()
@@ -59,12 +69,19 @@ class FichaMedicaController extends Controller
         try {
             $fichas_medica->load('paciente');
 
+            // Adiciona os dados do convênio manualmente
+            $idConvenio = $fichas_medica->ficha['id_convenio'] ?? null;
+            $fichaArray = $fichas_medica->toArray();
+            $fichaArray['convenio'] = $idConvenio
+                ? \App\Models\Convenio::find($idConvenio)
+                : null;
+
             Log::info('Ficha médica encontrada com sucesso', [
                 'id' => $fichas_medica->id,
                 'usuario_logado' => $this->getLoggedUserId()
             ]);
 
-            return response()->json($fichas_medica, 200);
+            return response()->json($fichaArray, 200);
         } catch (Exception $e) {
             Log::error('Erro ao buscar ficha médica', [
                 'exception_message' => $e->getMessage(),
