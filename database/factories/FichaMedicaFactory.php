@@ -44,6 +44,8 @@ class FichaMedicaFactory extends Factory
                 'indicacao_clinica' => $this->faker->sentence,
                 'indicador_cobertura_especial' => $this->faker->boolean,
 
+                'status' => 'pendente',
+
                 'procedimento' => [
                     [
                         'tabela' => '22',
