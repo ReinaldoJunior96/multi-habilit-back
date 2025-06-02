@@ -27,7 +27,7 @@ class UnidadeRequest extends FormRequest
                 'max:20',
                 Rule::unique('unidades', 'cnpj')->ignore($id),
             ],
-            'responsasavel' => 'nullable|string|max:255',
+            'responsavel' => 'nullable|string|max:255',
             'horario_funcionamento' => 'nullable|string|max:255',
             'status' => 'nullable|string|max:20',
             'tipo' => 'nullable|string|max:20',

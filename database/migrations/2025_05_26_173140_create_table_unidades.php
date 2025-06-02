@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('telefone')->nullable();
             $table->string('email')->nullable();
             $table->string('cnpj')->nullable();
-            $table->string('responsasavel')->nullable();
+            $table->string('responsavel')->nullable();
             $table->string('horario_funcionamento')->nullable();
             $table->string('status')->nullable();
             $table->string('tipo')->nullable();

@@ -17,7 +17,7 @@ class Unidade extends Model
         'telefone',
         'email',
         'cnpj',
-        'responsasavel',
+        'responsavel',
         'horario_funcionamento',
         'status',
         'tipo',

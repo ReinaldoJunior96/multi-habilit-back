@@ -24,7 +24,7 @@ class UnidadeFactory extends Factory
             'telefone' => $this->faker->phoneNumber,
             'email' => $this->faker->unique()->safeEmail,
             'cnpj' => $this->faker->numerify('##############'),
-            'responsasavel' => $this->faker->name,
+            'responsavel' => $this->faker->name,
             'horario_funcionamento' => '08:00-18:00',
             'status' => $this->faker->randomElement(['ativo', 'inativo']),
             'tipo' => $this->faker->randomElement(['matriz', 'filial']),
