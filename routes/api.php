@@ -27,7 +27,8 @@ use App\Http\Controllers\{
     EspecialidadeController,
     OrcamentoController,
     UnidadeController,
-    LoteController
+    LoteController,
+    ContaAPagarController
 };
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -168,6 +169,11 @@ Route::middleware(EnsureApiIsAuthenticatedAlias::class)->group(function () {
      * Rotas de lotes
      */
     Route::apiResource('lotes', LoteController::class);
+
+    /**
+     * Rotas de contas a pagar
+     */
+    Route::apiResource('contas-a-pagar', ContaAPagarController::class);
 });
 
 /**

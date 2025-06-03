@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             UnidadeSeeder::class,
             FichaMedicaSeeder::class,            // Cria as fichas médicas
             //LoteSeeder::class
+            ContaAPagarSeeder::class,
         ]);
     }
 }
