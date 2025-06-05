@@ -45,6 +45,12 @@ class ProcedimentoRequest extends FormRequest
             'instrumentador' => 'nullable|string|max:255',
             'porte_honorario' => 'nullable|integer',
             'tempo' => 'nullable|string|max:255',
+            'descricao' => 'nullable|string|max:255',
+            'qtde_solicitada' => 'nullable|string|max:255',
+            'qtde_autorizada' => 'nullable|string|max:255',
+            'valor' => 'nullable|numeric',
+            'ativo' => 'nullable|boolean',
+            'observacao' => 'nullable|string|max:255',
         ];
     }
 
@@ -102,6 +108,23 @@ class ProcedimentoRequest extends FormRequest
 
             'tempo.string' => 'O campo tempo deve ser um texto.',
             'tempo.max' => 'O campo tempo não pode ter mais que 255 caracteres.',
+
+            'descricao.string' => 'O campo descrição deve ser um texto.',
+            'descricao.max' => 'O campo descrição não pode ter mais que 255 caracteres.',
+
+            'qtde_solicitada.string' => 'O campo quantidade solicitada deve ser um texto.',
+            'qtde_solicitada.max' => 'O campo quantidade solicitada não pode ter mais que 255 caracteres.',
+
+            'qtde_autorizada.string' => 'O campo quantidade autorizada deve ser um texto.',
+            'qtde_autorizada.max' => 'O campo quantidade autorizada não pode ter mais que 255 caracteres.',
+
+            'valor.string' => 'O campo valor deve ser um texto.',
+            'valor.max' => 'O campo valor não pode ter mais que 255 caracteres.',
+
+            'ativo.boolean' => 'O campo ativo deve ser verdadeiro ou falso.',
+
+            'observacao.string' => 'O campo observação deve ser um texto.',
+            'observacao.max' => 'O campo observação não pode ter mais que 255 caracteres.',
         ];
     }
 

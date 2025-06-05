@@ -30,6 +30,18 @@ class CreateProcedimentosTable extends Migration
             $table->string('instrumentador')->nullable(); // Instrumentador
             $table->integer('porte_honorario')->nullable(); // Porte Honorário
             $table->string('tempo')->nullable(); // Tempo
+
+            $table->string('descricao')->nullable(); // Tempo
+            $table->string('qtde_solicitada')->nullable(); // Tempo
+            $table->string('qtde_autorizada')->nullable(); // Tempo
+            $table->decimal('valor', 10, 2)->nullable(); // Valor/CH
+            $table->boolean('ativo')->nullable(); // Tempo
+            $table->string('observacao')->nullable(); // Tempo
+
+
+
+
+
             $table->timestamps();
         });
     }

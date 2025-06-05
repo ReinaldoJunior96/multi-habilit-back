@@ -30,6 +30,12 @@ class Procedimento extends Model
         'instrumentador',
         'porte_honorario',
         'tempo',
+        'descricao',
+        'qtde_solicitada',
+        'qtde_autorizada',
+        'valor',
+        'ativo',
+        'observacao',
     ];
 
     /**

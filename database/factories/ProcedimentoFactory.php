@@ -32,6 +32,12 @@ class ProcedimentoFactory extends Factory
             'instrumentador' => $this->faker->word,
             'porte_honorario' => $this->faker->numberBetween(1, 5),
             'tempo' => $this->faker->time(),
+            'descricao' => $this->faker->sentence(4),
+            'qtde_solicitada' => (string) $this->faker->numberBetween(1, 10),
+            'qtde_autorizada' => (string) $this->faker->numberBetween(1, 10),
+            'valor' => $this->faker->randomFloat(2, 0, 1000),
+            'ativo' => $this->faker->boolean(),
+            'observacao' => $this->faker->sentence(6),
         ];
     }
 }

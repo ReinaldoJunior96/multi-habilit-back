@@ -109,6 +109,7 @@ class FichaMedicaFactory extends Factory
                 'assinatura_beneficiario_responsavel' => 'assinatura_base64',
                 'assinatura_contratado' => 'assinatura_base64',
                 'status' => 'Pendente',
+                'tipo_ficha' => 'terapia',
             ],
             'created_at' => now(),
         ];
